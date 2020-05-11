@@ -6,6 +6,8 @@ import (
 	"os"
 
 	"github.com/Lukaesebrot/asterisk/cmdparser"
+	"github.com/Lukaesebrot/asterisk/commands"
+	"github.com/Lukaesebrot/asterisk/utils"
 
 	"github.com/Lukaesebrot/asterisk/concommands"
 	"github.com/Lukaesebrot/asterisk/config"
@@ -47,13 +49,26 @@ func main() {
 	// Initialize the command system
 	log.Println("Initializing the command system...")
 	commandSystem := &cmdparser.CommandSystem{
+		BotUser: self,
 		Prefixes: []string{
 			"<@" + self.ID + ">",
 			"$",
 			"as!",
 			"你",
 		},
+		Commands: map[string]*cmdparser.Command{
+			"info": &cmdparser.Command{
+				Handler: commands.Info(self),
+			},
+		},
+		PingHandler: func(session *discordgo.Session, event *discordgo.MessageCreate) {
+			_, err := session.ChannelMessageSendEmbed(event.Message.ChannelID, utils.GenerateBotInfoEmbed(self))
+			if err != nil {
+				log.Println("[ERR] " + err.Error())
+			}
+		},
 	}
+	session.AddHandler(commandSystem.Handler())
 	log.Println("Successfully initialized the command system.")
 
 	// Handle incoming console commands

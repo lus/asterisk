@@ -16,6 +16,12 @@ func (system *CommandSystem) Handler() func(*discordgo.Session, *discordgo.Messa
 		message := event.Message
 		content := message.Content
 
+		// Check if the message only contains the bot ping
+		if content == "<@"+system.BotUser.ID+">" {
+			system.PingHandler(session, event)
+			return
+		}
+
 		// Check if the message starts with one of the defined prefixes
 		content, valid := utils.StringHasPrefix(content, system.Prefixes, true)
 		if !valid {

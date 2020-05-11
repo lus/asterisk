@@ -4,8 +4,10 @@ import "github.com/bwmarrin/discordgo"
 
 // CommandSystem represents a bunch of commands and settings
 type CommandSystem struct {
-	Prefixes []string
-	Commands map[string]*Command
+	BotUser     *discordgo.User
+	Prefixes    []string
+	Commands    map[string]*Command
+	PingHandler func(session *discordgo.Session, event *discordgo.MessageCreate)
 }
 
 // Command represents a command
