@@ -5,6 +5,8 @@ import (
 	"log"
 	"os"
 
+	"github.com/Lukaesebrot/asterisk/cmdparser"
+
 	"github.com/Lukaesebrot/asterisk/concommands"
 	"github.com/Lukaesebrot/asterisk/config"
 	"github.com/Lukaesebrot/asterisk/database"
@@ -36,9 +38,23 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	self, err := session.User("@me")
+	if err != nil {
+		panic(err)
+	}
 	log.Println("Successfully established the Discord connection.")
 
-	// TODO: Implement command system
+	// Initialize the command system
+	log.Println("Initializing the command system...")
+	commandSystem := &cmdparser.CommandSystem{
+		Prefixes: []string{
+			"<@" + self.ID + ">",
+			"$",
+			"as!",
+			"你",
+		},
+	}
+	log.Println("Successfully initialized the command system.")
 
 	// Handle incoming console commands
 	log.Println("Waiting for console commands. Type 'help' for help.")
