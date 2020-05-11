@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/Lukaesebrot/asterisk/guildconfig"
+	"github.com/Lukaesebrot/asterisk/static"
 	"github.com/Lukaesebrot/asterisk/utils"
 	"github.com/bwmarrin/discordgo"
 )
@@ -17,7 +18,7 @@ func (system *CommandSystem) Handler() func(*discordgo.Session, *discordgo.Messa
 		content := message.Content
 
 		// Check if the message only contains the bot ping
-		if content == "<@"+system.BotUser.ID+">" {
+		if content == "<@!"+static.Self.ID+">" {
 			system.PingHandler(session, event)
 			return
 		}

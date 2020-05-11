@@ -7,6 +7,7 @@ import (
 
 	"github.com/Lukaesebrot/asterisk/cmdparser"
 	"github.com/Lukaesebrot/asterisk/commands"
+	"github.com/Lukaesebrot/asterisk/static"
 	"github.com/Lukaesebrot/asterisk/utils"
 
 	"github.com/Lukaesebrot/asterisk/concommands"
@@ -36,7 +37,11 @@ func main() {
 
 	// Initialize the Discord session
 	log.Println("Establishing the Discord connection...")
-	session, err := discordgo.New("Bot " + config.CurrentConfig.Token)
+	session, err := discordgo.New("Bot " + config.CurrentConfig.BotToken)
+	if err != nil {
+		panic(err)
+	}
+	err = session.Open()
 	if err != nil {
 		panic(err)
 	}
@@ -44,25 +49,25 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	static.Self = self
 	log.Println("Successfully established the Discord connection.")
 
 	// Initialize the command system
 	log.Println("Initializing the command system...")
 	commandSystem := &cmdparser.CommandSystem{
-		BotUser: self,
 		Prefixes: []string{
-			"<@" + self.ID + ">",
+			"<@!" + static.Self.ID + ">",
 			"$",
 			"as!",
 			"你",
 		},
 		Commands: map[string]*cmdparser.Command{
 			"info": &cmdparser.Command{
-				Handler: commands.Info(self),
+				Handler: commands.Info(),
 			},
 		},
 		PingHandler: func(session *discordgo.Session, event *discordgo.MessageCreate) {
-			_, err := session.ChannelMessageSendEmbed(event.Message.ChannelID, utils.GenerateBotInfoEmbed(self))
+			_, err := session.ChannelMessageSendEmbed(event.Message.ChannelID, utils.GenerateBotInfoEmbed())
 			if err != nil {
 				log.Println("[ERR] " + err.Error())
 			}

@@ -15,7 +15,7 @@ var CurrentConfig *Config = new(Config)
 
 // Config represents the bot configuration
 type Config struct {
-	Token                 string        `json:"token"`
+	BotToken              string        `json:"botToken"`
 	BotAdmins             []string      `json:"botAdmins"`
 	MongoConnectionString string        `json:"mongoConnectionString"`
 	JDoodle               JDoodleConfig `json:"jdoodle"`
@@ -33,7 +33,7 @@ func Load() error {
 	if static.Mode != "prod" {
 		godotenv.Load()
 		CurrentConfig = &Config{
-			Token:                 os.Getenv("ASTERISK_TOKEN"),
+			BotToken:              os.Getenv("ASTERISK_BOT_TOKEN"),
 			BotAdmins:             strings.Split(os.Getenv("ASTERISK_BOT_ADMINS"), ","),
 			MongoConnectionString: os.Getenv("ASTERISK_MONGO_CONNECTION_STRING"),
 		}

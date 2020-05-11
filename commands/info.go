@@ -9,9 +9,9 @@ import (
 )
 
 // Info handles the info command
-func Info(self *discordgo.User) func(*discordgo.Session, *discordgo.MessageCreate, []string) {
+func Info() func(*discordgo.Session, *discordgo.MessageCreate, []string) {
 	return func(session *discordgo.Session, event *discordgo.MessageCreate, args []string) {
-		_, err := session.ChannelMessageSendEmbed(event.Message.ChannelID, utils.GenerateBotInfoEmbed(self))
+		_, err := session.ChannelMessageSendEmbed(event.Message.ChannelID, utils.GenerateBotInfoEmbed())
 		if err != nil {
 			log.Println("[ERR] " + err.Error())
 		}

@@ -3,6 +3,7 @@ package utils
 import (
 	"time"
 
+	"github.com/Lukaesebrot/asterisk/static"
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -26,7 +27,7 @@ func GenerateInternalErrorEmbed(errorMessage string) *discordgo.MessageEmbed {
 }
 
 // GenerateBotInfoEmbed generates the embed which contains all the neccessary bot information
-func GenerateBotInfoEmbed(self *discordgo.User) *discordgo.MessageEmbed {
+func GenerateBotInfoEmbed() *discordgo.MessageEmbed {
 	return &discordgo.MessageEmbed{
 		URL:         "https://github.com/Lukaesebrot/asterisk",
 		Type:        "rich",
@@ -37,17 +38,22 @@ func GenerateBotInfoEmbed(self *discordgo.User) *discordgo.MessageEmbed {
 		Fields: []*discordgo.MessageEmbedField{
 			&discordgo.MessageEmbedField{
 				Name:   "Developer(s)",
-				Value:  "**Lukaesebrot#8001**",
+				Value:  "`Lukaesebrot#8001`",
 				Inline: false,
 			},
 			&discordgo.MessageEmbedField{
 				Name:   "GitHub Repository",
-				Value:  "You cand find my source code here: **http://github.com/Lukaesebrot/asterisk**",
+				Value:  "http://github.com/Lukaesebrot/asterisk",
 				Inline: false,
 			},
 			&discordgo.MessageEmbedField{
 				Name:   "Invite me",
-				Value:  "You cand invite me to your server by clicking on this link: **<>**",
+				Value:  "https://discord.com/api/oauth2/authorize?client_id=" + static.Self.ID + "&permissions=0&scope=bot",
+				Inline: false,
+			},
+			&discordgo.MessageEmbedField{
+				Name:   "Support guild",
+				Value:  "https://discord.gg/ddz9b86",
 				Inline: false,
 			},
 		},
