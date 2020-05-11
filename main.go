@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/Lukaesebrot/asterisk/config"
+	"github.com/Lukaesebrot/asterisk/database"
 )
 
 func main() {
@@ -17,7 +18,13 @@ func main() {
 	}
 	log.Println("Successfully loaded the bot configuration.")
 
-	// TODO: Implement MongoDB integration
+	// Connect to the MongoDB host
+	log.Println("Connecting to the specified MongoDB server...")
+	err = database.Connect()
+	if err != nil {
+		panic(err)
+	}
+	log.Println("Successfully connected to the specified MongoDB server.")
 
 	// TODO: Implement command system
 

@@ -15,8 +15,9 @@ var CurrentConfig *Config = new(Config)
 
 // Config represents the bot configuration
 type Config struct {
-	Token     string   `json:"token"`
-	BotAdmins []string `json:"botAdmins"`
+	Token                 string   `json:"token"`
+	BotAdmins             []string `json:"botAdmins"`
+	MongoConnectionString string   `json:"mongoConnectionString"`
 }
 
 // Load loads the bot configuration
@@ -25,8 +26,9 @@ func Load() error {
 	if static.Mode != "prod" {
 		godotenv.Load()
 		CurrentConfig = &Config{
-			Token:     os.Getenv("ASTERISK_TOKEN"),
-			BotAdmins: strings.Split(os.Getenv("ASTERISK_BOT_ADMINS"), ","),
+			Token:                 os.Getenv("ASTERISK_TOKEN"),
+			BotAdmins:             strings.Split(os.Getenv("ASTERISK_BOT_ADMINS"), ","),
+			MongoConnectionString: os.Getenv("ASTERISK_MONGO_CONNECTION_STRING"),
 		}
 		return nil
 	}

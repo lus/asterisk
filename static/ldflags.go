@@ -6,4 +6,7 @@ var (
 
 	// Version defines the version string of the current instance
 	Version = "dev"
+
+	// MongoDatabase defines the MongoDB database name
+	MongoDatabase = "asterisk"
 )
