@@ -26,6 +26,25 @@ func GenerateInternalErrorEmbed(errorMessage string) *discordgo.MessageEmbed {
 	}
 }
 
+// GenerateInvalidUsageEmbed generates an embed for invalid usages
+func GenerateInvalidUsageEmbed(usage string) *discordgo.MessageEmbed {
+	return &discordgo.MessageEmbed{
+		URL:         "https://github.com/Lukaesebrot/asterisk",
+		Type:        "rich",
+		Title:       "Invalid Usage",
+		Description: "That's not how you're supposed to use this command!",
+		Timestamp:   time.Now().Format(time.RFC3339),
+		Color:       0xff0000,
+		Fields: []*discordgo.MessageEmbedField{
+			&discordgo.MessageEmbedField{
+				Name:   "Correct usage",
+				Value:  "```" + usage + "```",
+				Inline: false,
+			},
+		},
+	}
+}
+
 // GenerateBotInfoEmbed generates the embed which contains all the neccessary bot information
 func GenerateBotInfoEmbed() *discordgo.MessageEmbed {
 	return &discordgo.MessageEmbed{
@@ -54,6 +73,25 @@ func GenerateBotInfoEmbed() *discordgo.MessageEmbed {
 			&discordgo.MessageEmbedField{
 				Name:   "Support guild",
 				Value:  "https://discord.gg/ddz9b86",
+				Inline: false,
+			},
+		},
+	}
+}
+
+// GenerateRandomOutputEmbed generates an embed for random outputs
+func GenerateRandomOutputEmbed(output string) *discordgo.MessageEmbed {
+	return &discordgo.MessageEmbed{
+		URL:         "https://github.com/Lukaesebrot/asterisk",
+		Type:        "rich",
+		Title:       "Random Output",
+		Description: "Here's your (pseudo) random output.",
+		Timestamp:   time.Now().Format(time.RFC3339),
+		Color:       0x00ff00,
+		Fields: []*discordgo.MessageEmbedField{
+			&discordgo.MessageEmbedField{
+				Name:   "Output",
+				Value:  "```" + output + "```",
 				Inline: false,
 			},
 		},

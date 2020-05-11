@@ -65,6 +65,23 @@ func main() {
 			"info": &cmdparser.Command{
 				Handler: commands.Info(),
 			},
+			"random": &cmdparser.Command{
+				Handler: commands.Random(),
+				SubCommands: map[string]*cmdparser.Command{
+					"bool": &cmdparser.Command{
+						Handler: commands.RandomBool(),
+					},
+					"number": &cmdparser.Command{
+						Handler: commands.RandomNumber(),
+					},
+					"string": &cmdparser.Command{
+						Handler: commands.RandomString(),
+					},
+					"choice": &cmdparser.Command{
+						Handler: commands.RandomChoice(),
+					},
+				},
+			},
 		},
 		PingHandler: func(session *discordgo.Session, event *discordgo.MessageCreate) {
 			_, err := session.ChannelMessageSendEmbed(event.Message.ChannelID, utils.GenerateBotInfoEmbed())
