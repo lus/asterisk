@@ -5,6 +5,7 @@ import (
 
 	"github.com/Lukaesebrot/asterisk/config"
 	"github.com/Lukaesebrot/asterisk/database"
+	"github.com/bwmarrin/discordgo"
 )
 
 func main() {
@@ -25,6 +26,14 @@ func main() {
 		panic(err)
 	}
 	log.Println("Successfully connected to the specified MongoDB server.")
+
+	// Initialize the Discord session
+	log.Println("Establishing the Discord connection...")
+	session, err := discordgo.New("Bot " + config.CurrentConfig.Token)
+	if err != nil {
+		panic(err)
+	}
+	log.Println("Successfully established the Discord connection.")
 
 	// TODO: Implement command system
 
