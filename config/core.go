@@ -15,9 +15,16 @@ var CurrentConfig *Config = new(Config)
 
 // Config represents the bot configuration
 type Config struct {
-	Token                 string   `json:"token"`
-	BotAdmins             []string `json:"botAdmins"`
-	MongoConnectionString string   `json:"mongoConnectionString"`
+	Token                 string        `json:"token"`
+	BotAdmins             []string      `json:"botAdmins"`
+	MongoConnectionString string        `json:"mongoConnectionString"`
+	JDoodle               JDoodleConfig `json:"jdoodle"`
+}
+
+// JDoodleConfig represents the configuration of a JDoodle subscription
+type JDoodleConfig struct {
+	ClientID     string `json:"clientID"`
+	ClientSecret string `json:"clientSecret"`
 }
 
 // Load loads the bot configuration
