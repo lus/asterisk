@@ -1,8 +1,11 @@
 package main
 
 import (
+	"bufio"
 	"log"
+	"os"
 
+	"github.com/Lukaesebrot/asterisk/concommands"
 	"github.com/Lukaesebrot/asterisk/config"
 	"github.com/Lukaesebrot/asterisk/database"
 	"github.com/bwmarrin/discordgo"
@@ -37,7 +40,8 @@ func main() {
 
 	// TODO: Implement command system
 
-	// TODO: Implement console command system
-
+	// Handle incoming console commands
 	log.Println("Waiting for console commands. Type 'help' for help.")
+	reader := bufio.NewReader(os.Stdin)
+	concommands.Handle(reader, session)
 }
