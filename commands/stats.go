@@ -1,19 +1,14 @@
 package commands
 
 import (
-	"log"
+	"github.com/Lukaesebrot/dgc"
 
 	"github.com/Lukaesebrot/asterisk/utils"
-
-	"github.com/bwmarrin/discordgo"
 )
 
 // Stats handles the stats command
-func Stats() func(*discordgo.Session, *discordgo.MessageCreate, []string) {
-	return func(session *discordgo.Session, event *discordgo.MessageCreate, args []string) {
-		_, err := session.ChannelMessageSendEmbed(event.Message.ChannelID, utils.GenerateStatsEmbed(session))
-		if err != nil {
-			log.Println("[ERR] " + err.Error())
-		}
+func Stats() func(*dgc.Ctx) {
+	return func(ctx *dgc.Ctx) {
+		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateStatsEmbed(ctx.Session))
 	}
 }

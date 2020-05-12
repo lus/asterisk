@@ -5,10 +5,9 @@ import (
 	"log"
 	"os"
 
-	"github.com/Lukaesebrot/asterisk/cmdparser"
 	"github.com/Lukaesebrot/asterisk/commands"
 	"github.com/Lukaesebrot/asterisk/static"
-	"github.com/Lukaesebrot/asterisk/utils"
+	"github.com/Lukaesebrot/dgc"
 
 	"github.com/Lukaesebrot/asterisk/concommands"
 	"github.com/Lukaesebrot/asterisk/config"
@@ -45,58 +44,82 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	self, err := session.User("@me")
-	if err != nil {
-		panic(err)
-	}
-	static.Self = self
+	static.Self = session.State.User
 	log.Println("Successfully established the Discord connection.")
 
 	// Initialize the command system
 	log.Println("Initializing the command system...")
-	commandSystem := &cmdparser.CommandSystem{
+	router := &dgc.Router{
 		Prefixes: []string{
-			"<@!" + static.Self.ID + ">",
 			"$",
+			"<@!" + static.Self.ID + ">",
 			"as!",
 			"你",
 		},
-		Commands: map[string]*cmdparser.Command{
-			"info": &cmdparser.Command{
-				Description: "Shows some general information about the bot",
-				Handler:     commands.Info(),
-			},
-			"stats": &cmdparser.Command{
-				Description: "Shows some general stats about the bot and its system",
-				Handler:     commands.Stats(),
-			},
-			"random": &cmdparser.Command{
-				Description: "Generates a random bool, number, string or choice",
-				Handler:     commands.Random(),
-				SubCommands: map[string]*cmdparser.Command{
-					"bool": &cmdparser.Command{
-						Handler: commands.RandomBool(),
-					},
-					"number": &cmdparser.Command{
-						Handler: commands.RandomNumber(),
-					},
-					"string": &cmdparser.Command{
-						Handler: commands.RandomString(),
-					},
-					"choice": &cmdparser.Command{
-						Handler: commands.RandomChoice(),
-					},
-				},
-			},
-		},
-		PingHandler: func(session *discordgo.Session, event *discordgo.MessageCreate) {
-			_, err := session.ChannelMessageSendEmbed(event.Message.ChannelID, utils.GenerateBotInfoEmbed())
-			if err != nil {
-				log.Println("[ERR] " + err.Error())
-			}
-		},
+		IgnorePrefixCase: true,
+		BotsAllowed:      false,
+		PingHandler:      commands.Info(),
 	}
-	session.AddHandler(commandSystem.Handler())
+	router.RegisterCmd(&dgc.Command{
+		Name:        "info",
+		Description: "Displays some useful information about the bot",
+		Usage:       "info",
+		IgnoreCase:  true,
+		Handler:     commands.Info(),
+	})
+	router.RegisterCmd(&dgc.Command{
+		Name:        "stats",
+		Description: "Displays some general statistics about the bot",
+		Usage:       "stats",
+		IgnoreCase:  true,
+		Handler:     commands.Stats(),
+	})
+	router.RegisterCmd(&dgc.Command{
+		Name:        "random",
+		Description: "Generates a random bool, number, string or choice",
+		Usage:       "random <bool | number <interval> | string <int: length> | choice <options...>>",
+		IgnoreCase:  true,
+		SubCommands: []*dgc.Command{
+			&dgc.Command{
+				Name:        "bool",
+				Aliases:     []string{"b"},
+				Description: "Generates a random boolean",
+				IgnoreCase:  true,
+				Handler:     commands.RandomBool(),
+			},
+			&dgc.Command{
+				Name:        "number",
+				Aliases:     []string{"n"},
+				Description: "Generates a random number",
+				IgnoreCase:  true,
+				Handler:     commands.RandomNumber(),
+			},
+			&dgc.Command{
+				Name:        "string",
+				Aliases:     []string{"s"},
+				Description: "Generates a random string",
+				IgnoreCase:  true,
+				Handler:     commands.RandomString(),
+			},
+			&dgc.Command{
+				Name:        "choice",
+				Aliases:     []string{"c"},
+				Description: "Generates a random choice",
+				IgnoreCase:  true,
+				Handler:     commands.RandomChoice(),
+			},
+		},
+		Handler: commands.Random(),
+	})
+	router.RegisterCmd(&dgc.Command{
+		Name:        "say",
+		Description: "Makes me say something",
+		Usage:       "say",
+		IgnoreCase:  true,
+		Handler:     commands.Say(),
+	})
+	router.RegisterDefaultHelpCommand(session)
+	router.Initialize(session)
 	log.Println("Successfully initialized the command system.")
 
 	// Handle incoming console commands

@@ -10,19 +10,36 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-// GenerateInternalErrorEmbed generates an embed for internal errors
-func GenerateInternalErrorEmbed(errorMessage string) *discordgo.MessageEmbed {
+// GenerateSuccessEmbed generates a general success embed
+func GenerateSuccessEmbed(output string) *discordgo.MessageEmbed {
 	return &discordgo.MessageEmbed{
-		URL:         "https://github.com/Lukaesebrot/asterisk",
 		Type:        "rich",
-		Title:       "Internal Error",
-		Description: "An internal error occured :/",
+		Title:       "Success",
+		Description: "Wooohoooo.",
+		Timestamp:   time.Now().Format(time.RFC3339),
+		Color:       0x00ff00,
+		Fields: []*discordgo.MessageEmbedField{
+			&discordgo.MessageEmbedField{
+				Name:   "Output",
+				Value:  "```" + output + "```",
+				Inline: false,
+			},
+		},
+	}
+}
+
+// GenerateErrorEmbed generates an embed for errors
+func GenerateErrorEmbed(message string) *discordgo.MessageEmbed {
+	return &discordgo.MessageEmbed{
+		Type:        "rich",
+		Title:       "Error",
+		Description: "An error occured :/",
 		Timestamp:   time.Now().Format(time.RFC3339),
 		Color:       0xff0000,
 		Fields: []*discordgo.MessageEmbedField{
 			&discordgo.MessageEmbedField{
-				Name:   "Error message",
-				Value:  "```" + strings.Replace(errorMessage, "`", "'", -1) + "```",
+				Name:   "Message",
+				Value:  "```" + strings.Replace(message, "`", "'", -1) + "```",
 				Inline: false,
 			},
 		},
@@ -30,9 +47,8 @@ func GenerateInternalErrorEmbed(errorMessage string) *discordgo.MessageEmbed {
 }
 
 // GenerateInvalidUsageEmbed generates an embed for invalid usages
-func GenerateInvalidUsageEmbed(usage string) *discordgo.MessageEmbed {
+func GenerateInvalidUsageEmbed(message string) *discordgo.MessageEmbed {
 	return &discordgo.MessageEmbed{
-		URL:         "https://github.com/Lukaesebrot/asterisk",
 		Type:        "rich",
 		Title:       "Invalid Usage",
 		Description: "That's not how you're supposed to use this command!",
@@ -41,7 +57,7 @@ func GenerateInvalidUsageEmbed(usage string) *discordgo.MessageEmbed {
 		Fields: []*discordgo.MessageEmbedField{
 			&discordgo.MessageEmbedField{
 				Name:   "Message",
-				Value:  "```" + strings.Replace(usage, "`", "'", -1) + "```",
+				Value:  "```" + strings.Replace(message, "`", "'", -1) + "```",
 				Inline: false,
 			},
 		},
@@ -61,44 +77,6 @@ func GenerateInsufficientPermissionsEmbed(message string) *discordgo.MessageEmbe
 			&discordgo.MessageEmbedField{
 				Name:   "Message",
 				Value:  "```" + strings.Replace(message, "`", "'", -1) + "```",
-				Inline: false,
-			},
-		},
-	}
-}
-
-// GenerateHelpEmbed generates the embed which contains all the commands
-func GenerateHelpEmbed(commandNames []string) *discordgo.MessageEmbed {
-	return &discordgo.MessageEmbed{
-		URL:         "https://github.com/Lukaesebrot/asterisk",
-		Type:        "rich",
-		Title:       "Help",
-		Description: "Here you will find all available command. Use `$help <command>` to find out more.",
-		Timestamp:   time.Now().Format(time.RFC3339),
-		Color:       0xffff00,
-		Fields: []*discordgo.MessageEmbedField{
-			&discordgo.MessageEmbedField{
-				Name:   "Commands",
-				Value:  "`" + strings.Join(commandNames, "`, `") + "`",
-				Inline: false,
-			},
-		},
-	}
-}
-
-// GenerateSingleHelpEmbed generates the embed which contains the description of a single
-func GenerateSingleHelpEmbed(commandName, commandDescription string) *discordgo.MessageEmbed {
-	return &discordgo.MessageEmbed{
-		URL:         "https://github.com/Lukaesebrot/asterisk",
-		Type:        "rich",
-		Title:       "Help",
-		Description: "Here comes your help for the `" + commandName + "` command.",
-		Timestamp:   time.Now().Format(time.RFC3339),
-		Color:       0xffff00,
-		Fields: []*discordgo.MessageEmbedField{
-			&discordgo.MessageEmbedField{
-				Name:   "Description",
-				Value:  "```" + strings.Replace(commandDescription, "`", "'", -1) + "```",
 				Inline: false,
 			},
 		},
@@ -164,44 +142,6 @@ func GenerateStatsEmbed(session *discordgo.Session) *discordgo.MessageEmbed {
 					"\nUsable logical CPUs: `" + strconv.Itoa(runtime.NumCPU()) + "`" +
 					"\nHeap in use: `" + strconv.FormatUint(memStats.HeapInuse, 10) + "`" +
 					"\nStack in use: `" + strconv.FormatUint(memStats.StackInuse, 10) + "`",
-				Inline: false,
-			},
-		},
-	}
-}
-
-// GenerateRandomOutputEmbed generates an embed for random outputs
-func GenerateRandomOutputEmbed(output string) *discordgo.MessageEmbed {
-	return &discordgo.MessageEmbed{
-		URL:         "https://github.com/Lukaesebrot/asterisk",
-		Type:        "rich",
-		Title:       "Random Output",
-		Description: "Here's your (pseudo) random output.",
-		Timestamp:   time.Now().Format(time.RFC3339),
-		Color:       0x00ff00,
-		Fields: []*discordgo.MessageEmbedField{
-			&discordgo.MessageEmbedField{
-				Name:   "Output",
-				Value:  "```" + strings.Replace(output, "`", "'", -1) + "```",
-				Inline: false,
-			},
-		},
-	}
-}
-
-// GenerateArbitraryOutputEmbed generates an embed for arbitrary outputs
-func GenerateArbitraryOutputEmbed(output string) *discordgo.MessageEmbed {
-	return &discordgo.MessageEmbed{
-		URL:         "https://github.com/Lukaesebrot/asterisk",
-		Type:        "rich",
-		Title:       "Arbitrary Expression Output",
-		Description: "Here's the output of your arbitrary expression..",
-		Timestamp:   time.Now().Format(time.RFC3339),
-		Color:       0x00ff00,
-		Fields: []*discordgo.MessageEmbedField{
-			&discordgo.MessageEmbedField{
-				Name:   "Output",
-				Value:  "```" + strings.Replace(output, "`", "'", -1) + "```",
 				Inline: false,
 			},
 		},

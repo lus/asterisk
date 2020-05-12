@@ -1,19 +1,13 @@
 package commands
 
 import (
-	"log"
-
 	"github.com/Lukaesebrot/asterisk/utils"
-
-	"github.com/bwmarrin/discordgo"
+	"github.com/Lukaesebrot/dgc"
 )
 
 // Info handles the info command
-func Info() func(*discordgo.Session, *discordgo.MessageCreate, []string) {
-	return func(session *discordgo.Session, event *discordgo.MessageCreate, args []string) {
-		_, err := session.ChannelMessageSendEmbed(event.Message.ChannelID, utils.GenerateBotInfoEmbed())
-		if err != nil {
-			log.Println("[ERR] " + err.Error())
-		}
+func Info() func(*dgc.Ctx) {
+	return func(ctx *dgc.Ctx) {
+		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateBotInfoEmbed())
 	}
 }

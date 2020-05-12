@@ -1,93 +1,73 @@
 package commands
 
 import (
-	"log"
 	"math/rand"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/Lukaesebrot/asterisk/utils"
-	"github.com/bwmarrin/discordgo"
+	"github.com/Lukaesebrot/dgc"
 )
 
-// define the usage of this command
-var usage = "$random <bool | number | string | choice>"
+// Define the usage of this command
+var randomUsage = "$random <bool | number <interval> | string <int: length> | choice <options...>>"
 
 // Random handles the random command
-func Random() func(*discordgo.Session, *discordgo.MessageCreate, []string) {
-	return func(session *discordgo.Session, event *discordgo.MessageCreate, args []string) {
-		_, err := session.ChannelMessageSendEmbed(event.Message.ChannelID, utils.GenerateInvalidUsageEmbed(usage))
-		if err != nil {
-			log.Println("[ERR] " + err.Error())
-		}
+func Random() func(*dgc.Ctx) {
+	return func(ctx *dgc.Ctx) {
+		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateInvalidUsageEmbed(randomUsage))
 	}
 }
 
 // RandomBool handles the random bool command
-func RandomBool() func(*discordgo.Session, *discordgo.MessageCreate, []string) {
-	return func(session *discordgo.Session, event *discordgo.MessageCreate, args []string) {
+func RandomBool() func(*dgc.Ctx) {
+	return func(ctx *dgc.Ctx) {
 		// Seed the random generator
 		rand.Seed(time.Now().UnixNano())
 
 		// Respond with the generated random boolean
-		_, err := session.ChannelMessageSendEmbed(event.Message.ChannelID, utils.GenerateRandomOutputEmbed(strconv.FormatBool(rand.Intn(2) == 0)))
-		if err != nil {
-			log.Println("[ERR] " + err.Error())
-		}
+		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateSuccessEmbed(strconv.FormatBool(rand.Intn(2) == 0)))
 	}
 }
 
 // RandomNumber handles the random number command
-func RandomNumber() func(*discordgo.Session, *discordgo.MessageCreate, []string) {
-	return func(session *discordgo.Session, event *discordgo.MessageCreate, args []string) {
+func RandomNumber() func(*dgc.Ctx) {
+	return func(ctx *dgc.Ctx) {
 		// Seed the random generator
 		rand.Seed(time.Now().UnixNano())
 
 		// Define the random number
 		number := rand.Int()
-		if len(args) > 0 {
-			valid, generated := utils.FormatInterval(strings.Join(args, " "))
+		if ctx.Arguments.Amount() > 0 {
+			valid, generated := utils.FormatInterval(ctx.Arguments.Raw())
 			if !valid {
-				_, err := session.ChannelMessageSendEmbed(event.Message.ChannelID, utils.GenerateInvalidUsageEmbed("The interval you specified is invalid"))
-				if err != nil {
-					log.Println("[ERR] " + err.Error())
-				}
+				ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateInvalidUsageEmbed("The interval you specified is invalid."))
 				return
 			}
 			number = generated
 		}
 
 		// Respond with the generated random number
-		_, err := session.ChannelMessageSendEmbed(event.Message.ChannelID, utils.GenerateRandomOutputEmbed(strconv.Itoa(number)))
-		if err != nil {
-			log.Println("[ERR] " + err.Error())
-		}
+		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateSuccessEmbed(strconv.Itoa(number)))
 	}
 }
 
 // RandomString handles the random string command
-func RandomString() func(*discordgo.Session, *discordgo.MessageCreate, []string) {
-	return func(session *discordgo.Session, event *discordgo.MessageCreate, args []string) {
+func RandomString() func(*dgc.Ctx) {
+	return func(ctx *dgc.Ctx) {
 		// Seed the random generator
 		rand.Seed(time.Now().UnixNano())
 
 		// Validate the argument length
-		if len(args) == 0 {
-			_, err := session.ChannelMessageSendEmbed(event.Message.ChannelID, utils.GenerateInvalidUsageEmbed("You need to specify a length"))
-			if err != nil {
-				log.Println("[ERR] " + err.Error())
-			}
+		if ctx.Arguments.Amount() == 0 {
+			ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateInvalidUsageEmbed("You need to specify a length."))
 			return
 		}
 
 		// Parse the string length
-		length, err := strconv.Atoi(args[0])
+		length, err := ctx.Arguments.Get(0).AsInt()
 		if err != nil || length <= 0 {
-			_, err := session.ChannelMessageSendEmbed(event.Message.ChannelID, utils.GenerateInvalidUsageEmbed("The length parameter has to be a number > 0"))
-			if err != nil {
-				log.Println("[ERR] " + err.Error())
-			}
+			ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateInvalidUsageEmbed("The length parameter has to be a number > 0."))
 			return
 		}
 
@@ -99,35 +79,26 @@ func RandomString() func(*discordgo.Session, *discordgo.MessageCreate, []string)
 		}
 
 		// Respond with the generated random string
-		_, err = session.ChannelMessageSendEmbed(event.Message.ChannelID, utils.GenerateRandomOutputEmbed(string(byteArray)))
-		if err != nil {
-			log.Println("[ERR] " + err.Error())
-		}
+		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateSuccessEmbed(string(byteArray)))
 	}
 }
 
 // RandomChoice handles the random choice command
-func RandomChoice() func(*discordgo.Session, *discordgo.MessageCreate, []string) {
-	return func(session *discordgo.Session, event *discordgo.MessageCreate, args []string) {
+func RandomChoice() func(*dgc.Ctx) {
+	return func(ctx *dgc.Ctx) {
 		// Seed the random generator
 		rand.Seed(time.Now().UnixNano())
 
 		// Validate the argument length
-		if len(args) < 2 {
-			_, err := session.ChannelMessageSendEmbed(event.Message.ChannelID, utils.GenerateInvalidUsageEmbed("You need to specify at least 2 options"))
-			if err != nil {
-				log.Println("[ERR] " + err.Error())
-			}
+		if ctx.Arguments.Amount() < 2 {
+			ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateInvalidUsageEmbed("You need to specify at least 2 options."))
 			return
 		}
 
 		// Make a random choice
-		option := args[rand.Intn(len(args))]
+		option := ctx.Arguments.Get(rand.Intn(ctx.Arguments.Amount())).Raw()
 
 		// Respond with the random piked choice
-		_, err := session.ChannelMessageSendEmbed(event.Message.ChannelID, utils.GenerateRandomOutputEmbed(option))
-		if err != nil {
-			log.Println("[ERR] " + err.Error())
-		}
+		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateSuccessEmbed(option))
 	}
 }
