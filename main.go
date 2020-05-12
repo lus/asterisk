@@ -66,6 +66,10 @@ func main() {
 				Description: "Shows some general information about the bot",
 				Handler:     commands.Info(),
 			},
+			"stats": &cmdparser.Command{
+				Description: "Shows some general stats about the bot and its system",
+				Handler:     commands.Stats(),
+			},
 			"random": &cmdparser.Command{
 				Description: "Generates a random bool, number, string or choice",
 				Handler:     commands.Random(),

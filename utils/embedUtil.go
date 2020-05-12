@@ -1,6 +1,8 @@
 package utils
 
 import (
+	"runtime"
+	"strconv"
 	"strings"
 	"time"
 
@@ -20,7 +22,7 @@ func GenerateInternalErrorEmbed(errorMessage string) *discordgo.MessageEmbed {
 		Fields: []*discordgo.MessageEmbedField{
 			&discordgo.MessageEmbedField{
 				Name:   "Error message",
-				Value:  "```" + strings.Replace(errorMessage, "`", "listen here you little shit", -1) + "```",
+				Value:  "```" + strings.Replace(errorMessage, "`", "'", -1) + "```",
 				Inline: false,
 			},
 		},
@@ -39,7 +41,26 @@ func GenerateInvalidUsageEmbed(usage string) *discordgo.MessageEmbed {
 		Fields: []*discordgo.MessageEmbedField{
 			&discordgo.MessageEmbedField{
 				Name:   "Message",
-				Value:  "```" + strings.Replace(usage, "`", "listen here you little shit", -1) + "```",
+				Value:  "```" + strings.Replace(usage, "`", "'", -1) + "```",
+				Inline: false,
+			},
+		},
+	}
+}
+
+// GenerateInsufficientPermissionsEmbed generates an embed for insufficient permissions
+func GenerateInsufficientPermissionsEmbed(message string) *discordgo.MessageEmbed {
+	return &discordgo.MessageEmbed{
+		URL:         "https://github.com/Lukaesebrot/asterisk",
+		Type:        "rich",
+		Title:       "Insufficient Permissions",
+		Description: "Looks like you're not cool enough to use that command :/",
+		Timestamp:   time.Now().Format(time.RFC3339),
+		Color:       0xff0000,
+		Fields: []*discordgo.MessageEmbedField{
+			&discordgo.MessageEmbedField{
+				Name:   "Message",
+				Value:  "```" + strings.Replace(message, "`", "'", -1) + "```",
 				Inline: false,
 			},
 		},
@@ -77,7 +98,7 @@ func GenerateSingleHelpEmbed(commandName, commandDescription string) *discordgo.
 		Fields: []*discordgo.MessageEmbedField{
 			&discordgo.MessageEmbedField{
 				Name:   "Description",
-				Value:  "```" + commandDescription + "```",
+				Value:  "```" + strings.Replace(commandDescription, "`", "'", -1) + "```",
 				Inline: false,
 			},
 		},
@@ -118,6 +139,37 @@ func GenerateBotInfoEmbed() *discordgo.MessageEmbed {
 	}
 }
 
+// GenerateStatsEmbed generates the embed which contains all the useful stats
+func GenerateStatsEmbed(session *discordgo.Session) *discordgo.MessageEmbed {
+	// Read the memory stats
+	var memStats runtime.MemStats
+	runtime.ReadMemStats(&memStats)
+
+	return &discordgo.MessageEmbed{
+		URL:         "https://github.com/Lukaesebrot/asterisk",
+		Type:        "rich",
+		Title:       "Stats",
+		Description: "Here you will find some useful stats.",
+		Timestamp:   time.Now().Format(time.RFC3339),
+		Color:       0xffff00,
+		Fields: []*discordgo.MessageEmbedField{
+			&discordgo.MessageEmbedField{
+				Name:   "Discord specs",
+				Value:  "Guilds: `" + strconv.Itoa(len(session.State.Guilds)) + "`",
+				Inline: false,
+			},
+			&discordgo.MessageEmbedField{
+				Name: "System specs",
+				Value: "Current Goroutines: `" + strconv.Itoa(runtime.NumGoroutine()) + "`" +
+					"\nUsable logical CPUs: `" + strconv.Itoa(runtime.NumCPU()) + "`" +
+					"\nHeap in use: `" + strconv.FormatUint(memStats.HeapInuse, 10) + "`" +
+					"\nStack in use: `" + strconv.FormatUint(memStats.StackInuse, 10) + "`",
+				Inline: false,
+			},
+		},
+	}
+}
+
 // GenerateRandomOutputEmbed generates an embed for random outputs
 func GenerateRandomOutputEmbed(output string) *discordgo.MessageEmbed {
 	return &discordgo.MessageEmbed{
@@ -130,7 +182,7 @@ func GenerateRandomOutputEmbed(output string) *discordgo.MessageEmbed {
 		Fields: []*discordgo.MessageEmbedField{
 			&discordgo.MessageEmbedField{
 				Name:   "Output",
-				Value:  "```" + strings.Replace(output, "`", "listen here you little shit", -1) + "```",
+				Value:  "```" + strings.Replace(output, "`", "'", -1) + "```",
 				Inline: false,
 			},
 		},
@@ -149,7 +201,7 @@ func GenerateArbitraryOutputEmbed(output string) *discordgo.MessageEmbed {
 		Fields: []*discordgo.MessageEmbedField{
 			&discordgo.MessageEmbedField{
 				Name:   "Output",
-				Value:  "```" + strings.Replace(output, "`", "listen here you little shit", -1) + "```",
+				Value:  "```" + strings.Replace(output, "`", "'", -1) + "```",
 				Inline: false,
 			},
 		},
