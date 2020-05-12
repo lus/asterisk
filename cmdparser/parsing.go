@@ -12,6 +12,43 @@ import (
 
 // Handler returns the handler of a command system
 func (system *CommandSystem) Handler() func(*discordgo.Session, *discordgo.MessageCreate) {
+	// Initialize the help command
+	system.Commands["help"] = &Command{
+		Description: "Lists all available commands or shows detailed information about a single command",
+		Handler: func(session *discordgo.Session, event *discordgo.MessageCreate, args []string) {
+			// Check the argument length
+			if len(args) > 0 {
+				commandName := strings.ToLower(args[0])
+				if system.Commands[commandName] == nil {
+					_, err := session.ChannelMessageSendEmbed(event.Message.ChannelID, utils.GenerateInvalidUsageEmbed("The command '"+commandName+"' does not exist"))
+					if err != nil {
+						log.Println("[ERR] " + err.Error())
+					}
+					return
+				}
+				_, err := session.ChannelMessageSendEmbed(event.Message.ChannelID, utils.GenerateSingleHelpEmbed(commandName, system.Commands[commandName].Description))
+				if err != nil {
+					log.Println("[ERR] " + err.Error())
+				}
+				return
+			}
+
+			// Fetch all command names
+			commandNames := make([]string, len(system.Commands))
+			index := 0
+			for commandName := range system.Commands {
+				commandNames[index] = commandName
+				index++
+			}
+
+			// Respond with the help embed
+			_, err := session.ChannelMessageSendEmbed(event.Message.ChannelID, utils.GenerateHelpEmbed(commandNames))
+			if err != nil {
+				log.Println("[ERR] " + err.Error())
+			}
+		},
+	}
+
 	return func(session *discordgo.Session, event *discordgo.MessageCreate) {
 		// Define useful variables
 		message := event.Message

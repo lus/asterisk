@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"strings"
 	"time"
 
 	"github.com/Lukaesebrot/asterisk/static"
@@ -19,7 +20,7 @@ func GenerateInternalErrorEmbed(errorMessage string) *discordgo.MessageEmbed {
 		Fields: []*discordgo.MessageEmbedField{
 			&discordgo.MessageEmbedField{
 				Name:   "Error message",
-				Value:  "```" + errorMessage + "```",
+				Value:  "```" + strings.Replace(errorMessage, "`", "listen here you little shit", -1) + "```",
 				Inline: false,
 			},
 		},
@@ -38,7 +39,45 @@ func GenerateInvalidUsageEmbed(usage string) *discordgo.MessageEmbed {
 		Fields: []*discordgo.MessageEmbedField{
 			&discordgo.MessageEmbedField{
 				Name:   "Message",
-				Value:  "```" + usage + "```",
+				Value:  "```" + strings.Replace(usage, "`", "listen here you little shit", -1) + "```",
+				Inline: false,
+			},
+		},
+	}
+}
+
+// GenerateHelpEmbed generates the embed which contains all the commands
+func GenerateHelpEmbed(commandNames []string) *discordgo.MessageEmbed {
+	return &discordgo.MessageEmbed{
+		URL:         "https://github.com/Lukaesebrot/asterisk",
+		Type:        "rich",
+		Title:       "Help",
+		Description: "Here you will find all available command. Use `$help <command>` to find out more.",
+		Timestamp:   time.Now().Format(time.RFC3339),
+		Color:       0xffff00,
+		Fields: []*discordgo.MessageEmbedField{
+			&discordgo.MessageEmbedField{
+				Name:   "Commands",
+				Value:  "`" + strings.Join(commandNames, "`, `") + "`",
+				Inline: false,
+			},
+		},
+	}
+}
+
+// GenerateSingleHelpEmbed generates the embed which contains the description of a single
+func GenerateSingleHelpEmbed(commandName, commandDescription string) *discordgo.MessageEmbed {
+	return &discordgo.MessageEmbed{
+		URL:         "https://github.com/Lukaesebrot/asterisk",
+		Type:        "rich",
+		Title:       "Help",
+		Description: "Here comes your help for the `" + commandName + "` command.",
+		Timestamp:   time.Now().Format(time.RFC3339),
+		Color:       0xffff00,
+		Fields: []*discordgo.MessageEmbedField{
+			&discordgo.MessageEmbedField{
+				Name:   "Description",
+				Value:  "```" + commandDescription + "```",
 				Inline: false,
 			},
 		},
@@ -91,7 +130,26 @@ func GenerateRandomOutputEmbed(output string) *discordgo.MessageEmbed {
 		Fields: []*discordgo.MessageEmbedField{
 			&discordgo.MessageEmbedField{
 				Name:   "Output",
-				Value:  "```" + output + "```",
+				Value:  "```" + strings.Replace(output, "`", "listen here you little shit", -1) + "```",
+				Inline: false,
+			},
+		},
+	}
+}
+
+// GenerateArbitraryOutputEmbed generates an embed for arbitrary outputs
+func GenerateArbitraryOutputEmbed(output string) *discordgo.MessageEmbed {
+	return &discordgo.MessageEmbed{
+		URL:         "https://github.com/Lukaesebrot/asterisk",
+		Type:        "rich",
+		Title:       "Arbitrary Expression Output",
+		Description: "Here's the output of your arbitrary expression..",
+		Timestamp:   time.Now().Format(time.RFC3339),
+		Color:       0x00ff00,
+		Fields: []*discordgo.MessageEmbedField{
+			&discordgo.MessageEmbedField{
+				Name:   "Output",
+				Value:  "```" + strings.Replace(output, "`", "listen here you little shit", -1) + "```",
 				Inline: false,
 			},
 		},

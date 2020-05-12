@@ -63,10 +63,12 @@ func main() {
 		},
 		Commands: map[string]*cmdparser.Command{
 			"info": &cmdparser.Command{
-				Handler: commands.Info(),
+				Description: "Shows some general information about the bot",
+				Handler:     commands.Info(),
 			},
 			"random": &cmdparser.Command{
-				Handler: commands.Random(),
+				Description: "Generates a random bool, number, string or choice",
+				Handler:     commands.Random(),
 				SubCommands: map[string]*cmdparser.Command{
 					"bool": &cmdparser.Command{
 						Handler: commands.RandomBool(),

@@ -11,6 +11,7 @@ type CommandSystem struct {
 
 // Command represents a command
 type Command struct {
+	Description string
 	SubCommands map[string]*Command
 	Handler     func(session *discordgo.Session, event *discordgo.MessageCreate, args []string)
 }

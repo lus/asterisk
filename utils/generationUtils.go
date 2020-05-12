@@ -50,7 +50,7 @@ func FormatInterval(raw string) (bool, int) {
 	if (num1 > 0) && (num1 == num2) {
 		return false, 0
 	}
-	if (num1 > 0 && num2 > 0) && num1 > num2 {
+	if (num1 > 0) && num1 > num2 {
 		return false, 0
 	}
 	if (prefix == '(' && suffix == ')') && num1+1 == num2 {
