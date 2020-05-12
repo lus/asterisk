@@ -37,7 +37,7 @@ func GenerateInvalidUsageEmbed(usage string) *discordgo.MessageEmbed {
 		Color:       0xff0000,
 		Fields: []*discordgo.MessageEmbedField{
 			&discordgo.MessageEmbedField{
-				Name:   "Correct usage",
+				Name:   "Message",
 				Value:  "```" + usage + "```",
 				Inline: false,
 			},

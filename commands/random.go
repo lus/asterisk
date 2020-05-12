@@ -4,16 +4,20 @@ import (
 	"log"
 	"math/rand"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/Lukaesebrot/asterisk/utils"
 	"github.com/bwmarrin/discordgo"
 )
 
+// define the usage of this command
+var usage = "$random <bool | number | string | choice>"
+
 // Random handles the random command
 func Random() func(*discordgo.Session, *discordgo.MessageCreate, []string) {
 	return func(session *discordgo.Session, event *discordgo.MessageCreate, args []string) {
-		_, err := session.ChannelMessageSendEmbed(event.Message.ChannelID, utils.GenerateInvalidUsageEmbed("$random <bool | number [max number (int)] | string <length (int)> | choice <options... (min 2)>>"))
+		_, err := session.ChannelMessageSendEmbed(event.Message.ChannelID, utils.GenerateInvalidUsageEmbed(usage))
 		if err != nil {
 			log.Println("[ERR] " + err.Error())
 		}
@@ -40,36 +44,27 @@ func RandomNumber() func(*discordgo.Session, *discordgo.MessageCreate, []string)
 		// Seed the random generator
 		rand.Seed(time.Now().UnixNano())
 
-		// Define the maximum number
-		max := -1
-		if len(args) != 0 {
-			rawMax, err := strconv.Atoi(args[0])
-			if err != nil {
-				_, err := session.ChannelMessageSendEmbed(event.Message.ChannelID, utils.GenerateInvalidUsageEmbed("$random <bool | number [max number (int)] | string <length (int)> | choice <options... (min 2)>>"))
+		// Define the random number
+		number := rand.Int()
+		if len(args) > 0 {
+			valid, generated := utils.FormatInterval(strings.Join(args, " "))
+			if !valid {
+				_, err := session.ChannelMessageSendEmbed(event.Message.ChannelID, utils.GenerateInvalidUsageEmbed("The interval you specified is invalid"))
 				if err != nil {
 					log.Println("[ERR] " + err.Error())
 				}
 				return
 			}
-			max = rawMax
-		}
-
-		// Generate the random number
-		rnd := rand.Int()
-		if max > 0 {
-			rnd = rand.Intn(max)
+			number = generated
 		}
 
 		// Respond with the generated random number
-		_, err := session.ChannelMessageSendEmbed(event.Message.ChannelID, utils.GenerateRandomOutputEmbed(strconv.Itoa(rnd)))
+		_, err := session.ChannelMessageSendEmbed(event.Message.ChannelID, utils.GenerateRandomOutputEmbed(strconv.Itoa(number)))
 		if err != nil {
 			log.Println("[ERR] " + err.Error())
 		}
 	}
 }
-
-// stringCharacters holds the characters that may be part of a string
-const stringCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
 // RandomString handles the random string command
 func RandomString() func(*discordgo.Session, *discordgo.MessageCreate, []string) {
@@ -79,17 +74,17 @@ func RandomString() func(*discordgo.Session, *discordgo.MessageCreate, []string)
 
 		// Validate the argument length
 		if len(args) == 0 {
-			_, err := session.ChannelMessageSendEmbed(event.Message.ChannelID, utils.GenerateInvalidUsageEmbed("$random <bool | number [max number (int)] | string <length (int)> | choice <options... (min 2)>>"))
+			_, err := session.ChannelMessageSendEmbed(event.Message.ChannelID, utils.GenerateInvalidUsageEmbed("You need to specify a length"))
 			if err != nil {
 				log.Println("[ERR] " + err.Error())
 			}
 			return
 		}
 
-		// Define the length
+		// Parse the string length
 		length, err := strconv.Atoi(args[0])
-		if err != nil {
-			_, err := session.ChannelMessageSendEmbed(event.Message.ChannelID, utils.GenerateInvalidUsageEmbed("$random <bool | number [max number (int)] | string <length (int)> | choice <options... (min 2)>>"))
+		if err != nil || length <= 0 {
+			_, err := session.ChannelMessageSendEmbed(event.Message.ChannelID, utils.GenerateInvalidUsageEmbed("The length parameter has to be a number > 0"))
 			if err != nil {
 				log.Println("[ERR] " + err.Error())
 			}
@@ -97,9 +92,10 @@ func RandomString() func(*discordgo.Session, *discordgo.MessageCreate, []string)
 		}
 
 		// Generate the random string
+		characters := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 		byteArray := make([]byte, length)
 		for i := range byteArray {
-			byteArray[i] = stringCharacters[rand.Intn(len(stringCharacters))]
+			byteArray[i] = characters[rand.Intn(len(characters))]
 		}
 
 		// Respond with the generated random string
@@ -118,18 +114,18 @@ func RandomChoice() func(*discordgo.Session, *discordgo.MessageCreate, []string)
 
 		// Validate the argument length
 		if len(args) < 2 {
-			_, err := session.ChannelMessageSendEmbed(event.Message.ChannelID, utils.GenerateInvalidUsageEmbed("$random <bool | number [max number (int)] | string <length (int)> | choice <options... (min 2)>>"))
+			_, err := session.ChannelMessageSendEmbed(event.Message.ChannelID, utils.GenerateInvalidUsageEmbed("You need to specify at least 2 options"))
 			if err != nil {
 				log.Println("[ERR] " + err.Error())
 			}
 			return
 		}
 
-		// Choose a random option
-		choice := args[rand.Intn(len(args))]
+		// Make a random choice
+		option := args[rand.Intn(len(args))]
 
-		// Respond with the generated random choice
-		_, err := session.ChannelMessageSendEmbed(event.Message.ChannelID, utils.GenerateRandomOutputEmbed(choice))
+		// Respond with the random piked choice
+		_, err := session.ChannelMessageSendEmbed(event.Message.ChannelID, utils.GenerateRandomOutputEmbed(option))
 		if err != nil {
 			log.Println("[ERR] " + err.Error())
 		}

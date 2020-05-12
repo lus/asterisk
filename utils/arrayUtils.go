@@ -26,3 +26,16 @@ func StringHasPrefix(str string, prefixes []string, replace bool) (string, bool)
 	}
 	return str, false
 }
+
+// StringHasSuffix checks whether or not the given string ends with at least one element of the given array
+func StringHasSuffix(str string, suffixes []string, replace bool) (string, bool) {
+	for _, suffix := range suffixes {
+		if strings.HasSuffix(str, suffix) {
+			if replace {
+				str = strings.TrimSpace(strings.Replace(str, suffix, "", 1))
+			}
+			return str, true
+		}
+	}
+	return str, false
+}
