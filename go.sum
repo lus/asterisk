@@ -1,6 +1,6 @@
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
-github.com/Lukaesebrot/dgc v0.0.0-20200512230402-7d6b34ae1880 h1:3/a5/C2rEWUYQRL4DkFMzdqL4D0Xp+ZCbwhzVOlANWs=
-github.com/Lukaesebrot/dgc v0.0.0-20200512230402-7d6b34ae1880/go.mod h1:Cs8fI+3JBB69U0rbzbc2LJtTOUi4iULBEvNefSL0kPQ=
+github.com/Lukaesebrot/dgc v0.0.0-20200512232910-0ac2b25f73f7 h1:8R58n4qEhzRvL8gJDqMgrxAB2I0DIBU+N7myrmoeq/k=
+github.com/Lukaesebrot/dgc v0.0.0-20200512232910-0ac2b25f73f7/go.mod h1:Cs8fI+3JBB69U0rbzbc2LJtTOUi4iULBEvNefSL0kPQ=
 github.com/bwmarrin/discordgo v0.20.3 h1:AxjcHGbyBFSC0a3Zx5nDQwbOjU7xai5dXjRnZ0YB7nU=
 github.com/bwmarrin/discordgo v0.20.3/go.mod h1:O9S4p+ofTFwB02em7jkpkV8M3R0/PUVOwN61zSZ0r4Q=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=

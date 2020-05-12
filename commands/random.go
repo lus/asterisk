@@ -9,13 +9,10 @@ import (
 	"github.com/Lukaesebrot/dgc"
 )
 
-// Define the usage of this command
-var randomUsage = "$random <bool | number <interval> | string <int: length> | choice <options...>>"
-
 // Random handles the random command
 func Random() func(*dgc.Ctx) {
 	return func(ctx *dgc.Ctx) {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateInvalidUsageEmbed(randomUsage))
+		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateInvalidUsageEmbed(ctx.Command.Usage))
 	}
 }
 
