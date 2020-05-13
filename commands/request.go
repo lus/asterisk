@@ -17,7 +17,7 @@ func Request(ctx *dgc.Ctx) {
 	// Check if the user is being time-outed
 	lastCall := lastRequestCalls[ctx.Event.Author.ID]
 	currentTime := time.Now().UnixNano() / 1e6
-	if (lastCall != 0) && (currentTime-lastCall) < 3600000 {
+	if (lastCall != 0) && (currentTime-lastCall) < 3600000 && !utils.StringArrayContains(config.CurrentConfig.BotAdmins, ctx.Event.Author.ID) {
 		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateErrorEmbed("You need to wait at least one hour between two feature requests."))
 		return
 	}
