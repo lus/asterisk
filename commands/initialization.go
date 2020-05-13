@@ -32,7 +32,7 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 	router.RegisterCmd(&dgc.Command{
 		Name:        "request",
 		Description: "Creates a feature request",
-		Usage:       "request <feature request>",
+		Usage:       "request <string>",
 		IgnoreCase:  true,
 		Handler:     Request,
 	})
@@ -41,7 +41,7 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 	// Register the random command
 	router.RegisterCmd(&dgc.Command{
 		Name:        "random",
-		Description: "Generates a random bool, number, string or choice",
+		Description: "Generates a random boolean, number, string or choice",
 		Usage:       "random <bool | number <interval> | string <int: length> | choice <options...>>",
 		IgnoreCase:  true,
 		SubCommands: []*dgc.Command{
@@ -69,7 +69,7 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 			&dgc.Command{
 				Name:        "choice",
 				Aliases:     []string{"c"},
-				Description: "Generates a random choice",
+				Description: "Chooses a random element of the given options",
 				IgnoreCase:  true,
 				Handler:     RandomChoice,
 			},
@@ -77,19 +77,27 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 		Handler: Random,
 	})
 
-	// Register the md5 command
+	// Register the hash command
 	router.RegisterCmd(&dgc.Command{
-		Name:        "md5",
-		Description: "Hashes the given arguments using md5",
-		Usage:       "md5 <string>",
+		Name:        "hash",
+		Description: "Hashes the given string using the specified algorithm",
+		Usage:       "hash <md5> <string>",
 		IgnoreCase:  true,
-		Handler:     MD5,
+		SubCommands: []*dgc.Command{
+			&dgc.Command{
+				Name:        "md5",
+				Description: "Hashes the given string using the md5 algorithm",
+				IgnoreCase:  true,
+				Handler:     HashMD5,
+			},
+		},
+		Handler: Hash,
 	})
 
 	// Register the say command
 	router.RegisterCmd(&dgc.Command{
 		Name:        "say",
-		Description: "[Bot Admin only] Makes me say something",
+		Description: "[Bot Admin only] Makes the bot say something",
 		Usage:       "say <string>",
 		Flags: []string{
 			"botAdminOnly",
@@ -113,7 +121,7 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 	// Register the debug command
 	router.RegisterCmd(&dgc.Command{
 		Name:        "debug",
-		Description: "[Bot Admin only] Executes the given string at runtime",
+		Description: "[Bot Admin only] Executes the given code at runtime",
 		Usage:       "debug <codeblock>",
 		Flags: []string{
 			"botAdminOnly",
