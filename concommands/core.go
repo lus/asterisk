@@ -23,8 +23,9 @@ func Handle(reader *bufio.Reader, session *discordgo.Session) {
 	// Handle the executed command
 	switch strings.ToLower(split[0]) {
 	case "help":
-		fmt.Println("help: Shows this list")
-		fmt.Println("stop: Stops this Asterisk instance")
+		fmt.Println("    > help: Shows this list")
+		fmt.Println("    > stop: Stops this Asterisk instance")
+		fmt.Println("    > say: Prints the message defined in the second+ argument(s) to the channel with the ID of the first one")
 	case "stop":
 		log.Println("Stopping this Asterisk instance...")
 		err = session.Close()
@@ -32,8 +33,19 @@ func Handle(reader *bufio.Reader, session *discordgo.Session) {
 			panic(err)
 		}
 		return
+	case "say":
+		if len(split) < 3 {
+			fmt.Println("> Invalid syntax.")
+			break
+		}
+		_, err = session.ChannelMessageSend(split[1], strings.Join(split[2:], " "))
+		if err != nil {
+			fmt.Println(err)
+			break
+		}
+		fmt.Println("> Success.")
 	default:
-		fmt.Println("Command not found. Type 'help' for help.")
+		fmt.Println("> Command not found. Type 'help' for help.")
 	}
 
 	// Handle further commands

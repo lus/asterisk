@@ -133,6 +133,13 @@ func main() {
 		IgnoreCase:  true,
 		Handler:     commands.Blacklist(),
 	})
+	router.RegisterCmd(&dgc.Command{
+		Name:        "debug",
+		Description: "[Bot Admin only] Executes the given string at runtime",
+		Usage:       "debug <code>",
+		IgnoreCase:  true,
+		Handler:     commands.Debug(),
+	})
 	log.Println("Successfully registered commands.")
 
 	// Register middlewares
