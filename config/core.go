@@ -36,6 +36,10 @@ func Load() error {
 			BotToken:              os.Getenv("ASTERISK_BOT_TOKEN"),
 			BotAdmins:             strings.Split(os.Getenv("ASTERISK_BOT_ADMINS"), ","),
 			MongoConnectionString: os.Getenv("ASTERISK_MONGO_CONNECTION_STRING"),
+			JDoodle: JDoodleConfig{
+				ClientID:     os.Getenv("ASTERISK_JDOODLE_CLIENT_ID"),
+				ClientSecret: os.Getenv("ASTERISK_JDOODLE_CLIENT_SECRET"),
+			},
 		}
 		return nil
 	}
