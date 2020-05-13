@@ -67,6 +67,7 @@ func main() {
 
 	// Register commands
 	log.Println("Registering commands...")
+	router.RegisterDefaultHelpCommand(session)
 	router.RegisterCmd(&dgc.Command{
 		Name:        "info",
 		Description: "Displays some useful information about the bot",
@@ -132,13 +133,13 @@ func main() {
 		IgnoreCase:  true,
 		Handler:     commands.Blacklist(),
 	})
-	router.RegisterDefaultHelpCommand(session)
 	log.Println("Successfully registered commands.")
 
 	// Register middlewares
 	log.Println("Registering middlewares...")
 	router.AddMiddleware(middlewares.CheckCommandBlacklist)
 	router.AddMiddleware(middlewares.InjectGuildConfig)
+	router.AddMiddleware(middlewares.CheckCommandChannel)
 	log.Println("Successfully registered middlewares.")
 
 	// Handle incoming console commands
