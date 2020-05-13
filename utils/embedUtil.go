@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/Lukaesebrot/asterisk/static"
+	"github.com/Lukaesebrot/dgc"
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -134,6 +135,28 @@ func GenerateStatsEmbed(session *discordgo.Session) *discordgo.MessageEmbed {
 					"\nUsable logical CPUs: `" + strconv.Itoa(runtime.NumCPU()) + "`" +
 					"\nHeap in use: `" + strconv.FormatUint(memStats.HeapInuse, 10) + "`" +
 					"\nStack in use: `" + strconv.FormatUint(memStats.StackInuse, 10) + "`",
+				Inline: false,
+			},
+		},
+	}
+}
+
+// GenerateFeatureRequestEmbed generates the embed which contains the information about a feature request
+func GenerateFeatureRequestEmbed(ctx *dgc.Ctx) *discordgo.MessageEmbed {
+	return &discordgo.MessageEmbed{
+		Type:      "rich",
+		Title:     "Feature Request",
+		Timestamp: time.Now().Format(time.RFC3339),
+		Color:     0xffff00,
+		Fields: []*discordgo.MessageEmbedField{
+			&discordgo.MessageEmbedField{
+				Name:   "Description",
+				Value:  "```" + strings.ReplaceAll(ctx.Arguments.Raw(), "`", "'") + "```",
+				Inline: false,
+			},
+			&discordgo.MessageEmbedField{
+				Name:   "Requester",
+				Value:  "```" + ctx.Event.Author.Username + "#" + ctx.Event.Author.Discriminator + " (" + ctx.Event.Author.ID + ")```",
 				Inline: false,
 			},
 		},

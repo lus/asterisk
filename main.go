@@ -83,6 +83,14 @@ func main() {
 		Handler:     commands.Stats,
 	})
 	router.RegisterCmd(&dgc.Command{
+		Name:        "request",
+		Description: "Creates a feature request",
+		Usage:       "request <feature request>",
+		IgnoreCase:  true,
+		Handler:     commands.Request,
+	})
+	session.AddHandler(commands.RequestReactionListener)
+	router.RegisterCmd(&dgc.Command{
 		Name:        "random",
 		Description: "Generates a random bool, number, string or choice",
 		Usage:       "random <bool | number <interval> | string <int: length> | choice <options...>>",

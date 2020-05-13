@@ -17,6 +17,7 @@ var CurrentConfig *Config = new(Config)
 type Config struct {
 	BotToken              string        `json:"botToken"`
 	BotAdmins             []string      `json:"botAdmins"`
+	FeatureRequestChannel string        `json:"featureRequestChannel"`
 	MongoConnectionString string        `json:"mongoConnectionString"`
 	JDoodle               JDoodleConfig `json:"jdoodle"`
 }
@@ -35,6 +36,7 @@ func Load() error {
 		CurrentConfig = &Config{
 			BotToken:              os.Getenv("ASTERISK_BOT_TOKEN"),
 			BotAdmins:             strings.Split(os.Getenv("ASTERISK_BOT_ADMINS"), ","),
+			FeatureRequestChannel: os.Getenv("ASTERISK_FEATURE_REQUEST_CHANNEL"),
 			MongoConnectionString: os.Getenv("ASTERISK_MONGO_CONNECTION_STRING"),
 			JDoodle: JDoodleConfig{
 				ClientID:     os.Getenv("ASTERISK_JDOODLE_CLIENT_ID"),
