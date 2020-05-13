@@ -3,6 +3,7 @@ package commands
 import (
 	"reflect"
 
+	"github.com/Lukaesebrot/asterisk/config"
 	"github.com/Lukaesebrot/asterisk/utils"
 	"github.com/Lukaesebrot/dgc"
 	"github.com/containous/yaegi/interp"
@@ -23,12 +24,13 @@ func Debug(ctx *dgc.Ctx) {
 
 	// Inject the custom variables
 	custom := make(map[string]map[string]reflect.Value)
-	custom["main"] = map[string]reflect.Value{
-		"ctx": reflect.ValueOf(ctx),
+	custom["asterisk"] = map[string]reflect.Value{
+		"ctx":    reflect.ValueOf(ctx),
+		"config": reflect.ValueOf(config.CurrentConfig),
 	}
 	interpreter.Use(stdlib.Symbols)
 	interpreter.Use(custom)
-	_, err := interpreter.Eval("import (\n. \"main\"\n\"fmt\"\n)")
+	_, err := interpreter.Eval("import (\n. \"asterisk\"\n\"fmt\"\n\"time\"\n)")
 	if err != nil {
 		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateErrorEmbed(err.Error()))
 		return
