@@ -4,8 +4,6 @@ import (
 	"context"
 	"time"
 
-	"github.com/Lukaesebrot/asterisk/utils"
-
 	"go.mongodb.org/mongo-driver/mongo"
 
 	"github.com/Lukaesebrot/asterisk/database"
@@ -74,15 +72,4 @@ func (guildConfig *GuildConfig) Update() error {
 		"commandChannels":    guildConfig.CommandChannels,
 	}})
 	return err
-}
-
-// ValidateChannel checks whether or not commands may get executed in the given channel
-func (guildConfig *GuildConfig) ValidateChannel(channelID string) bool {
-	// Return true if the guild did not enable the command restriction
-	if !guildConfig.ChannelRestriction {
-		return true
-	}
-
-	// Return true if the channel is in the list of command channels
-	return utils.StringArrayContains(guildConfig.CommandChannels, channelID)
 }

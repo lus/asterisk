@@ -38,6 +38,15 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 	})
 	session.AddHandler(RequestReactionListener)
 
+	// Register the settings command
+	router.RegisterCmd(&dgc.Command{
+		Name:        "settings",
+		Description: "Displays the current guild settings or changes them",
+		Usage:       "settings [toggleChannelRestriction | toggleCommandChannel <channel mention>]",
+		IgnoreCase:  true,
+		Handler:     Settings,
+	})
+
 	// Register the random command
 	router.RegisterCmd(&dgc.Command{
 		Name:        "random",

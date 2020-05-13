@@ -6,6 +6,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/Lukaesebrot/asterisk/guildconfig"
 	"github.com/Lukaesebrot/asterisk/static"
 	"github.com/Lukaesebrot/dgc"
 	"github.com/bwmarrin/discordgo"
@@ -157,6 +158,34 @@ func GenerateFeatureRequestEmbed(ctx *dgc.Ctx) *discordgo.MessageEmbed {
 			&discordgo.MessageEmbedField{
 				Name:   "Requester",
 				Value:  "```" + ctx.Event.Author.Username + "#" + ctx.Event.Author.Discriminator + " (" + ctx.Event.Author.ID + ")```",
+				Inline: false,
+			},
+		},
+	}
+}
+
+// GenerateGuildSettingsEmbed generates the embed which contains the current settings of a guild
+func GenerateGuildSettingsEmbed(guildConfig *guildconfig.GuildConfig) *discordgo.MessageEmbed {
+	// Define the command channel string
+	commandChannels := "No command channels"
+	if len(guildConfig.CommandChannels) > 0 {
+		commandChannels = "<#" + strings.Join(guildConfig.CommandChannels, ">, <#") + ">"
+	}
+
+	return &discordgo.MessageEmbed{
+		Type:      "rich",
+		Title:     "Guild Settings Overview",
+		Timestamp: time.Now().Format(time.RFC3339),
+		Color:     0xffff00,
+		Fields: []*discordgo.MessageEmbedField{
+			&discordgo.MessageEmbedField{
+				Name:   "Command Channel Restriction",
+				Value:  "`" + PrettifyBool(guildConfig.ChannelRestriction) + "`",
+				Inline: false,
+			},
+			&discordgo.MessageEmbedField{
+				Name:   "Command Channels",
+				Value:  commandChannels,
 				Inline: false,
 			},
 		},
