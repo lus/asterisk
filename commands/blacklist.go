@@ -8,12 +8,6 @@ import (
 
 // Blacklist handles the blacklist command
 func Blacklist(ctx *dgc.Ctx) {
-	// Check if the executor is a bot admin
-	if !utils.IsBotAdmin(ctx.Event.Author.ID) {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateInsufficientPermissionsEmbed("You need to be a bot admin to use this command."))
-		return
-	}
-
 	// Validate the arguments
 	userID := ctx.Arguments.Get(0).AsUserMentionID()
 	if userID == "" {

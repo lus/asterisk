@@ -51,7 +51,7 @@ func main() {
 
 	// Initialize the command system
 	log.Println("Initializing the command system...")
-	router := &dgc.Router{
+	router := dgc.Create(&dgc.Router{
 		Prefixes: []string{
 			"$",
 			"<@!" + static.Self.ID + ">",
@@ -61,7 +61,7 @@ func main() {
 		IgnorePrefixCase: true,
 		BotsAllowed:      false,
 		PingHandler:      commands.Info,
-	}
+	})
 	router.Initialize(session)
 	log.Println("Successfully initialized the command system.")
 
@@ -130,30 +130,40 @@ func main() {
 		Name:        "say",
 		Description: "[Bot Admin only] Makes me say something",
 		Usage:       "say <string>",
-		IgnoreCase:  true,
-		Handler:     commands.Say,
+		Flags: []string{
+			"botAdminOnly",
+		},
+		IgnoreCase: true,
+		Handler:    commands.Say,
 	})
 	router.RegisterCmd(&dgc.Command{
 		Name:        "blacklist",
 		Description: "[Bot Admin only] Adds/Removes a user to/from the command blacklist",
 		Usage:       "blacklist <user mention>",
-		IgnoreCase:  true,
-		Handler:     commands.Blacklist,
+		Flags: []string{
+			"botAdminOnly",
+		},
+		IgnoreCase: true,
+		Handler:    commands.Blacklist,
 	})
 	router.RegisterCmd(&dgc.Command{
 		Name:        "debug",
 		Description: "[Bot Admin only] Executes the given string at runtime",
-		Usage:       "debug <string>",
-		IgnoreCase:  true,
-		Handler:     commands.Debug,
+		Usage:       "debug <codeblock>",
+		Flags: []string{
+			"botAdminOnly",
+		},
+		IgnoreCase: true,
+		Handler:    commands.Debug,
 	})
 	log.Println("Successfully registered commands.")
 
 	// Register middlewares
 	log.Println("Registering middlewares...")
-	router.AddMiddleware(middlewares.CheckCommandBlacklist)
-	router.AddMiddleware(middlewares.InjectGuildConfig)
-	router.AddMiddleware(middlewares.CheckCommandChannel)
+	router.AddMiddleware("*", middlewares.CheckCommandBlacklist)
+	router.AddMiddleware("*", middlewares.InjectGuildConfig)
+	router.AddMiddleware("*", middlewares.CheckCommandChannel)
+	router.AddMiddleware("botAdminOnly", middlewares.CheckBotAdmin)
 	log.Println("Successfully registered middlewares.")
 
 	// Handle incoming console commands

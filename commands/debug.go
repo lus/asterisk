@@ -2,7 +2,6 @@ package commands
 
 import (
 	"reflect"
-	"strings"
 
 	"github.com/Lukaesebrot/asterisk/utils"
 	"github.com/Lukaesebrot/dgc"
@@ -12,20 +11,14 @@ import (
 
 // Debug handles the debug command
 func Debug(ctx *dgc.Ctx) {
-	// Check if the executor is a bot admin
-	if !utils.IsBotAdmin(ctx.Event.Author.ID) {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateInsufficientPermissionsEmbed("You need to be a bot admin to use this command."))
-		return
-	}
-
 	// Validate the arguments
-	if ctx.Arguments.Amount() == 0 {
+	codeblock := ctx.Arguments.AsCodeblock()
+	if codeblock == nil {
 		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateInvalidUsageEmbed(ctx.Command.Usage))
 		return
 	}
 
-	// Define the evaluation string and create the interpreter
-	evaluationString := strings.ReplaceAll(ctx.Arguments.Raw(), "```", "")
+	// Create the interpreter
 	interpreter := interp.New(interp.Options{})
 
 	// Inject the custom variables
@@ -42,7 +35,7 @@ func Debug(ctx *dgc.Ctx) {
 	}
 
 	// Evaluate the given string and output the result
-	_, err = interpreter.Eval(evaluationString)
+	_, err = interpreter.Eval(codeblock.Content)
 	if err != nil {
 		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateErrorEmbed(err.Error()))
 		return

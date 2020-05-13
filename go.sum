@@ -1,6 +1,6 @@
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
-github.com/Lukaesebrot/dgc v0.0.0-20200513130646-5d997d793fba h1:A0U4hIcilNq+GoyyKpXTbCXajHAhCQ8EJz44W4k01/o=
-github.com/Lukaesebrot/dgc v0.0.0-20200513130646-5d997d793fba/go.mod h1:Cs8fI+3JBB69U0rbzbc2LJtTOUi4iULBEvNefSL0kPQ=
+github.com/Lukaesebrot/dgc v0.0.0-20200513203524-e8801221d52a h1:I85MzkzyCES6iF2DykCpxupUgbNOw65m/inb4AcJgnU=
+github.com/Lukaesebrot/dgc v0.0.0-20200513203524-e8801221d52a/go.mod h1:Cs8fI+3JBB69U0rbzbc2LJtTOUi4iULBEvNefSL0kPQ=
 github.com/bwmarrin/discordgo v0.20.3 h1:AxjcHGbyBFSC0a3Zx5nDQwbOjU7xai5dXjRnZ0YB7nU=
 github.com/bwmarrin/discordgo v0.20.3/go.mod h1:O9S4p+ofTFwB02em7jkpkV8M3R0/PUVOwN61zSZ0r4Q=
 github.com/containous/yaegi v0.8.5 h1:L4GzyFK6Y7TdTIlQSFpxdaBBFlKL/u54tG3viucuzJk=
