@@ -15,7 +15,7 @@ var lastRequestCalls = make(map[string]int64)
 // Request handles the request command
 func Request(ctx *dgc.Ctx) {
 	// Check if the user is being time-outed
-	lastCall := lastRequestCalls[ctx.Event.Member.User.ID]
+	lastCall := lastRequestCalls[ctx.Event.Author.ID]
 	currentTime := time.Now().UnixNano() / 1e6
 	if (lastCall != 0) && (currentTime-lastCall) < 3600000 {
 		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateErrorEmbed("You need to wait at least one hour between two feature requests."))
@@ -37,7 +37,7 @@ func Request(ctx *dgc.Ctx) {
 	ctx.Session.MessageReactionAdd(config.CurrentConfig.FeatureRequestChannel, message.ID, "✅")
 
 	// Save the current execution time
-	lastRequestCalls[ctx.Event.Member.User.ID] = currentTime
+	lastRequestCalls[ctx.Event.Author.ID] = currentTime
 
 	// Confirm the creation of the feature request
 	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateSuccessEmbed("Your feature request was submitted."))
