@@ -5,6 +5,8 @@ import (
 	"log"
 	"os"
 
+	"github.com/Lukaesebrot/asterisk/middlewares"
+
 	"github.com/Lukaesebrot/asterisk/commands"
 	"github.com/Lukaesebrot/asterisk/static"
 	"github.com/Lukaesebrot/dgc"
@@ -60,6 +62,11 @@ func main() {
 		BotsAllowed:      false,
 		PingHandler:      commands.Info(),
 	}
+	router.Initialize(session)
+	log.Println("Successfully initialized the command system.")
+
+	// Register commands
+	log.Println("Registering commands...")
 	router.RegisterCmd(&dgc.Command{
 		Name:        "info",
 		Description: "Displays some useful information about the bot",
@@ -113,14 +120,26 @@ func main() {
 	})
 	router.RegisterCmd(&dgc.Command{
 		Name:        "say",
-		Description: "Makes me say something",
+		Description: "[Bot Admin only] Makes me say something",
 		Usage:       "say",
 		IgnoreCase:  true,
 		Handler:     commands.Say(),
 	})
+	router.RegisterCmd(&dgc.Command{
+		Name:        "blacklist",
+		Description: "[Bot Admin only] Adds/Removes a user to/from the command blacklist",
+		Usage:       "blacklist <user mention>",
+		IgnoreCase:  true,
+		Handler:     commands.Blacklist(),
+	})
 	router.RegisterDefaultHelpCommand(session)
-	router.Initialize(session)
-	log.Println("Successfully initialized the command system.")
+	log.Println("Successfully registered commands.")
+
+	// Register middlewares
+	log.Println("Registering middlewares...")
+	router.AddMiddleware(middlewares.CheckCommandBlacklist)
+	router.AddMiddleware(middlewares.InjectGuildConfig)
+	log.Println("Successfully registered middlewares.")
 
 	// Handle incoming console commands
 	log.Println("Waiting for console commands. Type 'help' for help.")

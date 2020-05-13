@@ -13,11 +13,10 @@ import (
 // GenerateSuccessEmbed generates a general success embed
 func GenerateSuccessEmbed(output string) *discordgo.MessageEmbed {
 	return &discordgo.MessageEmbed{
-		Type:        "rich",
-		Title:       "Success",
-		Description: "Wooohoooo.",
-		Timestamp:   time.Now().Format(time.RFC3339),
-		Color:       0x00ff00,
+		Type:      "rich",
+		Title:     "Success",
+		Timestamp: time.Now().Format(time.RFC3339),
+		Color:     0x00ff00,
 		Fields: []*discordgo.MessageEmbedField{
 			&discordgo.MessageEmbedField{
 				Name:   "Output",
@@ -31,11 +30,10 @@ func GenerateSuccessEmbed(output string) *discordgo.MessageEmbed {
 // GenerateErrorEmbed generates an embed for errors
 func GenerateErrorEmbed(message string) *discordgo.MessageEmbed {
 	return &discordgo.MessageEmbed{
-		Type:        "rich",
-		Title:       "Error",
-		Description: "An error occured :/",
-		Timestamp:   time.Now().Format(time.RFC3339),
-		Color:       0xff0000,
+		Type:      "rich",
+		Title:     "Error",
+		Timestamp: time.Now().Format(time.RFC3339),
+		Color:     0xff0000,
 		Fields: []*discordgo.MessageEmbedField{
 			&discordgo.MessageEmbedField{
 				Name:   "Message",
@@ -49,11 +47,10 @@ func GenerateErrorEmbed(message string) *discordgo.MessageEmbed {
 // GenerateInvalidUsageEmbed generates an embed for invalid usages
 func GenerateInvalidUsageEmbed(message string) *discordgo.MessageEmbed {
 	return &discordgo.MessageEmbed{
-		Type:        "rich",
-		Title:       "Invalid Usage",
-		Description: "That's not how you're supposed to use this command!",
-		Timestamp:   time.Now().Format(time.RFC3339),
-		Color:       0xff0000,
+		Type:      "rich",
+		Title:     "Invalid Usage",
+		Timestamp: time.Now().Format(time.RFC3339),
+		Color:     0xff0000,
 		Fields: []*discordgo.MessageEmbedField{
 			&discordgo.MessageEmbedField{
 				Name:   "Message",
@@ -67,12 +64,10 @@ func GenerateInvalidUsageEmbed(message string) *discordgo.MessageEmbed {
 // GenerateInsufficientPermissionsEmbed generates an embed for insufficient permissions
 func GenerateInsufficientPermissionsEmbed(message string) *discordgo.MessageEmbed {
 	return &discordgo.MessageEmbed{
-		URL:         "https://github.com/Lukaesebrot/asterisk",
-		Type:        "rich",
-		Title:       "Insufficient Permissions",
-		Description: "Looks like you're not cool enough to use that command :/",
-		Timestamp:   time.Now().Format(time.RFC3339),
-		Color:       0xff0000,
+		Type:      "rich",
+		Title:     "Insufficient Permissions",
+		Timestamp: time.Now().Format(time.RFC3339),
+		Color:     0xff0000,
 		Fields: []*discordgo.MessageEmbedField{
 			&discordgo.MessageEmbedField{
 				Name:   "Message",
@@ -86,12 +81,10 @@ func GenerateInsufficientPermissionsEmbed(message string) *discordgo.MessageEmbe
 // GenerateBotInfoEmbed generates the embed which contains all the neccessary bot information
 func GenerateBotInfoEmbed() *discordgo.MessageEmbed {
 	return &discordgo.MessageEmbed{
-		URL:         "https://github.com/Lukaesebrot/asterisk",
-		Type:        "rich",
-		Title:       "Information",
-		Description: "Here you will find some information about me :)",
-		Timestamp:   time.Now().Format(time.RFC3339),
-		Color:       0xffff00,
+		Type:      "rich",
+		Title:     "Bot Information",
+		Timestamp: time.Now().Format(time.RFC3339),
+		Color:     0xffff00,
 		Fields: []*discordgo.MessageEmbedField{
 			&discordgo.MessageEmbedField{
 				Name:   "Developer(s)",
@@ -124,12 +117,10 @@ func GenerateStatsEmbed(session *discordgo.Session) *discordgo.MessageEmbed {
 	runtime.ReadMemStats(&memStats)
 
 	return &discordgo.MessageEmbed{
-		URL:         "https://github.com/Lukaesebrot/asterisk",
-		Type:        "rich",
-		Title:       "Stats",
-		Description: "Here you will find some useful stats.",
-		Timestamp:   time.Now().Format(time.RFC3339),
-		Color:       0xffff00,
+		Type:      "rich",
+		Title:     "Stats",
+		Timestamp: time.Now().Format(time.RFC3339),
+		Color:     0xffff00,
 		Fields: []*discordgo.MessageEmbedField{
 			&discordgo.MessageEmbedField{
 				Name:   "Discord specs",
