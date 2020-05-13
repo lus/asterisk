@@ -7,8 +7,6 @@ import (
 )
 
 // Stats handles the stats command
-func Stats() func(*dgc.Ctx) {
-	return func(ctx *dgc.Ctx) {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateStatsEmbed(ctx.Session))
-	}
+func Stats(ctx *dgc.Ctx) {
+	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateStatsEmbed(ctx.Session))
 }

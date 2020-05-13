@@ -60,7 +60,7 @@ func main() {
 		},
 		IgnorePrefixCase: true,
 		BotsAllowed:      false,
-		PingHandler:      commands.Info(),
+		PingHandler:      commands.Info,
 	}
 	router.Initialize(session)
 	log.Println("Successfully initialized the command system.")
@@ -73,14 +73,14 @@ func main() {
 		Description: "Displays some useful information about the bot",
 		Usage:       "info",
 		IgnoreCase:  true,
-		Handler:     commands.Info(),
+		Handler:     commands.Info,
 	})
 	router.RegisterCmd(&dgc.Command{
 		Name:        "stats",
 		Description: "Displays some general statistics about the bot",
 		Usage:       "stats",
 		IgnoreCase:  true,
-		Handler:     commands.Stats(),
+		Handler:     commands.Stats,
 	})
 	router.RegisterCmd(&dgc.Command{
 		Name:        "random",
@@ -93,52 +93,59 @@ func main() {
 				Aliases:     []string{"b"},
 				Description: "Generates a random boolean",
 				IgnoreCase:  true,
-				Handler:     commands.RandomBool(),
+				Handler:     commands.RandomBool,
 			},
 			&dgc.Command{
 				Name:        "number",
 				Aliases:     []string{"n"},
 				Description: "Generates a random number",
 				IgnoreCase:  true,
-				Handler:     commands.RandomNumber(),
+				Handler:     commands.RandomNumber,
 			},
 			&dgc.Command{
 				Name:        "string",
 				Aliases:     []string{"s"},
 				Description: "Generates a random string",
 				IgnoreCase:  true,
-				Handler:     commands.RandomString(),
+				Handler:     commands.RandomString,
 			},
 			&dgc.Command{
 				Name:        "choice",
 				Aliases:     []string{"c"},
 				Description: "Generates a random choice",
 				IgnoreCase:  true,
-				Handler:     commands.RandomChoice(),
+				Handler:     commands.RandomChoice,
 			},
 		},
-		Handler: commands.Random(),
+		Handler: commands.Random,
+	})
+	router.RegisterCmd(&dgc.Command{
+		Name:        "md5",
+		Description: "Hashes the given arguments using md5",
+		Usage:       "md5 <string>",
+		IgnoreCase:  true,
+		Handler:     commands.MD5,
 	})
 	router.RegisterCmd(&dgc.Command{
 		Name:        "say",
 		Description: "[Bot Admin only] Makes me say something",
-		Usage:       "say",
+		Usage:       "say <string>",
 		IgnoreCase:  true,
-		Handler:     commands.Say(),
+		Handler:     commands.Say,
 	})
 	router.RegisterCmd(&dgc.Command{
 		Name:        "blacklist",
 		Description: "[Bot Admin only] Adds/Removes a user to/from the command blacklist",
 		Usage:       "blacklist <user mention>",
 		IgnoreCase:  true,
-		Handler:     commands.Blacklist(),
+		Handler:     commands.Blacklist,
 	})
 	router.RegisterCmd(&dgc.Command{
 		Name:        "debug",
 		Description: "[Bot Admin only] Executes the given string at runtime",
-		Usage:       "debug <code>",
+		Usage:       "debug <string>",
 		IgnoreCase:  true,
-		Handler:     commands.Debug(),
+		Handler:     commands.Debug,
 	})
 	log.Println("Successfully registered commands.")
 
