@@ -49,8 +49,11 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 				Name:        "toggleChannelRestriction",
 				Aliases:     []string{"tcr"},
 				Description: "Toggles the current command channel restriction status",
-				IgnoreCase:  true,
-				Handler:     SettingsToggleChannelRestriction,
+				Flags: []string{
+					"guildAdminOnly",
+				},
+				IgnoreCase: true,
+				Handler:    SettingsToggleChannelRestriction,
 			},
 		},
 		Handler: Settings,

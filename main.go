@@ -76,6 +76,7 @@ func main() {
 	router.AddMiddleware("*", middlewares.InjectGuildConfig)
 	router.AddMiddleware("*", middlewares.CheckCommandChannel)
 	router.AddMiddleware("botAdminOnly", middlewares.CheckBotAdmin)
+	router.AddMiddleware("guildAdminOnly", middlewares.CheckGuildAdmin)
 	log.Println("Successfully registered middlewares.")
 
 	// Handle incoming console commands
