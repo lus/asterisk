@@ -3,7 +3,7 @@ module github.com/Lukaesebrot/asterisk
 go 1.14
 
 require (
-	github.com/Lukaesebrot/dgc v0.0.0-20200513203524-e8801221d52a
+	github.com/Lukaesebrot/dgc v0.0.0-20200514002314-6e4d5cff9919
 	github.com/bwmarrin/discordgo v0.20.3
 	github.com/containous/yaegi v0.8.5
 	github.com/gorilla/websocket v1.4.2 // indirect

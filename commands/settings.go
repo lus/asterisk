@@ -27,3 +27,41 @@ func SettingsToggleChannelRestriction(ctx *dgc.Ctx) {
 	// Respond with a success message
 	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateSuccessEmbed("The command channel restriction has been "+utils.PrettifyBool(guildConfig.ChannelRestriction)+"."))
 }
+
+// SettingsToggleCommandChannel handles the settings toggleCommandChannel command
+func SettingsToggleCommandChannel(ctx *dgc.Ctx) {
+	// Validate the argument
+	channelID := ctx.Arguments.Get(0).AsChannelMentionID()
+	if channelID == "" {
+		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateInvalidUsageEmbed(ctx.Command.Usage))
+		return
+	}
+
+	// Define the guild configuration
+	guildConfig := ctx.CustomObjects["guildConfig"].(*guildconfig.GuildConfig)
+
+	// Toggle the command channel status
+	contains := utils.StringArrayContains(guildConfig.CommandChannels, ctx.Event.ChannelID)
+	if contains {
+		newArray := make([]string, len(guildConfig.CommandChannels)-1)
+		counter := 0
+		for _, channel := range guildConfig.CommandChannels {
+			if channel == channelID {
+				continue
+			}
+			newArray[counter] = channel
+			counter++
+		}
+		guildConfig.CommandChannels = newArray
+	} else {
+		guildConfig.CommandChannels = append(guildConfig.CommandChannels, channelID)
+	}
+	err := guildConfig.Update()
+	if err != nil {
+		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateErrorEmbed(err.Error()))
+		return
+	}
+
+	// Respond with a success message
+	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateSuccessEmbed("The command channel status for the mentioned channel has been "+utils.PrettifyBool(!contains)+"."))
+}

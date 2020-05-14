@@ -55,6 +55,16 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 				IgnoreCase: true,
 				Handler:    SettingsToggleChannelRestriction,
 			},
+			&dgc.Command{
+				Name:        "toggleCommandChannel",
+				Aliases:     []string{"tcc"},
+				Description: "Toggles the command channel status of the mentioned channel",
+				Flags: []string{
+					"guildAdminOnly",
+				},
+				IgnoreCase: true,
+				Handler:    SettingsToggleCommandChannel,
+			},
 		},
 		Handler: Settings,
 	})

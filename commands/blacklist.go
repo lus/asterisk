@@ -8,7 +8,7 @@ import (
 
 // Blacklist handles the blacklist command
 func Blacklist(ctx *dgc.Ctx) {
-	// Validate the arguments
+	// Validate the argument
 	userID := ctx.Arguments.Get(0).AsUserMentionID()
 	if userID == "" {
 		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateInvalidUsageEmbed(ctx.Command.Usage))
