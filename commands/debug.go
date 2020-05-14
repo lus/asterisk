@@ -4,6 +4,7 @@ import (
 	"reflect"
 
 	"github.com/Lukaesebrot/asterisk/config"
+	"github.com/Lukaesebrot/asterisk/guildconfig"
 	"github.com/Lukaesebrot/asterisk/utils"
 	"github.com/Lukaesebrot/dgc"
 	"github.com/containous/yaegi/interp"
@@ -25,8 +26,9 @@ func Debug(ctx *dgc.Ctx) {
 	// Inject the custom variables
 	custom := make(map[string]map[string]reflect.Value)
 	custom["asterisk"] = map[string]reflect.Value{
-		"ctx":    reflect.ValueOf(ctx),
-		"config": reflect.ValueOf(config.CurrentConfig),
+		"ctx":         reflect.ValueOf(ctx),
+		"guildConfig": reflect.ValueOf(ctx.CustomObjects["guildConfig"].(*guildconfig.GuildConfig)),
+		"config":      reflect.ValueOf(config.CurrentConfig),
 	}
 	interpreter.Use(stdlib.Symbols)
 	interpreter.Use(custom)
