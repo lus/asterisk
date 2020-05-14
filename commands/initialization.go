@@ -44,7 +44,16 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 		Description: "Displays the current guild settings or changes them",
 		Usage:       "settings [toggleChannelRestriction | toggleCommandChannel <channel mention>]",
 		IgnoreCase:  true,
-		Handler:     Settings,
+		SubCommands: []*dgc.Command{
+			&dgc.Command{
+				Name:        "toggleChannelRestriction",
+				Aliases:     []string{"tcr"},
+				Description: "Toggles the current command channel restriction status",
+				IgnoreCase:  true,
+				Handler:     SettingsToggleChannelRestriction,
+			},
+		},
+		Handler: Settings,
 	})
 
 	// Register the random command
