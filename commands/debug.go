@@ -26,9 +26,10 @@ func Debug(ctx *dgc.Ctx) {
 	// Inject the custom variables
 	custom := make(map[string]map[string]reflect.Value)
 	custom["asterisk"] = map[string]reflect.Value{
-		"ctx":         reflect.ValueOf(ctx),
-		"guildConfig": reflect.ValueOf(ctx.CustomObjects["guildConfig"].(*guildconfig.GuildConfig)),
-		"config":      reflect.ValueOf(config.CurrentConfig),
+		"ctx":           reflect.ValueOf(ctx),
+		"guildConfig":   reflect.ValueOf(ctx.CustomObjects["guildConfig"].(*guildconfig.GuildConfig)),
+		"config":        reflect.ValueOf(config.CurrentConfig),
+		"hasPermission": reflect.ValueOf(utils.HasPermission),
 	}
 	interpreter.Use(stdlib.Symbols)
 	interpreter.Use(custom)
@@ -39,10 +40,10 @@ func Debug(ctx *dgc.Ctx) {
 	}
 
 	// Evaluate the given string and output the result
-	_, err = interpreter.Eval(codeblock.Content)
+	result, err := interpreter.Eval(codeblock.Content)
 	if err != nil {
 		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateErrorEmbed(err.Error()))
 		return
 	}
-	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateSuccessEmbed("Evaluation succeeded."))
+	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateSuccessEmbed(result.String()))
 }

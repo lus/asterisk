@@ -12,10 +12,23 @@ func IsBotAdmin(userID string) bool {
 
 // HasPermission checks whether or not the given user has the given permission
 func HasPermission(session *discordgo.Session, guildID string, userID string, permission int) (bool, error) {
+	// Check if the user is the guild owner
+	guild, err := session.State.Guild(guildID)
+	if err != nil {
+		guild, err = session.Guild(guildID)
+		if err != nil {
+			return false, err
+		}
+	}
+	if guild.OwnerID == userID {
+		return true, nil
+	}
+
 	// Retrieve the member object
 	member, err := session.State.Member(guildID, userID)
 	if err != nil {
-		if member, err = session.GuildMember(guildID, userID); err != nil {
+		member, err = session.GuildMember(guildID, userID)
+		if err != nil {
 			return false, err
 		}
 	}

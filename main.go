@@ -42,6 +42,9 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	session.AddHandlerOnce(func(session *discordgo.Session, event *discordgo.Ready) {
+		session.UpdateListeningStatus("$help")
+	})
 	err = session.Open()
 	if err != nil {
 		panic(err)
