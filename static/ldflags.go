@@ -9,4 +9,7 @@ var (
 
 	// MongoDatabase defines the MongoDB database name
 	MongoDatabase = "asterisk"
+
+	// HastebinURL defines the URL of the hastebin instance to use
+	HastebinURL = "https://hasteb.in/"
 )
