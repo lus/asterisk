@@ -27,10 +27,9 @@ func Debug(ctx *dgc.Ctx) {
 	// Inject the custom variables
 	custom := make(map[string]map[string]reflect.Value)
 	custom["asterisk"] = map[string]reflect.Value{
-		"ctx":           reflect.ValueOf(ctx),
-		"guildConfig":   reflect.ValueOf(ctx.CustomObjects["guildConfig"].(*guildconfig.GuildConfig)),
-		"config":        reflect.ValueOf(config.CurrentConfig),
-		"hasPermission": reflect.ValueOf(utils.HasPermission),
+		"ctx":         reflect.ValueOf(ctx),
+		"guildConfig": reflect.ValueOf(ctx.CustomObjects["guildConfig"].(*guildconfig.GuildConfig)),
+		"config":      reflect.ValueOf(config.CurrentConfig),
 	}
 	interpreter.Use(stdlib.Symbols)
 	interpreter.Use(custom)
