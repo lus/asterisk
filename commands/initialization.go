@@ -125,6 +125,15 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 		Handler: Hash,
 	})
 
+	// Register the math command
+	router.RegisterCmd(&dgc.Command{
+		Name:        "math",
+		Description: "Evaluates the given mathematical expression",
+		Usage:       "math <codeblock>",
+		IgnoreCase:  true,
+		Handler:     Math,
+	})
+
 	// Register the say command
 	router.RegisterCmd(&dgc.Command{
 		Name:        "say",

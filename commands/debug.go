@@ -39,7 +39,7 @@ func Debug(ctx *dgc.Ctx) {
 		return
 	}
 
-	// Evaluate the given string and output the result
+	// Evaluate the given string and respond with the result
 	result, err := interpreter.Eval(codeblock.Content)
 	if err != nil {
 		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateErrorEmbed(err.Error()))
