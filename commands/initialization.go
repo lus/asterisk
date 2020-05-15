@@ -10,65 +10,6 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 	// Register the default help command
 	router.RegisterDefaultHelpCommand(session)
 
-	// Register the info command
-	router.RegisterCmd(&dgc.Command{
-		Name:        "info",
-		Description: "Displays some useful information about the bot",
-		Usage:       "info",
-		IgnoreCase:  true,
-		Handler:     Info,
-	})
-
-	// Register the stats command
-	router.RegisterCmd(&dgc.Command{
-		Name:        "stats",
-		Description: "Displays some general statistics about the bot",
-		Usage:       "stats",
-		IgnoreCase:  true,
-		Handler:     Stats,
-	})
-
-	// Register the request command
-	router.RegisterCmd(&dgc.Command{
-		Name:        "request",
-		Description: "Creates a feature request",
-		Usage:       "request <string>",
-		IgnoreCase:  true,
-		Handler:     Request,
-	})
-	session.AddHandler(RequestReactionListener)
-
-	// Register the settings command
-	router.RegisterCmd(&dgc.Command{
-		Name:        "settings",
-		Description: "Displays the current guild settings or changes them",
-		Usage:       "settings [toggleChannelRestriction | toggleCommandChannel <channel mention>]",
-		IgnoreCase:  true,
-		SubCommands: []*dgc.Command{
-			&dgc.Command{
-				Name:        "toggleChannelRestriction",
-				Aliases:     []string{"tcr"},
-				Description: "Toggles the current command channel restriction status",
-				Flags: []string{
-					"guildAdminOnly",
-				},
-				IgnoreCase: true,
-				Handler:    SettingsToggleChannelRestriction,
-			},
-			&dgc.Command{
-				Name:        "toggleCommandChannel",
-				Aliases:     []string{"tcc"},
-				Description: "Toggles the command channel status of the mentioned channel",
-				Flags: []string{
-					"guildAdminOnly",
-				},
-				IgnoreCase: true,
-				Handler:    SettingsToggleCommandChannel,
-			},
-		},
-		Handler: Settings,
-	})
-
 	// Register the random command
 	router.RegisterCmd(&dgc.Command{
 		Name:        "random",
@@ -132,6 +73,65 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 		Usage:       "math <codeblock>",
 		IgnoreCase:  true,
 		Handler:     Math,
+	})
+
+	// Register the info command
+	router.RegisterCmd(&dgc.Command{
+		Name:        "info",
+		Description: "Displays some useful information about the bot",
+		Usage:       "info",
+		IgnoreCase:  true,
+		Handler:     Info,
+	})
+
+	// Register the stats command
+	router.RegisterCmd(&dgc.Command{
+		Name:        "stats",
+		Description: "Displays some general statistics about the bot",
+		Usage:       "stats",
+		IgnoreCase:  true,
+		Handler:     Stats,
+	})
+
+	// Register the request command
+	router.RegisterCmd(&dgc.Command{
+		Name:        "request",
+		Description: "Creates a feature request",
+		Usage:       "request <string>",
+		IgnoreCase:  true,
+		Handler:     Request,
+	})
+	session.AddHandler(RequestReactionListener)
+
+	// Register the settings command
+	router.RegisterCmd(&dgc.Command{
+		Name:        "settings",
+		Description: "Displays the current guild settings or changes them",
+		Usage:       "settings [toggleChannelRestriction | toggleCommandChannel <channel mention>]",
+		IgnoreCase:  true,
+		SubCommands: []*dgc.Command{
+			&dgc.Command{
+				Name:        "toggleChannelRestriction",
+				Aliases:     []string{"tcr"},
+				Description: "Toggles the current command channel restriction status",
+				Flags: []string{
+					"guildAdminOnly",
+				},
+				IgnoreCase: true,
+				Handler:    SettingsToggleChannelRestriction,
+			},
+			&dgc.Command{
+				Name:        "toggleCommandChannel",
+				Aliases:     []string{"tcc"},
+				Description: "Toggles the command channel status of the mentioned channel",
+				Flags: []string{
+					"guildAdminOnly",
+				},
+				IgnoreCase: true,
+				Handler:    SettingsToggleCommandChannel,
+			},
+		},
+		Handler: Settings,
 	})
 
 	// Register the say command

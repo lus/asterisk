@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"fmt"
 	"reflect"
 
 	"github.com/Lukaesebrot/asterisk/config"
@@ -45,5 +46,5 @@ func Debug(ctx *dgc.Ctx) {
 		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateErrorEmbed(err.Error()))
 		return
 	}
-	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateSuccessEmbed(result.String()))
+	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateSuccessEmbed(fmt.Sprintf("%+v", result)))
 }
