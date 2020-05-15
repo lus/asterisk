@@ -75,15 +75,7 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 		Handler:     Math,
 	})
 
-	// Register the haste command
-	router.RegisterCmd(&dgc.Command{
-		Name:        "hastebin",
-		Aliases:     []string{"haste"},
-		Description: "Creates a haste of the given codeblock",
-		Usage:       "hastebin <codeblock>",
-		IgnoreCase:  true,
-		Handler:     Hastebin,
-	})
+	// Register the hastebin feature
 	session.AddHandler(HastebinMessageCreateListener)
 	session.AddHandler(HastebinReactionAddListener)
 
