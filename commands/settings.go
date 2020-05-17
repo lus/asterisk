@@ -65,3 +65,18 @@ func SettingsToggleCommandChannel(ctx *dgc.Ctx) {
 	// Respond with a success message
 	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateSuccessEmbed("The command channel status for the mentioned channel has been "+utils.PrettifyBool(!contains)+"."))
 }
+
+// SettingsToggleHastebinIntegration handles the settings toggleHastebinIntegration command
+func SettingsToggleHastebinIntegration(ctx *dgc.Ctx) {
+	// Toggle the hastebin integration status
+	guildConfig := ctx.CustomObjects["guildConfig"].(*guildconfig.GuildConfig)
+	guildConfig.HastebinIntegration = !guildConfig.HastebinIntegration
+	err := guildConfig.Update()
+	if err != nil {
+		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateErrorEmbed(err.Error()))
+		return
+	}
+
+	// Respond with a success message
+	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateSuccessEmbed("The hastebin integration has been "+utils.PrettifyBool(guildConfig.HastebinIntegration)+"."))
+}

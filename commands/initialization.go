@@ -134,6 +134,16 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 				IgnoreCase: true,
 				Handler:    SettingsToggleCommandChannel,
 			},
+			&dgc.Command{
+				Name:        "toggleHastebinIntegration",
+				Aliases:     []string{"thi"},
+				Description: "Toggles the current hastebin integration status",
+				Flags: []string{
+					"guildAdminOnly",
+				},
+				IgnoreCase: true,
+				Handler:    SettingsToggleHastebinIntegration,
+			},
 		},
 		Handler: Settings,
 	})

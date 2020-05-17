@@ -14,10 +14,11 @@ import (
 
 // GuildConfig represents the configuration of a guild
 type GuildConfig struct {
-	ID                 primitive.ObjectID `bson:"_id,omitempty"`
-	GuildID            string             `bson:"guildID"`
-	ChannelRestriction bool               `bson:"channelRestriction"`
-	CommandChannels    []string           `bson:"commandChannels"`
+	ID                  primitive.ObjectID `bson:"_id,omitempty"`
+	GuildID             string             `bson:"guildID"`
+	ChannelRestriction  bool               `bson:"channelRestriction"`
+	CommandChannels     []string           `bson:"commandChannels"`
+	HastebinIntegration bool               `bson:"hastebinIntegration"`
 }
 
 // Retrieve fetches the current configuration of the given guild or creates it if it doesn't exist

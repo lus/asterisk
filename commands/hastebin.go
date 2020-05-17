@@ -3,6 +3,7 @@ package commands
 import (
 	"strings"
 
+	"github.com/Lukaesebrot/asterisk/guildconfig"
 	"github.com/Lukaesebrot/asterisk/utils"
 	"github.com/Lukaesebrot/dgc"
 	"github.com/bwmarrin/discordgo"
@@ -13,7 +14,13 @@ func HastebinMessageCreateListener(session *discordgo.Session, event *discordgo.
 	// Parse the message content into a codeblock
 	arguments := dgc.ParseArguments(event.Content)
 	codeblock := arguments.AsCodeblock()
-	if codeblock == nil || strings.TrimSpace(codeblock.Content) == "" {
+	if codeblock == nil || strings.TrimSpace(codeblock.Content) == "" || len(strings.TrimSpace(codeblock.Content)) < 100 {
+		return
+	}
+
+	// Check if the guild activated the hastebin feature
+	guildConfig, err := guildconfig.Retrieve(event.GuildID)
+	if err != nil || !guildConfig.HastebinIntegration {
 		return
 	}
 

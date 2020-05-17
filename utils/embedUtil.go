@@ -188,6 +188,11 @@ func GenerateGuildSettingsEmbed(guildConfig *guildconfig.GuildConfig) *discordgo
 				Value:  commandChannels,
 				Inline: false,
 			},
+			&discordgo.MessageEmbedField{
+				Name:   "Hastebin Integration",
+				Value:  "`" + PrettifyBool(guildConfig.HastebinIntegration) + "`",
+				Inline: false,
+			},
 		},
 	}
 }
