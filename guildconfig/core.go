@@ -69,8 +69,9 @@ func (guildConfig *GuildConfig) Update() error {
 	// Update the MongoDB document
 	filter := bson.M{"_id": guildConfig.ID}
 	_, err := collection.UpdateOne(ctx, filter, bson.M{"$set": bson.M{
-		"channelRestriction": guildConfig.ChannelRestriction,
-		"commandChannels":    guildConfig.CommandChannels,
+		"channelRestriction":  guildConfig.ChannelRestriction,
+		"commandChannels":     guildConfig.CommandChannels,
+		"hastebinIntegration": guildConfig.HastebinIntegration,
 	}})
 	return err
 }
