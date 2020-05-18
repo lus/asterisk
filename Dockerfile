@@ -4,7 +4,7 @@ FROM golang:1.14-alpine
 WORKDIR /app
 
 # Download the neccessary go modules
-COPY go.mod go.sum .
+COPY go.mod go.sum ./
 RUN go mod download
 
 # Build the application and define the starting command
