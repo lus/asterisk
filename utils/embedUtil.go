@@ -125,6 +125,12 @@ func GenerateStatsEmbed(session *discordgo.Session) *discordgo.MessageEmbed {
 		Color:     0xffff00,
 		Fields: []*discordgo.MessageEmbedField{
 			&discordgo.MessageEmbedField{
+				Name: "Application specs",
+				Value: "Mode: `" + static.Mode + "`" +
+					"\nVersion: `" + static.Version + "`",
+				Inline: false,
+			},
+			&discordgo.MessageEmbedField{
 				Name: "Discord specs",
 				Value: "Guilds: `" + strconv.Itoa(len(session.State.Guilds)) + "`" +
 					"\nAPI latency: `" + strconv.FormatInt(session.HeartbeatLatency().Milliseconds(), 10) + "ms`",
