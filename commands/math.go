@@ -1,9 +1,6 @@
 package commands
 
 import (
-	"fmt"
-
-	"github.com/Knetic/govaluate"
 	"github.com/Lukaesebrot/asterisk/utils"
 	"github.com/Lukaesebrot/dgc"
 )
@@ -17,19 +14,11 @@ func Math(ctx *dgc.Ctx) {
 		return
 	}
 
-	// Create the evaluable expression
-	expression, err := govaluate.NewEvaluableExpression(codeblock.Content)
-	if err != nil {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateErrorEmbed(err.Error()))
-		return
-	}
-
 	// Evaluate the expression and respond with the result
-	params := make(map[string]interface{})
-	result, err := expression.Evaluate(params)
+	result, err := utils.EvaluateMathematicalExpression(codeblock.Content)
 	if err != nil {
 		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateErrorEmbed(err.Error()))
 		return
 	}
-	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateSuccessEmbed(fmt.Sprintf("%v", result)))
+	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateSuccessEmbed(result))
 }

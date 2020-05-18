@@ -3,7 +3,6 @@ module github.com/Lukaesebrot/asterisk
 go 1.14
 
 require (
-	github.com/Knetic/govaluate v3.0.0+incompatible
 	github.com/Lukaesebrot/dgc v0.0.0-20200518185909-6a6c38ffa85a
 	github.com/bwmarrin/discordgo v0.20.3
 	github.com/containous/yaegi v0.8.5

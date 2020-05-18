@@ -1,6 +1,4 @@
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
-github.com/Knetic/govaluate v3.0.0+incompatible h1:7o6+MAPhYTCF0+fdvoz1xDedhRb4f6s9Tn1Tt7/WTEg=
-github.com/Knetic/govaluate v3.0.0+incompatible/go.mod h1:r7JcOSlj0wfOMncg0iLm8Leh48TZaKVeNIfJntJ2wa0=
 github.com/Lukaesebrot/dgc v0.0.0-20200518185909-6a6c38ffa85a h1:4/w8dCfsdx5kG/79+EFAmKiXnyJMpQj4l9DmB/jF5Jg=
 github.com/Lukaesebrot/dgc v0.0.0-20200518185909-6a6c38ffa85a/go.mod h1:a6NMcuw+ahQIqJTV2zCjSYq0WoVW2CHSJ9H3yY7qOxI=
 github.com/bwmarrin/discordgo v0.20.3 h1:AxjcHGbyBFSC0a3Zx5nDQwbOjU7xai5dXjRnZ0YB7nU=
