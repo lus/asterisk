@@ -22,10 +22,7 @@ func main() {
 
 	// Initialize the configuration
 	log.Println("Loading the bot configuration...")
-	err := config.Load()
-	if err != nil {
-		panic(err)
-	}
+	config.Load()
 	log.Println("Successfully loaded the bot configuration.")
 
 	// Connect to the MongoDB host
