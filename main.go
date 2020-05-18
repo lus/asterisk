@@ -27,7 +27,7 @@ func main() {
 
 	// Connect to the MongoDB host
 	log.Println("Connecting to the specified MongoDB server...")
-	err = database.Connect()
+	err := database.Connect()
 	if err != nil {
 		panic(err)
 	}
