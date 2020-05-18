@@ -1,5 +1,9 @@
 FROM golang:1.14-alpine
 
+# Install git for the version string
+RUN apk update && apk upgrade && \
+    apk add --no-cache bash git openssh
+
 # Define the directory we should work in
 WORKDIR /app
 
