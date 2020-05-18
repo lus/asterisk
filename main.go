@@ -1,9 +1,11 @@
 package main
 
 import (
-	"bufio"
+	"context"
 	"log"
 	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/Lukaesebrot/asterisk/middlewares"
 
@@ -11,7 +13,6 @@ import (
 	"github.com/Lukaesebrot/asterisk/static"
 	"github.com/Lukaesebrot/dgc"
 
-	"github.com/Lukaesebrot/asterisk/concommands"
 	"github.com/Lukaesebrot/asterisk/config"
 	"github.com/Lukaesebrot/asterisk/database"
 	"github.com/bwmarrin/discordgo"
@@ -79,8 +80,14 @@ func main() {
 	router.AddMiddleware("guildAdminOnly", middlewares.CheckGuildAdmin)
 	log.Println("Successfully registered middlewares.")
 
-	// Handle incoming console commands
-	log.Println("Waiting for console commands. Type 'help' for help.")
-	reader := bufio.NewReader(os.Stdin)
-	concommands.Handle(reader, session)
+	// Wait for the program to exit
+	log.Println("Successfully started this Asterisk instance.")
+	sc := make(chan os.Signal, 1)
+	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
+	<-sc
+
+	// Gracefully close the Discord session
+	log.Println("Stopping this Asterisk instance...")
+	session.Close()
+	database.CurrentClient.Disconnect(context.TODO())
 }
