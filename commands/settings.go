@@ -41,7 +41,7 @@ func SettingsToggleCommandChannel(ctx *dgc.Ctx) {
 	guildConfig := ctx.CustomObjects["guildConfig"].(*guildconfig.GuildConfig)
 
 	// Toggle the command channel status
-	contains := utils.StringArrayContains(guildConfig.CommandChannels, ctx.Event.ChannelID)
+	contains := utils.StringArrayContains(guildConfig.CommandChannels, channelID)
 	if contains {
 		newArray := make([]string, len(guildConfig.CommandChannels)-1)
 		counter := 0
