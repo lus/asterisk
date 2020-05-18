@@ -72,6 +72,9 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 	})
 
 	// Register the hash command
+	hashingRateLimiter := dgc.NewRateLimiter(30*time.Second, 3*time.Second, func(ctx *dgc.Ctx) {
+		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateErrorEmbed("You need to wait at least thirty seconds between two hash calculations."))
+	})
 	router.RegisterCmd(&dgc.Command{
 		Name:        "hash",
 		Description: "Hashes the given string using the specified algorithm",
@@ -85,11 +88,11 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 				Usage:       "hash md5 <string>",
 				Example:     "hash md5 hello",
 				IgnoreCase:  true,
-				RateLimiter: rateLimiter,
+				RateLimiter: hashingRateLimiter,
 				Handler:     HashMD5,
 			},
 		},
-		RateLimiter: rateLimiter,
+		RateLimiter: hashingRateLimiter,
 		Handler:     Hash,
 	})
 
