@@ -83,7 +83,7 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 		Name:        "math",
 		Description: "Evaluates the given mathematical expression",
 		Usage:       "math <codeblock>",
-		Example:     "math `20+1`",
+		Example:     "math 10^3",
 		IgnoreCase:  true,
 		Handler:     Math,
 	})
@@ -93,7 +93,7 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 		Name:        "latex",
 		Description: "Renders the given LaTeX expression",
 		Usage:       "latex <codeblock>",
-		Example:     "latex `10^3",
+		Example:     "latex 10^3",
 		IgnoreCase:  true,
 		Handler:     Latex,
 	})
@@ -212,7 +212,7 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 		Name:        "debug",
 		Description: "[Bot Admin only] Executes the given code at runtime",
 		Usage:       "debug <codeblock>",
-		Example:     "debug `fmt.Println(\"Hello, world!\")",
+		Example:     "debug fmt.Println(\"Hello, world!\")",
 		Flags: []string{
 			"botAdminOnly",
 		},
