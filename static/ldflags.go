@@ -20,7 +20,7 @@ var (
 	MathJSURL = "http://api.mathjs.org/v4/"
 
 	// LaTeXTemplate defines the template to use for LaTeX expression rendering
-	LaTeXTemplate = "\\documentclass[preview,border=2pt]{standalone} \\usepackage[utf8]{inputenc} \\usepackage{amsmath} \\usepackage{xcolor} \\begin{document} \\color{white} #CONTENT# \\end{document}"
+	LaTeXTemplate = "\\documentclass[varwidth,border=2pt]{standalone} \\usepackage[utf8]{inputenc} \\usepackage{amsmath} \\usepackage{xcolor} \\definecolor{bgcolor}{HTML}{2F3136} \\begin{document} \\pagecolor{bgcolor} \\color{white} #CONTENT# \\end{document}"
 
 	// IntervalRegexString defines the RegEx an interval has to match
 	IntervalRegexString = "(\\[|\\()(\\d+),\\s*(\\d+)(\\]|\\))"
