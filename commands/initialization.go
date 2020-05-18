@@ -75,6 +75,15 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 		Handler:     Math,
 	})
 
+	// Register the latex command
+	router.RegisterCmd(&dgc.Command{
+		Name:        "latex",
+		Description: "Renders the given LaTeX expression",
+		Usage:       "latex <codeblock>",
+		IgnoreCase:  true,
+		Handler:     Latex,
+	})
+
 	// Register the hastebin feature
 	session.AddHandler(HastebinMessageCreateListener)
 	session.AddHandler(HastebinReactionAddListener)

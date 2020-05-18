@@ -202,3 +202,16 @@ func GenerateGuildSettingsEmbed(guildConfig *guildconfig.GuildConfig) *discordgo
 		},
 	}
 }
+
+// GenerateLaTeXResultEmbed generates an embed for LaTeX render results
+func GenerateLaTeXResultEmbed(url string) *discordgo.MessageEmbed {
+	return &discordgo.MessageEmbed{
+		Type:      "rich",
+		Title:     "LaTeX Result",
+		Timestamp: time.Now().Format(time.RFC3339),
+		Color:     0x00ff00,
+		Image: &discordgo.MessageEmbedImage{
+			URL: url,
+		},
+	}
+}

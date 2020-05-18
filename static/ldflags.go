@@ -12,4 +12,10 @@ var (
 
 	// HastebinURL defines the URL of the hastebin instance to use
 	HastebinURL = "https://hasteb.in/"
+
+	// RTeXURL defines the URL to the rTeX API to use
+	RTeXURL = "https://rtex.probablyaweb.site/api/v2"
+
+	// LaTeXTemplate defines the template to use for LaTeX expression rendering
+	LaTeXTemplate = "\\documentclass[border=2pt]{standalone} \\usepackage[utf8]{inputenc} \\usepackage{xcolor} \\begin{document} \\color{white} $ #CONTENT# $ \\end{document}"
 )
