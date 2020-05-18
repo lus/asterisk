@@ -57,7 +57,7 @@ func RandomString(ctx *dgc.Ctx) {
 	// Parse the string length
 	length, err := ctx.Arguments.Get(0).AsInt()
 	if err != nil || length <= 0 || length > 100 {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateInvalidUsageEmbed("The length parameter has to be a number > 0 and < 100."))
+		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateInvalidUsageEmbed("The length parameter has to be a number > 0 and <= 100."))
 		return
 	}
 
