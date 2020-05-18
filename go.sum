@@ -1,8 +1,8 @@
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/Knetic/govaluate v3.0.0+incompatible h1:7o6+MAPhYTCF0+fdvoz1xDedhRb4f6s9Tn1Tt7/WTEg=
 github.com/Knetic/govaluate v3.0.0+incompatible/go.mod h1:r7JcOSlj0wfOMncg0iLm8Leh48TZaKVeNIfJntJ2wa0=
-github.com/Lukaesebrot/dgc v0.0.0-20200518171041-032cc79ea315 h1:LWY8MLkQcvXYGEyjo6PC3coUaV2s7snBKC+Fpa72zUI=
-github.com/Lukaesebrot/dgc v0.0.0-20200518171041-032cc79ea315/go.mod h1:Cs8fI+3JBB69U0rbzbc2LJtTOUi4iULBEvNefSL0kPQ=
+github.com/Lukaesebrot/dgc v0.0.0-20200518185909-6a6c38ffa85a h1:4/w8dCfsdx5kG/79+EFAmKiXnyJMpQj4l9DmB/jF5Jg=
+github.com/Lukaesebrot/dgc v0.0.0-20200518185909-6a6c38ffa85a/go.mod h1:a6NMcuw+ahQIqJTV2zCjSYq0WoVW2CHSJ9H3yY7qOxI=
 github.com/bwmarrin/discordgo v0.20.3 h1:AxjcHGbyBFSC0a3Zx5nDQwbOjU7xai5dXjRnZ0YB7nU=
 github.com/bwmarrin/discordgo v0.20.3/go.mod h1:O9S4p+ofTFwB02em7jkpkV8M3R0/PUVOwN61zSZ0r4Q=
 github.com/containous/yaegi v0.8.5 h1:L4GzyFK6Y7TdTIlQSFpxdaBBFlKL/u54tG3viucuzJk=
@@ -95,6 +95,8 @@ github.com/xdg/scram v0.0.0-20180814205039-7eeb5667e42c h1:u40Z8hqBAAQyv+vATcGgV
 github.com/xdg/scram v0.0.0-20180814205039-7eeb5667e42c/go.mod h1:lB8K/P019DLNhemzwFU4jHLhdvlE6uDZjXFejJXr49I=
 github.com/xdg/stringprep v0.0.0-20180714160509-73f8eece6fdc h1:n+nNi93yXLkJvKwXNP9d55HC7lGK4H/SRcwB5IaUZLo=
 github.com/xdg/stringprep v0.0.0-20180714160509-73f8eece6fdc/go.mod h1:Jhud4/sHMO4oL310DaZAKk9ZaJ08SJfe+sJh0HrGL1Y=
+github.com/zekroTJA/timedmap v0.0.0-20200421070859-4302645f33f5 h1:LoUppaRvaFRGh8/hF7848Hl5g9FcddkP8cVPJJ0y0fQ=
+github.com/zekroTJA/timedmap v0.0.0-20200421070859-4302645f33f5/go.mod h1:ktlw5aYhoXQvOvWFL9SzltGXn1bQgJXxZzHJK4wQvsI=
 go.mongodb.org/mongo-driver v1.3.3 h1:9kX7WY6sU/5qBuhm5mdnNWdqaDAQKB2qSZOd5wMEPGQ=
 go.mongodb.org/mongo-driver v1.3.3/go.mod h1:MSWZXKOynuguX+JSvwP8i+58jYCXxbia8HS3gZBapIE=
 golang.org/x/crypto v0.0.0-20180904163835-0709b304e793/go.mod h1:6SG95UA2DQfeDnfUPMdvaQW0Q7yPrPDi9nlGo2tz2b4=

@@ -1,14 +1,22 @@
 package commands
 
 import (
+	"time"
+
+	"github.com/Lukaesebrot/asterisk/utils"
 	"github.com/Lukaesebrot/dgc"
 	"github.com/bwmarrin/discordgo"
 )
 
 // Initialize initializes all commands
 func Initialize(router *dgc.Router, session *discordgo.Session) {
+	// Define the default rate limiter
+	rateLimiter := dgc.NewRateLimiter(5*time.Second, 1*time.Second, func(ctx *dgc.Ctx) {
+		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateErrorEmbed("Hey! Don't spam!"))
+	})
+
 	// Register the default help command
-	router.RegisterDefaultHelpCommand(session)
+	router.RegisterDefaultHelpCommand(session, rateLimiter)
 
 	// Register the random command
 	router.RegisterCmd(&dgc.Command{
@@ -25,6 +33,7 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 				Usage:       "random bool",
 				Example:     "random bool",
 				IgnoreCase:  true,
+				RateLimiter: rateLimiter,
 				Handler:     RandomBool,
 			},
 			&dgc.Command{
@@ -34,6 +43,7 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 				Usage:       "random number <interval>",
 				Example:     "random number [0, 200]",
 				IgnoreCase:  true,
+				RateLimiter: rateLimiter,
 				Handler:     RandomNumber,
 			},
 			&dgc.Command{
@@ -43,6 +53,7 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 				Usage:       "random string <int: length>",
 				Example:     "random string 20",
 				IgnoreCase:  true,
+				RateLimiter: rateLimiter,
 				Handler:     RandomString,
 			},
 			&dgc.Command{
@@ -52,10 +63,12 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 				Usage:       "random choice <options...>",
 				Example:     "random choice I am cool lol",
 				IgnoreCase:  true,
+				RateLimiter: rateLimiter,
 				Handler:     RandomChoice,
 			},
 		},
-		Handler: Random,
+		RateLimiter: rateLimiter,
+		Handler:     Random,
 	})
 
 	// Register the hash command
@@ -72,10 +85,12 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 				Usage:       "hash md5 <string>",
 				Example:     "hash md5 hello",
 				IgnoreCase:  true,
+				RateLimiter: rateLimiter,
 				Handler:     HashMD5,
 			},
 		},
-		Handler: Hash,
+		RateLimiter: rateLimiter,
+		Handler:     Hash,
 	})
 
 	// Register the math command
@@ -85,6 +100,7 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 		Usage:       "math <codeblock>",
 		Example:     "math 10^3",
 		IgnoreCase:  true,
+		RateLimiter: rateLimiter,
 		Handler:     Math,
 	})
 
@@ -95,6 +111,7 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 		Usage:       "latex <codeblock>",
 		Example:     "latex 10^3",
 		IgnoreCase:  true,
+		RateLimiter: rateLimiter,
 		Handler:     Latex,
 	})
 
@@ -109,6 +126,7 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 		Usage:       "info",
 		Example:     "info",
 		IgnoreCase:  true,
+		RateLimiter: rateLimiter,
 		Handler:     Info,
 	})
 
@@ -119,6 +137,7 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 		Usage:       "stats",
 		Example:     "stats",
 		IgnoreCase:  true,
+		RateLimiter: rateLimiter,
 		Handler:     Stats,
 	})
 
@@ -129,7 +148,10 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 		Usage:       "request <string>",
 		Example:     "request My cool new feature",
 		IgnoreCase:  true,
-		Handler:     Request,
+		RateLimiter: dgc.NewRateLimiter(1*time.Hour, 1*time.Minute, func(ctx *dgc.Ctx) {
+			ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateErrorEmbed("You need to wait at least one hour between two feature requests."))
+		}),
+		Handler: Request,
 	})
 	session.AddHandler(RequestReactionListener)
 
@@ -150,8 +172,9 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 				Flags: []string{
 					"guildAdminOnly",
 				},
-				IgnoreCase: true,
-				Handler:    SettingsToggleChannelRestriction,
+				IgnoreCase:  true,
+				RateLimiter: rateLimiter,
+				Handler:     SettingsToggleChannelRestriction,
 			},
 			&dgc.Command{
 				Name:        "toggleCommandChannel",
@@ -162,8 +185,9 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 				Flags: []string{
 					"guildAdminOnly",
 				},
-				IgnoreCase: true,
-				Handler:    SettingsToggleCommandChannel,
+				IgnoreCase:  true,
+				RateLimiter: rateLimiter,
+				Handler:     SettingsToggleCommandChannel,
 			},
 			&dgc.Command{
 				Name:        "toggleHastebinIntegration",
@@ -174,11 +198,13 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 				Flags: []string{
 					"guildAdminOnly",
 				},
-				IgnoreCase: true,
-				Handler:    SettingsToggleHastebinIntegration,
+				IgnoreCase:  true,
+				RateLimiter: rateLimiter,
+				Handler:     SettingsToggleHastebinIntegration,
 			},
 		},
-		Handler: Settings,
+		RateLimiter: rateLimiter,
+		Handler:     Settings,
 	})
 
 	// Register the say command
