@@ -31,7 +31,7 @@ func RandomNumber(ctx *dgc.Ctx) {
 	// Define the random number
 	number := rand.Int()
 	if ctx.Arguments.Amount() > 0 {
-		valid, generated := utils.FormatInterval(ctx.Arguments.Raw())
+		valid, generated := utils.GenerateFromInterval(ctx.Arguments.Raw())
 		if !valid {
 			ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateInvalidUsageEmbed("The interval you specified is invalid."))
 			return
