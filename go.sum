@@ -1,8 +1,8 @@
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/Knetic/govaluate v3.0.0+incompatible h1:7o6+MAPhYTCF0+fdvoz1xDedhRb4f6s9Tn1Tt7/WTEg=
 github.com/Knetic/govaluate v3.0.0+incompatible/go.mod h1:r7JcOSlj0wfOMncg0iLm8Leh48TZaKVeNIfJntJ2wa0=
-github.com/Lukaesebrot/dgc v0.0.0-20200515131847-06aebbe3381a h1:kECoOJYXT3QmE0nkHNs6dTu2PwM5t6WfSqvLDlTdDak=
-github.com/Lukaesebrot/dgc v0.0.0-20200515131847-06aebbe3381a/go.mod h1:Cs8fI+3JBB69U0rbzbc2LJtTOUi4iULBEvNefSL0kPQ=
+github.com/Lukaesebrot/dgc v0.0.0-20200518171041-032cc79ea315 h1:LWY8MLkQcvXYGEyjo6PC3coUaV2s7snBKC+Fpa72zUI=
+github.com/Lukaesebrot/dgc v0.0.0-20200518171041-032cc79ea315/go.mod h1:Cs8fI+3JBB69U0rbzbc2LJtTOUi4iULBEvNefSL0kPQ=
 github.com/bwmarrin/discordgo v0.20.3 h1:AxjcHGbyBFSC0a3Zx5nDQwbOjU7xai5dXjRnZ0YB7nU=
 github.com/bwmarrin/discordgo v0.20.3/go.mod h1:O9S4p+ofTFwB02em7jkpkV8M3R0/PUVOwN61zSZ0r4Q=
 github.com/containous/yaegi v0.8.5 h1:L4GzyFK6Y7TdTIlQSFpxdaBBFlKL/u54tG3viucuzJk=
