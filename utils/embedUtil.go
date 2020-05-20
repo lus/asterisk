@@ -173,6 +173,28 @@ func GenerateFeatureRequestEmbed(ctx *dgc.Ctx) *discordgo.MessageEmbed {
 	}
 }
 
+// GenerateBugReportEmbed generates the embed which contains the information about a bug report
+func GenerateBugReportEmbed(ctx *dgc.Ctx) *discordgo.MessageEmbed {
+	return &discordgo.MessageEmbed{
+		Type:      "rich",
+		Title:     "Bug Report",
+		Timestamp: time.Now().Format(time.RFC3339),
+		Color:     0xffff00,
+		Fields: []*discordgo.MessageEmbedField{
+			&discordgo.MessageEmbedField{
+				Name:   "Description",
+				Value:  "```" + strings.ReplaceAll(ctx.Arguments.Raw(), "`", "'") + "```",
+				Inline: false,
+			},
+			&discordgo.MessageEmbedField{
+				Name:   "Reporter",
+				Value:  "```" + ctx.Event.Author.Username + "#" + ctx.Event.Author.Discriminator + " (" + ctx.Event.Author.ID + ")```",
+				Inline: false,
+			},
+		},
+	}
+}
+
 // GenerateGuildSettingsEmbed generates the embed which contains the current settings of a guild
 func GenerateGuildSettingsEmbed(guildConfig *guildconfig.GuildConfig) *discordgo.MessageEmbed {
 	// Define the command channel string

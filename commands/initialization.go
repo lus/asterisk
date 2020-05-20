@@ -144,6 +144,20 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 		Handler:     Stats,
 	})
 
+	// Register the bug command
+	router.RegisterCmd(&dgc.Command{
+		Name:        "bug",
+		Description: "Reports a bug",
+		Usage:       "bug <string>",
+		Example:     "bug The bot spams",
+		IgnoreCase:  true,
+		RateLimiter: dgc.NewRateLimiter(1*time.Hour, 1*time.Minute, func(ctx *dgc.Ctx) {
+			ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateErrorEmbed("You need to wait at least one hour between two bug reports."))
+		}),
+		Handler: Bug,
+	})
+	session.AddHandler(BugReactionListener)
+
 	// Register the request command
 	router.RegisterCmd(&dgc.Command{
 		Name:        "request",

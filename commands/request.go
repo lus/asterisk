@@ -24,7 +24,7 @@ func Request(ctx *dgc.Ctx) {
 	ctx.Session.MessageReactionAdd(config.CurrentConfig.FeatureRequestChannel, message.ID, "✅")
 
 	// Confirm the creation of the feature request
-	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateSuccessEmbed("Your feature request was submitted."))
+	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateSuccessEmbed("Your feature request got submitted."))
 }
 
 // RequestReactionListener has to be registered to enable the tick reaction on feature requests

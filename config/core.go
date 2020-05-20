@@ -16,6 +16,7 @@ type Config struct {
 	BotToken              string        `json:"botToken"`
 	BotAdmins             []string      `json:"botAdmins"`
 	FeatureRequestChannel string        `json:"featureRequestChannel"`
+	BugReportChannel      string        `json:"bugReportChannel"`
 	MongoConnectionString string        `json:"mongoConnectionString"`
 	JDoodle               JDoodleConfig `json:"jdoodle"`
 }
@@ -38,6 +39,7 @@ func Load() {
 		BotToken:              os.Getenv("ASTERISK_BOT_TOKEN"),
 		BotAdmins:             strings.Split(os.Getenv("ASTERISK_BOT_ADMINS"), ","),
 		FeatureRequestChannel: os.Getenv("ASTERISK_FEATURE_REQUEST_CHANNEL"),
+		BugReportChannel:      os.Getenv("ASTERISK_BUG_REPORT_CHANNEL"),
 		MongoConnectionString: os.Getenv("ASTERISK_MONGO_CONNECTION_STRING"),
 		JDoodle: JDoodleConfig{
 			ClientID:     os.Getenv("ASTERISK_JDOODLE_CLIENT_ID"),
