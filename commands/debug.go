@@ -28,7 +28,7 @@ func Debug(ctx *dgc.Ctx) {
 	custom := make(map[string]map[string]reflect.Value)
 	custom["asterisk"] = map[string]reflect.Value{
 		"ctx":         reflect.ValueOf(ctx),
-		"guildConfig": reflect.ValueOf(ctx.CustomObjects["guildConfig"].(*guildconfig.GuildConfig)),
+		"guildConfig": reflect.ValueOf(ctx.CustomObjects.MustGet("guildConfig").(*guildconfig.GuildConfig)),
 		"config":      reflect.ValueOf(config.CurrentConfig),
 	}
 	interpreter.Use(stdlib.Symbols)

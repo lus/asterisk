@@ -9,14 +9,14 @@ import (
 // Settings handles the settings command
 func Settings(ctx *dgc.Ctx) {
 	// Respond with the current guild configuration
-	guildConfig := ctx.CustomObjects["guildConfig"].(*guildconfig.GuildConfig)
+	guildConfig := ctx.CustomObjects.MustGet("guildConfig").(*guildconfig.GuildConfig)
 	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateGuildSettingsEmbed(guildConfig))
 }
 
 // SettingsToggleChannelRestriction handles the settings toggleChannelRestriction command
 func SettingsToggleChannelRestriction(ctx *dgc.Ctx) {
 	// Toggle the channel restriction status
-	guildConfig := ctx.CustomObjects["guildConfig"].(*guildconfig.GuildConfig)
+	guildConfig := ctx.CustomObjects.MustGet("guildConfig").(*guildconfig.GuildConfig)
 	guildConfig.ChannelRestriction = !guildConfig.ChannelRestriction
 	err := guildConfig.Update()
 	if err != nil {
@@ -38,7 +38,7 @@ func SettingsToggleCommandChannel(ctx *dgc.Ctx) {
 	}
 
 	// Define the guild configuration
-	guildConfig := ctx.CustomObjects["guildConfig"].(*guildconfig.GuildConfig)
+	guildConfig := ctx.CustomObjects.MustGet("guildConfig").(*guildconfig.GuildConfig)
 
 	// Toggle the command channel status
 	contains := utils.StringArrayContains(guildConfig.CommandChannels, channelID)
@@ -69,7 +69,7 @@ func SettingsToggleCommandChannel(ctx *dgc.Ctx) {
 // SettingsToggleHastebinIntegration handles the settings toggleHastebinIntegration command
 func SettingsToggleHastebinIntegration(ctx *dgc.Ctx) {
 	// Toggle the hastebin integration status
-	guildConfig := ctx.CustomObjects["guildConfig"].(*guildconfig.GuildConfig)
+	guildConfig := ctx.CustomObjects.MustGet("guildConfig").(*guildconfig.GuildConfig)
 	guildConfig.HastebinIntegration = !guildConfig.HastebinIntegration
 	err := guildConfig.Update()
 	if err != nil {

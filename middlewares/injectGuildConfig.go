@@ -14,6 +14,6 @@ func InjectGuildConfig(ctx *dgc.Ctx) bool {
 		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateErrorEmbed(err.Error()))
 		return false
 	}
-	ctx.CustomObjects["guildConfig"] = guildConfig
+	ctx.CustomObjects.Set("guildConfig", guildConfig)
 	return true
 }

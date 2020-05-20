@@ -56,6 +56,7 @@ func main() {
 		Prefixes: []string{
 			"$",
 			"<@!" + static.Self.ID + ">",
+			"<@" + static.Self.ID + ">",
 			"as!",
 			"你",
 		},
