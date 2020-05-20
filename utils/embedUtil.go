@@ -10,6 +10,7 @@ import (
 	"github.com/Lukaesebrot/asterisk/static"
 	"github.com/Lukaesebrot/dgc"
 	"github.com/bwmarrin/discordgo"
+	"github.com/c2h5oh/datasize"
 )
 
 // GenerateSuccessEmbed generates a general success embed
@@ -117,6 +118,8 @@ func GenerateStatsEmbed(session *discordgo.Session) *discordgo.MessageEmbed {
 	// Read the memory stats
 	var memStats runtime.MemStats
 	runtime.ReadMemStats(&memStats)
+	heap := datasize.ByteSize(memStats.HeapInuse)
+	stack := datasize.ByteSize(memStats.StackInuse)
 
 	return &discordgo.MessageEmbed{
 		Type:      "rich",
@@ -140,8 +143,8 @@ func GenerateStatsEmbed(session *discordgo.Session) *discordgo.MessageEmbed {
 				Name: "System specs",
 				Value: "Current Goroutines: `" + strconv.Itoa(runtime.NumGoroutine()) + "`" +
 					"\nUsable logical CPUs: `" + strconv.Itoa(runtime.NumCPU()) + "`" +
-					"\nHeap in use: `" + strconv.FormatUint(memStats.HeapInuse, 10) + "`" +
-					"\nStack in use: `" + strconv.FormatUint(memStats.StackInuse, 10) + "`",
+					"\nHeap in use: `" + heap.HumanReadable() + "`" +
+					"\nStack in use: `" + stack.HumanReadable() + "`",
 				Inline: false,
 			},
 		},
