@@ -44,8 +44,8 @@ func RenderLaTeX(expression string) (string, error) {
 	body, _ := json.Marshal(&rtexRequest{
 		Code:    expression,
 		Format:  "png",
-		Quality: 85,
-		Density: 200,
+		Quality: 100,
+		Density: 400,
 	})
 	request.SetBody(body)
 
