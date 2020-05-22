@@ -30,7 +30,7 @@ func Debug(ctx *dgc.Ctx) {
 	custom["asterisk"] = map[string]reflect.Value{
 		"ctx":         reflect.ValueOf(ctx),
 		"guildConfig": reflect.ValueOf(ctx.CustomObjects.MustGet("guildConfig").(*guildconfig.GuildConfig)),
-		"user":        reflect.ValueOf(ctx.CustomObjects.MustGet("user").(*users.User)),
+		"getUser":     reflect.ValueOf(users.RetrieveCached),
 		"config":      reflect.ValueOf(config.CurrentConfig),
 	}
 	interpreter.Use(stdlib.Symbols)
