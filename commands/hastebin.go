@@ -14,7 +14,7 @@ func HastebinMessageCreateListener(session *discordgo.Session, event *discordgo.
 	// Parse the message content into a codeblock
 	arguments := dgc.ParseArguments(event.Content)
 	codeblock := arguments.AsCodeblock()
-	if codeblock == nil || strings.TrimSpace(codeblock.Content) == "" || len(strings.TrimSpace(codeblock.Content)) < 100 {
+	if codeblock == nil || strings.TrimSpace(codeblock.Content) == "" || len(strings.TrimSpace(codeblock.Content)) < 500 {
 		return
 	}
 
