@@ -187,7 +187,7 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 				Usage:       "settings toggleChannelRestriction",
 				Example:     "settings toggleChannelRestriction",
 				Flags: []string{
-					"guildAdminOnly",
+					"guild_admin",
 				},
 				IgnoreCase:  true,
 				RateLimiter: rateLimiter,
@@ -200,7 +200,7 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 				Usage:       "settings toggleCommandChannel <channel mention>",
 				Example:     "settings toggleCommandChannel #my-channel",
 				Flags: []string{
-					"guildAdminOnly",
+					"guild_admin",
 				},
 				IgnoreCase:  true,
 				RateLimiter: rateLimiter,
@@ -213,7 +213,7 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 				Usage:       "settings toggleHastebinIntegration",
 				Example:     "settings toggleHastebinIntegration",
 				Flags: []string{
-					"guildAdminOnly",
+					"guild_admin",
 				},
 				IgnoreCase:  true,
 				RateLimiter: rateLimiter,
@@ -224,19 +224,6 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 		Handler:     Settings,
 	})
 
-	// Register the say command
-	router.RegisterCmd(&dgc.Command{
-		Name:        "say",
-		Description: "[Bot Admin only] Makes the bot say something",
-		Usage:       "say <string>",
-		Example:     "say Hello, world!",
-		Flags: []string{
-			"botAdminOnly",
-		},
-		IgnoreCase: true,
-		Handler:    Say,
-	})
-
 	// Register the blacklist command
 	router.RegisterCmd(&dgc.Command{
 		Name:        "blacklist",
@@ -244,10 +231,23 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 		Usage:       "blacklist <user mention>",
 		Example:     "blacklist @Erik",
 		Flags: []string{
-			"botAdminOnly",
+			"bot_mod",
 		},
 		IgnoreCase: true,
 		Handler:    Blacklist,
+	})
+
+	// Register the say command
+	router.RegisterCmd(&dgc.Command{
+		Name:        "say",
+		Description: "[Bot Admin only] Makes the bot say something",
+		Usage:       "say <string>",
+		Example:     "say Hello, world!",
+		Flags: []string{
+			"bot_admin",
+		},
+		IgnoreCase: true,
+		Handler:    Say,
 	})
 
 	// Register the debug command
@@ -257,7 +257,7 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 		Usage:       "debug <codeblock>",
 		Example:     "debug fmt.Println(\"Hello, world!\")",
 		Flags: []string{
-			"botAdminOnly",
+			"bot_admin",
 		},
 		IgnoreCase: true,
 		Handler:    Debug,

@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/Lukaesebrot/asterisk/middlewares"
+	"github.com/Lukaesebrot/asterisk/users"
 
 	"github.com/Lukaesebrot/asterisk/commands"
 	"github.com/Lukaesebrot/asterisk/static"
@@ -76,11 +77,11 @@ func main() {
 
 	// Register middlewares
 	log.Println("Registering middlewares...")
-	router.AddMiddleware("*", middlewares.CheckCommandBlacklist)
 	router.AddMiddleware("*", middlewares.InjectGuildConfig)
 	router.AddMiddleware("*", middlewares.CheckCommandChannel)
-	router.AddMiddleware("botAdminOnly", middlewares.CheckBotAdmin)
-	router.AddMiddleware("guildAdminOnly", middlewares.CheckGuildAdmin)
+	router.AddMiddleware("bot_admin", middlewares.CheckInternalPermissions("BOT_ADMINISTRATOR", users.PermissionAdministrator))
+	router.AddMiddleware("bot_mod", middlewares.CheckInternalPermissions("BOT_MODERATOR", users.PermissionModerator, users.PermissionAdministrator))
+	router.AddMiddleware("guild_admin", middlewares.CheckGuildPermissions("ADMINISTRATOR", discordgo.PermissionAdministrator))
 	log.Println("Successfully registered middlewares.")
 
 	// Wait for the program to exit
