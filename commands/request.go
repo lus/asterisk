@@ -2,6 +2,7 @@ package commands
 
 import (
 	"github.com/Lukaesebrot/asterisk/config"
+	"github.com/Lukaesebrot/asterisk/users"
 	"github.com/Lukaesebrot/asterisk/utils"
 	"github.com/Lukaesebrot/dgc"
 	"github.com/bwmarrin/discordgo"
@@ -35,7 +36,8 @@ func RequestReactionListener(session *discordgo.Session, event *discordgo.Messag
 	}
 
 	// Check if the user is a bot admin
-	if !utils.StringArrayContains(config.CurrentConfig.BotAdmins, event.UserID) {
+	user, err := users.RetrieveCached(event.UserID)
+	if err != nil || !user.HasPermission(users.PermissionAdministrator) {
 		return
 	}
 

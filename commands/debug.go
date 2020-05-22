@@ -6,6 +6,7 @@ import (
 
 	"github.com/Lukaesebrot/asterisk/config"
 	"github.com/Lukaesebrot/asterisk/guildconfig"
+	"github.com/Lukaesebrot/asterisk/users"
 	"github.com/Lukaesebrot/asterisk/utils"
 	"github.com/Lukaesebrot/dgc"
 	"github.com/containous/yaegi/interp"
@@ -29,6 +30,7 @@ func Debug(ctx *dgc.Ctx) {
 	custom["asterisk"] = map[string]reflect.Value{
 		"ctx":         reflect.ValueOf(ctx),
 		"guildConfig": reflect.ValueOf(ctx.CustomObjects.MustGet("guildConfig").(*guildconfig.GuildConfig)),
+		"user":        reflect.ValueOf(ctx.CustomObjects.MustGet("user").(*users.User)),
 		"config":      reflect.ValueOf(config.CurrentConfig),
 	}
 	interpreter.Use(stdlib.Symbols)

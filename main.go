@@ -79,6 +79,7 @@ func main() {
 	log.Println("Registering middlewares...")
 	router.AddMiddleware("*", middlewares.InjectGuildConfig)
 	router.AddMiddleware("*", middlewares.CheckCommandChannel)
+	router.AddMiddleware("*", middlewares.InjectUserObject)
 	router.AddMiddleware("bot_admin", middlewares.CheckInternalPermissions("BOT_ADMINISTRATOR", users.PermissionAdministrator))
 	router.AddMiddleware("bot_mod", middlewares.CheckInternalPermissions("BOT_MODERATOR", users.PermissionModerator, users.PermissionAdministrator))
 	router.AddMiddleware("guild_admin", middlewares.CheckGuildPermissions("ADMINISTRATOR", discordgo.PermissionAdministrator))
