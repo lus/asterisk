@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"github.com/Lukaesebrot/asterisk/middlewares"
 
@@ -48,6 +49,7 @@ func main() {
 		panic(err)
 	}
 	static.Self = session.State.User
+	static.StartTime = time.Now()
 	log.Println("Successfully established the Discord connection.")
 
 	// Initialize the command system

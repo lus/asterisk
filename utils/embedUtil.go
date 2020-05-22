@@ -130,7 +130,8 @@ func GenerateStatsEmbed(session *discordgo.Session) *discordgo.MessageEmbed {
 			&discordgo.MessageEmbedField{
 				Name: "Application specs",
 				Value: "Mode: `" + static.Mode + "`" +
-					"\nVersion: `" + static.Version + "`",
+					"\nVersion: `" + static.Version + "`" +
+					"\nUptime: `" + time.Since(static.StartTime).Round(time.Second).String() + "`",
 				Inline: false,
 			},
 			&discordgo.MessageEmbedField{
