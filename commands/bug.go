@@ -2,8 +2,8 @@ package commands
 
 import (
 	"github.com/Lukaesebrot/asterisk/config"
+	"github.com/Lukaesebrot/asterisk/embeds"
 	"github.com/Lukaesebrot/asterisk/users"
-	"github.com/Lukaesebrot/asterisk/utils"
 	"github.com/Lukaesebrot/dgc"
 	"github.com/bwmarrin/discordgo"
 )
@@ -12,20 +12,20 @@ import (
 func Bug(ctx *dgc.Ctx) {
 	// Validate the input
 	if ctx.Arguments.Amount() == 0 {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateInvalidUsageEmbed("You need to specify a description of the bug you want to report."))
+		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.InvalidUsage("You need to specify a description of the bug you want to report."))
 		return
 	}
 
 	// Send the bug report to the bug report channel and add the delete emote
-	message, err := ctx.Session.ChannelMessageSendEmbed(config.CurrentConfig.BugReportChannel, utils.GenerateBugReportEmbed(ctx))
+	message, err := ctx.Session.ChannelMessageSendEmbed(config.CurrentConfig.BugReportChannel, embeds.BugReport(ctx))
 	if err != nil {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateErrorEmbed("Your bug report couldn't be submitted. Please try again later."))
+		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Error("Your bug report couldn't be submitted. Please try again later."))
 		return
 	}
 	ctx.Session.MessageReactionAdd(config.CurrentConfig.BugReportChannel, message.ID, "✅")
 
 	// Confirm the creation of the feature request
-	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateSuccessEmbed("Your bug report got submitted."))
+	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Success("Your bug report got submitted."))
 }
 
 // BugReactionListener has to be registered to enable the tick reaction on bug reports

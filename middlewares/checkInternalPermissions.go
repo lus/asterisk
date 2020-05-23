@@ -1,8 +1,8 @@
 package middlewares
 
 import (
+	"github.com/Lukaesebrot/asterisk/embeds"
 	"github.com/Lukaesebrot/asterisk/users"
-	"github.com/Lukaesebrot/asterisk/utils"
 	"github.com/Lukaesebrot/dgc"
 )
 
@@ -15,7 +15,7 @@ func CheckInternalPermissions(format string, permissions ...users.Permission) fu
 		// Check if the user has the required permissions
 		hasPermission := user.HasPermission(permissions...)
 		if !hasPermission {
-			ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateInsufficientPermissionsEmbed("You need to have the internal '"+format+"' permission(s)."))
+			ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.InsufficientPermissions("You need to have the internal '"+format+"' permission(s)."))
 		}
 		return hasPermission
 	}

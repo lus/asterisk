@@ -3,7 +3,7 @@ package commands
 import (
 	"time"
 
-	"github.com/Lukaesebrot/asterisk/utils"
+	"github.com/Lukaesebrot/asterisk/embeds"
 	"github.com/Lukaesebrot/dgc"
 	"github.com/bwmarrin/discordgo"
 )
@@ -12,7 +12,7 @@ import (
 func Initialize(router *dgc.Router, session *discordgo.Session) {
 	// Define the default rate limiter
 	rateLimiter := dgc.NewRateLimiter(5*time.Second, 1*time.Second, func(ctx *dgc.Ctx) {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateErrorEmbed("Hey! Don't spam!"))
+		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Error("Hey! Don't spam!"))
 	})
 
 	// Register the default help command
@@ -73,7 +73,7 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 
 	// Register the hash command
 	hashingRateLimiter := dgc.NewRateLimiter(30*time.Second, 3*time.Second, func(ctx *dgc.Ctx) {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateErrorEmbed("You need to wait at least thirty seconds between two hash calculations."))
+		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Error("You need to wait at least thirty seconds between two hash calculations."))
 	})
 	router.RegisterCmd(&dgc.Command{
 		Name:        "hash",
@@ -118,10 +118,6 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 		Handler:     Latex,
 	})
 
-	// Register the hastebin feature
-	session.AddHandler(HastebinMessageCreateListener)
-	session.AddHandler(HastebinReactionAddListener)
-
 	// Register the info command
 	router.RegisterCmd(&dgc.Command{
 		Name:        "info",
@@ -133,17 +129,6 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 		Handler:     Info,
 	})
 
-	// Register the stats command
-	router.RegisterCmd(&dgc.Command{
-		Name:        "stats",
-		Description: "Displays some general statistics about the bot",
-		Usage:       "stats",
-		Example:     "stats",
-		IgnoreCase:  true,
-		RateLimiter: rateLimiter,
-		Handler:     Stats,
-	})
-
 	// Register the bug command
 	router.RegisterCmd(&dgc.Command{
 		Name:        "bug",
@@ -152,7 +137,7 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 		Example:     "bug The bot spams",
 		IgnoreCase:  true,
 		RateLimiter: dgc.NewRateLimiter(1*time.Hour, 1*time.Minute, func(ctx *dgc.Ctx) {
-			ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateErrorEmbed("You need to wait at least one hour between two bug reports."))
+			ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Error("You need to wait at least one hour between two bug reports."))
 		}),
 		Handler: Bug,
 	})
@@ -166,76 +151,11 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 		Example:     "request My cool new feature",
 		IgnoreCase:  true,
 		RateLimiter: dgc.NewRateLimiter(1*time.Hour, 1*time.Minute, func(ctx *dgc.Ctx) {
-			ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateErrorEmbed("You need to wait at least one hour between two feature requests."))
+			ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Error("You need to wait at least one hour between two feature requests."))
 		}),
 		Handler: Request,
 	})
 	session.AddHandler(RequestReactionListener)
-
-	// Register the settings command
-	router.RegisterCmd(&dgc.Command{
-		Name:        "settings",
-		Description: "Displays the current guild settings or changes them",
-		Usage:       "settings [toggleChannelRestriction | toggleCommandChannel <channel mention> | toggleHastebinIntegration]",
-		Example:     "settings toggleChannelRestriction",
-		IgnoreCase:  true,
-		SubCommands: []*dgc.Command{
-			&dgc.Command{
-				Name:        "toggleChannelRestriction",
-				Aliases:     []string{"tcr"},
-				Description: "Toggles the current command channel restriction status",
-				Usage:       "settings toggleChannelRestriction",
-				Example:     "settings toggleChannelRestriction",
-				Flags: []string{
-					"guild_admin",
-				},
-				IgnoreCase:  true,
-				RateLimiter: rateLimiter,
-				Handler:     SettingsToggleChannelRestriction,
-			},
-			&dgc.Command{
-				Name:        "toggleCommandChannel",
-				Aliases:     []string{"tcc"},
-				Description: "Toggles the command channel status of the mentioned channel",
-				Usage:       "settings toggleCommandChannel <channel mention>",
-				Example:     "settings toggleCommandChannel #my-channel",
-				Flags: []string{
-					"guild_admin",
-				},
-				IgnoreCase:  true,
-				RateLimiter: rateLimiter,
-				Handler:     SettingsToggleCommandChannel,
-			},
-			&dgc.Command{
-				Name:        "toggleHastebinIntegration",
-				Aliases:     []string{"thi"},
-				Description: "Toggles the current hastebin integration status",
-				Usage:       "settings toggleHastebinIntegration",
-				Example:     "settings toggleHastebinIntegration",
-				Flags: []string{
-					"guild_admin",
-				},
-				IgnoreCase:  true,
-				RateLimiter: rateLimiter,
-				Handler:     SettingsToggleHastebinIntegration,
-			},
-		},
-		RateLimiter: rateLimiter,
-		Handler:     Settings,
-	})
-
-	// Register the blacklist command
-	router.RegisterCmd(&dgc.Command{
-		Name:        "blacklist",
-		Description: "[Bot Admin only] Adds/Removes a user to/from the command blacklist",
-		Usage:       "blacklist <user mention>",
-		Example:     "blacklist @Erik",
-		Flags: []string{
-			"bot_mod",
-		},
-		IgnoreCase: true,
-		Handler:    Blacklist,
-	})
 
 	// Register the say command
 	router.RegisterCmd(&dgc.Command{

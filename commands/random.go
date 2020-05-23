@@ -5,13 +5,14 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/Lukaesebrot/asterisk/embeds"
 	"github.com/Lukaesebrot/asterisk/utils"
 	"github.com/Lukaesebrot/dgc"
 )
 
 // Random handles the random command
 func Random(ctx *dgc.Ctx) {
-	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateInvalidUsageEmbed(ctx.Command.Usage))
+	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.InvalidUsage(ctx.Command.Usage))
 }
 
 // RandomBool handles the random bool command
@@ -20,7 +21,7 @@ func RandomBool(ctx *dgc.Ctx) {
 	rand.Seed(time.Now().UnixNano())
 
 	// Respond with the generated random boolean
-	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateSuccessEmbed(strconv.FormatBool(rand.Intn(2) == 0)))
+	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Success(strconv.FormatBool(rand.Intn(2) == 0)))
 }
 
 // RandomNumber handles the random number command
@@ -33,14 +34,14 @@ func RandomNumber(ctx *dgc.Ctx) {
 	if ctx.Arguments.Amount() > 0 {
 		valid, generated := utils.GenerateFromInterval(ctx.Arguments.Raw())
 		if !valid {
-			ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateInvalidUsageEmbed("The interval you specified is invalid."))
+			ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.InvalidUsage("The interval you specified is invalid."))
 			return
 		}
 		number = generated
 	}
 
 	// Respond with the generated random number
-	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateSuccessEmbed(strconv.Itoa(number)))
+	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Success(strconv.Itoa(number)))
 }
 
 // RandomString handles the random string command
@@ -50,14 +51,14 @@ func RandomString(ctx *dgc.Ctx) {
 
 	// Validate the argument length
 	if ctx.Arguments.Amount() == 0 {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateInvalidUsageEmbed("You need to specify a length."))
+		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.InvalidUsage("You need to specify a length."))
 		return
 	}
 
 	// Parse the string length
 	length, err := ctx.Arguments.Get(0).AsInt()
 	if err != nil || length <= 0 || length > 100 {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateInvalidUsageEmbed("The length parameter has to be a number > 0 and <= 100."))
+		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.InvalidUsage("The length parameter has to be a number > 0 and <= 100."))
 		return
 	}
 
@@ -69,7 +70,7 @@ func RandomString(ctx *dgc.Ctx) {
 	}
 
 	// Respond with the generated random string
-	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateSuccessEmbed(string(byteArray)))
+	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Success(string(byteArray)))
 }
 
 // RandomChoice handles the random choice command
@@ -79,7 +80,7 @@ func RandomChoice(ctx *dgc.Ctx) {
 
 	// Validate the argument length
 	if ctx.Arguments.Amount() < 2 {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateInvalidUsageEmbed("You need to specify at least 2 options."))
+		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.InvalidUsage("You need to specify at least 2 options."))
 		return
 	}
 
@@ -87,5 +88,5 @@ func RandomChoice(ctx *dgc.Ctx) {
 	option := ctx.Arguments.Get(rand.Intn(ctx.Arguments.Amount())).Raw()
 
 	// Respond with the random piked choice
-	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateSuccessEmbed(option))
+	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Success(option))
 }

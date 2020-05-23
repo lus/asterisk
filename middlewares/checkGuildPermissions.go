@@ -1,7 +1,7 @@
 package middlewares
 
 import (
-	"github.com/Lukaesebrot/asterisk/utils"
+	"github.com/Lukaesebrot/asterisk/embeds"
 	"github.com/Lukaesebrot/dgc"
 	"github.com/bwmarrin/discordgo"
 )
@@ -19,7 +19,7 @@ func CheckGuildPermissions(format string, permissions ...int) func(*dgc.Ctx) boo
 			}
 		}
 		if !hasPermissions {
-			ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateInsufficientPermissionsEmbed("You need to have the guild-related '"+format+"' permission(s)."))
+			ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.InsufficientPermissions("You need to have the guild-related '"+format+"' permission(s)."))
 		}
 		return hasPermissions
 	}

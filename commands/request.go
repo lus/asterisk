@@ -2,8 +2,8 @@ package commands
 
 import (
 	"github.com/Lukaesebrot/asterisk/config"
+	"github.com/Lukaesebrot/asterisk/embeds"
 	"github.com/Lukaesebrot/asterisk/users"
-	"github.com/Lukaesebrot/asterisk/utils"
 	"github.com/Lukaesebrot/dgc"
 	"github.com/bwmarrin/discordgo"
 )
@@ -12,20 +12,20 @@ import (
 func Request(ctx *dgc.Ctx) {
 	// Validate the input
 	if ctx.Arguments.Amount() == 0 {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateInvalidUsageEmbed("You need to specify a feature you want to request."))
+		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.InvalidUsage("You need to specify a feature you want to request."))
 		return
 	}
 
 	// Send the feature request to the feature request channel and add the delete emote
-	message, err := ctx.Session.ChannelMessageSendEmbed(config.CurrentConfig.FeatureRequestChannel, utils.GenerateFeatureRequestEmbed(ctx))
+	message, err := ctx.Session.ChannelMessageSendEmbed(config.CurrentConfig.FeatureRequestChannel, embeds.FeatureRequest(ctx))
 	if err != nil {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateErrorEmbed("Your feature request couldn't be submitted. Please try again later."))
+		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Error("Your feature request couldn't be submitted. Please try again later."))
 		return
 	}
 	ctx.Session.MessageReactionAdd(config.CurrentConfig.FeatureRequestChannel, message.ID, "✅")
 
 	// Confirm the creation of the feature request
-	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateSuccessEmbed("Your feature request got submitted."))
+	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Success("Your feature request got submitted."))
 }
 
 // RequestReactionListener has to be registered to enable the tick reaction on feature requests

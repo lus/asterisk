@@ -1,8 +1,8 @@
 package middlewares
 
 import (
+	"github.com/Lukaesebrot/asterisk/embeds"
 	"github.com/Lukaesebrot/asterisk/users"
-	"github.com/Lukaesebrot/asterisk/utils"
 	"github.com/Lukaesebrot/dgc"
 )
 
@@ -11,7 +11,7 @@ func InjectUserObject(ctx *dgc.Ctx) bool {
 	// Retrieve the user object
 	user, err := users.RetrieveCached(ctx.Event.Author.ID)
 	if err != nil {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, utils.GenerateErrorEmbed(err.Error()))
+		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Error(err.Error()))
 		return false
 	}
 	ctx.CustomObjects.Set("user", user)
