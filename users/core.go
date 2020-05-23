@@ -23,23 +23,22 @@ func Retrieve(userID string) (*User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	// Try to retrieve the current user document
+	// Try to retrieve the corresponding user document
 	filter := bson.M{"discordID": userID}
 	result := collection.FindOne(ctx, filter)
 	err := result.Err()
 	if err != nil {
 		// Create the user document and return it instantly if it doesn't exist
 		if err == mongo.ErrNoDocuments {
-			insertResult, err := collection.InsertOne(ctx, User{
+			user := &User{
 				DiscordID: userID,
-			})
+			}
+			insertResult, err := collection.InsertOne(ctx, user)
 			if err != nil {
 				return nil, err
 			}
-			return &User{
-				ID:        insertResult.InsertedID.(primitive.ObjectID),
-				DiscordID: userID,
-			}, nil
+			user.ID = insertResult.InsertedID.(primitive.ObjectID)
+			return user, nil
 		}
 		return nil, err
 	}
