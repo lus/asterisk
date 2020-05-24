@@ -18,6 +18,33 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 	// Register the default help command
 	router.RegisterDefaultHelpCommand(session, rateLimiter)
 
+	// Register the settings command
+	router.RegisterCmd(&dgc.Command{
+		Name:        "settings",
+		Description: "Displays the current guild settings or changes them",
+		Usage:       "settings [commandChannel <channel id or mention>]",
+		Example:     "settings commandChannel 573374556409032800",
+		IgnoreCase:  true,
+		SubCommands: []*dgc.Command{
+			&dgc.Command{
+				Name:        "commandChannel",
+				Aliases:     []string{"cc"},
+				Description: "Toggles the command channel status of the given channel",
+				Usage:       "settings commandChannel <channel id or mention>",
+				Example:     "settings commandChannel 573374556409032800",
+				Flags: []string{
+					"guild_admin",
+					"ignore_command_channel",
+				},
+				IgnoreCase:  true,
+				RateLimiter: rateLimiter,
+				Handler:     SettingsCommandChannel,
+			},
+		},
+		RateLimiter: rateLimiter,
+		Handler:     Settings,
+	})
+
 	// Register the random command
 	router.RegisterCmd(&dgc.Command{
 		Name:        "random",

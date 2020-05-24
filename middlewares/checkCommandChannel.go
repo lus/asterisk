@@ -9,5 +9,5 @@ import (
 // CheckCommandChannel checks whether or not the current channel is a command channel
 func CheckCommandChannel(ctx *dgc.Ctx) bool {
 	guild := ctx.CustomObjects.MustGet("guild").(*guilds.Guild)
-	return utils.StringArrayContains(guild.Settings.CommandChannels, ctx.Event.ChannelID)
+	return len(guild.Settings.CommandChannels) == 0 || utils.StringArrayContains(guild.Settings.CommandChannels, ctx.Event.ChannelID) || utils.StringArrayContains(ctx.Command.Flags, "ignore_command_channel")
 }
