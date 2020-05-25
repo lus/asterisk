@@ -45,6 +45,39 @@ func Initialize(router *dgc.Router, session *discordgo.Session) {
 		Handler:     Settings,
 	})
 
+	// Register the reminder command
+	router.RegisterCmd(&dgc.Command{
+		Name:        "reminder",
+		Description: "Lists the current reminders",
+		Usage:       "reminder [create <duration> <message> | delete <id>]",
+		Example:     "reminder",
+		IgnoreCase:  true,
+		SubCommands: []*dgc.Command{
+			&dgc.Command{
+				Name:        "create",
+				Aliases:     []string{"c"},
+				Description: "Creates a reminder",
+				Usage:       "reminder create <duration> <message>",
+				Example:     "reminder create 1h That's my reminder!",
+				IgnoreCase:  true,
+				RateLimiter: rateLimiter,
+				Handler:     ReminderCreate,
+			},
+			&dgc.Command{
+				Name:        "delete",
+				Aliases:     []string{"d", "rm"},
+				Description: "Deletes a reminder",
+				Usage:       "reminder delete <id>",
+				Example:     "reminder delete 1",
+				IgnoreCase:  true,
+				RateLimiter: rateLimiter,
+				Handler:     ReminderDelete,
+			},
+		},
+		RateLimiter: rateLimiter,
+		Handler:     Reminder,
+	})
+
 	// Register the random command
 	router.RegisterCmd(&dgc.Command{
 		Name:        "random",

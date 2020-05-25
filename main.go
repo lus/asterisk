@@ -8,7 +8,9 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/Lukaesebrot/asterisk/embeds"
 	"github.com/Lukaesebrot/asterisk/middlewares"
+	"github.com/Lukaesebrot/asterisk/reminders"
 	"github.com/Lukaesebrot/asterisk/users"
 
 	"github.com/Lukaesebrot/asterisk/commands"
@@ -84,6 +86,14 @@ func main() {
 	router.AddMiddleware("bot_mod", middlewares.CheckInternalPermissions("BOT_MODERATOR", users.PermissionModerator, users.PermissionAdministrator))
 	router.AddMiddleware("guild_admin", middlewares.CheckGuildPermissions("ADMINISTRATOR", discordgo.PermissionAdministrator))
 	log.Println("Successfully registered middlewares.")
+
+	// Schedule the reminder queue
+	log.Println("Scheduling the reminder queue...")
+	go reminders.ScheduleQueue(session, func(reminder *reminders.Reminder) {
+		session.ChannelMessageSend(reminder.ChannelID, "<@"+reminder.UserID+">")
+		session.ChannelMessageSendEmbed(reminder.ChannelID, embeds.Reminder(reminder))
+	})
+	log.Println("Successfully scheduled the reminder queue.")
 
 	// Wait for the program to exit
 	log.Println("Successfully started this Asterisk instance.")
