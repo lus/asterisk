@@ -1,4 +1,4 @@
-package commands
+package features
 
 import (
 	"github.com/Lukaesebrot/asterisk/config"
@@ -8,8 +8,25 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-// Bug handles the bug command
-func Bug(ctx *dgc.Ctx) {
+// initializeBugFeature initializes the bug feature
+func initializeBugFeature(router *dgc.Router, rateLimiter dgc.RateLimiter, session *discordgo.Session) {
+	// Register the 'bug' command
+	router.RegisterCmd(&dgc.Command{
+		Name:        "bug",
+		Description: "Reports a bug to the developers",
+		Usage:       "bug <description>",
+		Example:     "bug The bot spams!",
+		IgnoreCase:  true,
+		RateLimiter: rateLimiter,
+		Handler:     bugCommand,
+	})
+
+	// Register the bugReactionListener
+	session.AddHandler(bugReactionListener)
+}
+
+// bugCommand handles the 'bug' command
+func bugCommand(ctx *dgc.Ctx) {
 	// Validate the input
 	if ctx.Arguments.Amount() == 0 {
 		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.InvalidUsage("You need to specify a description of the bug you want to report."))
@@ -28,8 +45,8 @@ func Bug(ctx *dgc.Ctx) {
 	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Success("Your bug report got submitted."))
 }
 
-// BugReactionListener has to be registered to enable the tick reaction on bug reports
-func BugReactionListener(session *discordgo.Session, event *discordgo.MessageReactionAdd) {
+// bugReactionListener has to be registered to enable the tick reaction on bug reports
+func bugReactionListener(session *discordgo.Session, event *discordgo.MessageReactionAdd) {
 	// Check if the channel is the bug report channel
 	if event.ChannelID != config.CurrentConfig.BugReportChannel {
 		return

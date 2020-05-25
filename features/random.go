@@ -1,4 +1,4 @@
-package commands
+package features
 
 import (
 	"math/rand"
@@ -10,13 +10,65 @@ import (
 	"github.com/Lukaesebrot/dgc"
 )
 
-// Random handles the random command
-func Random(ctx *dgc.Ctx) {
+// initializeRandomFeature initializes the random feature
+func initializeRandomFeature(router *dgc.Router, rateLimiter dgc.RateLimiter) {
+	// Register the 'random' command
+	router.RegisterCmd(&dgc.Command{
+		Name:        "random",
+		Description: "Generates a random boolean, number, string or choice",
+		Usage:       "random <bool | number <interval> | string <length> | choice <options...>>",
+		Example:     "random number [0,5]",
+		IgnoreCase:  true,
+		SubCommands: []*dgc.Command{
+			{
+				Name:        "bool",
+				Description: "Generates a random boolean",
+				Usage:       "random bool",
+				Example:     "random bool",
+				IgnoreCase:  true,
+				RateLimiter: rateLimiter,
+				Handler:     randomBoolCommand,
+			},
+			{
+				Name:        "number",
+				Description: "Generates a random number respecting the given interval",
+				Usage:       "random number <interval>",
+				Example:     "random number [0,5]",
+				IgnoreCase:  true,
+				RateLimiter: rateLimiter,
+				Handler:     randomNumberCommand,
+			},
+			{
+				Name:        "string",
+				Description: "Generates a random string with the given length",
+				Usage:       "random string <length>",
+				Example:     "random string 32",
+				IgnoreCase:  true,
+				RateLimiter: rateLimiter,
+				Handler:     randomStringCommand,
+			},
+			{
+				Name:        "choice",
+				Description: "Generates a random choice",
+				Usage:       "random choice <options...>",
+				Example:     "random choice \"Coice one\" \"Choice two\"",
+				IgnoreCase:  true,
+				RateLimiter: rateLimiter,
+				Handler:     randomChoiceCommand,
+			},
+		},
+		RateLimiter: rateLimiter,
+		Handler:     randomCommand,
+	})
+}
+
+// randomCommand handles the 'random' command
+func randomCommand(ctx *dgc.Ctx) {
 	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.InvalidUsage(ctx.Command.Usage))
 }
 
-// RandomBool handles the random bool command
-func RandomBool(ctx *dgc.Ctx) {
+// randomBoolCommand handles the 'random bool' command
+func randomBoolCommand(ctx *dgc.Ctx) {
 	// Seed the random generator
 	rand.Seed(time.Now().UnixNano())
 
@@ -24,8 +76,8 @@ func RandomBool(ctx *dgc.Ctx) {
 	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Success(strconv.FormatBool(rand.Intn(2) == 0)))
 }
 
-// RandomNumber handles the random number command
-func RandomNumber(ctx *dgc.Ctx) {
+// randomNumberCommand handles the 'random number' command
+func randomNumberCommand(ctx *dgc.Ctx) {
 	// Seed the random generator
 	rand.Seed(time.Now().UnixNano())
 
@@ -44,8 +96,8 @@ func RandomNumber(ctx *dgc.Ctx) {
 	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Success(strconv.Itoa(number)))
 }
 
-// RandomString handles the random string command
-func RandomString(ctx *dgc.Ctx) {
+// randomStringCommand handles the 'random string' command
+func randomStringCommand(ctx *dgc.Ctx) {
 	// Seed the random generator
 	rand.Seed(time.Now().UnixNano())
 
@@ -73,8 +125,8 @@ func RandomString(ctx *dgc.Ctx) {
 	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Success(string(byteArray)))
 }
 
-// RandomChoice handles the random choice command
-func RandomChoice(ctx *dgc.Ctx) {
+// randomChoiceCommand handles the 'random choice' command
+func randomChoiceCommand(ctx *dgc.Ctx) {
 	// Seed the random generator
 	rand.Seed(time.Now().UnixNano())
 

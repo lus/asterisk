@@ -8,14 +8,13 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/Lukaesebrot/asterisk/features"
+
 	"github.com/Lukaesebrot/asterisk/embeds"
-	"github.com/Lukaesebrot/asterisk/middlewares"
 	"github.com/Lukaesebrot/asterisk/reminders"
 	"github.com/Lukaesebrot/asterisk/users"
 
-	"github.com/Lukaesebrot/asterisk/commands"
 	"github.com/Lukaesebrot/asterisk/static"
-	"github.com/Lukaesebrot/dgc"
 
 	"github.com/Lukaesebrot/asterisk/config"
 	"github.com/Lukaesebrot/asterisk/database"
@@ -55,37 +54,10 @@ func main() {
 	static.StartupTime = time.Now()
 	log.Println("Successfully established the Discord connection.")
 
-	// Initialize the command system
-	log.Println("Initializing the command system...")
-	router := dgc.Create(&dgc.Router{
-		Prefixes: []string{
-			"$",
-			"<@!" + static.Self.ID + ">",
-			"<@" + static.Self.ID + ">",
-			"as!",
-			"你",
-		},
-		IgnorePrefixCase: true,
-		BotsAllowed:      false,
-		PingHandler:      commands.Info,
-	})
-	router.Initialize(session)
-	log.Println("Successfully initialized the command system.")
-
-	// Register commands
-	log.Println("Registering commands...")
-	commands.Initialize(router, session)
-	log.Println("Successfully registered commands.")
-
-	// Register middlewares
-	log.Println("Registering middlewares...")
-	router.AddMiddleware("*", middlewares.InjectGuildObject)
-	router.AddMiddleware("*", middlewares.CheckCommandChannel)
-	router.AddMiddleware("*", middlewares.InjectUserObject)
-	router.AddMiddleware("bot_admin", middlewares.CheckInternalPermissions("BOT_ADMINISTRATOR", users.PermissionAdministrator))
-	router.AddMiddleware("bot_mod", middlewares.CheckInternalPermissions("BOT_MODERATOR", users.PermissionModerator, users.PermissionAdministrator))
-	router.AddMiddleware("guild_admin", middlewares.CheckGuildPermissions("ADMINISTRATOR", discordgo.PermissionAdministrator))
-	log.Println("Successfully registered middlewares.")
+	// Initialize all features
+	log.Println("Initializing all features...")
+	features.Initialize(session)
+	log.Println("Successfully initialized all features.")
 
 	// Schedule the reminder queue
 	log.Println("Scheduling the reminder queue...")

@@ -1,4 +1,4 @@
-package commands
+package features
 
 import (
 	"github.com/Lukaesebrot/asterisk/embeds"
@@ -6,8 +6,22 @@ import (
 	"github.com/Lukaesebrot/dgc"
 )
 
-// Math handles the math command
-func Math(ctx *dgc.Ctx) {
+// initializeMathFeature initializes the math feature
+func initializeMathFeature(router *dgc.Router, rateLimiter dgc.RateLimiter) {
+	// Register the 'math' command
+	router.RegisterCmd(&dgc.Command{
+		Name:        "math",
+		Description: "Evaluates the given mathematical expression",
+		Usage:       "math <codeblock>",
+		Example:     "math `1+4^6`\n",
+		IgnoreCase:  true,
+		RateLimiter: rateLimiter,
+		Handler:     mathCommand,
+	})
+}
+
+// mathCommand handles the 'math' command
+func mathCommand(ctx *dgc.Ctx) {
 	// Validate the arguments
 	codeblock := ctx.Arguments.AsCodeblock()
 	if codeblock == nil {

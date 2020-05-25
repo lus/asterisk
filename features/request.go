@@ -1,4 +1,4 @@
-package commands
+package features
 
 import (
 	"github.com/Lukaesebrot/asterisk/config"
@@ -8,8 +8,25 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-// Request handles the request command
-func Request(ctx *dgc.Ctx) {
+// initializeRequestFeature initializes the request feature
+func initializeRequestFeature(router *dgc.Router, rateLimiter dgc.RateLimiter, session *discordgo.Session) {
+	// Register the 'request' command
+	router.RegisterCmd(&dgc.Command{
+		Name:        "request",
+		Description: "Sends a feature request to the developers",
+		Usage:       "request <description>",
+		Example:     "request More hashing algorithms.",
+		IgnoreCase:  true,
+		RateLimiter: rateLimiter,
+		Handler:     requestCommand,
+	})
+
+	// Register the requestReactionListener
+	session.AddHandler(requestReactionListener)
+}
+
+// requestCommand handles the 'request' command
+func requestCommand(ctx *dgc.Ctx) {
 	// Validate the input
 	if ctx.Arguments.Amount() == 0 {
 		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.InvalidUsage("You need to specify a feature you want to request."))
@@ -28,8 +45,8 @@ func Request(ctx *dgc.Ctx) {
 	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Success("Your feature request got submitted."))
 }
 
-// RequestReactionListener has to be registered to enable the tick reaction on feature requests
-func RequestReactionListener(session *discordgo.Session, event *discordgo.MessageReactionAdd) {
+// requestReactionListener has to be registered to enable the tick reaction on feature requests
+func requestReactionListener(session *discordgo.Session, event *discordgo.MessageReactionAdd) {
 	// Check if the channel is the feature request channel
 	if event.ChannelID != config.CurrentConfig.FeatureRequestChannel {
 		return

@@ -1,4 +1,4 @@
-package commands
+package features
 
 import (
 	"github.com/Lukaesebrot/asterisk/embeds"
@@ -7,13 +7,42 @@ import (
 	"github.com/Lukaesebrot/dgc"
 )
 
-// Settings handles the settings command
-func Settings(ctx *dgc.Ctx) {
+// initializeSettingsFeature initializes the settings feature
+func initializeSettingsFeature(router *dgc.Router, rateLimiter dgc.RateLimiter) {
+	// Register the 'settings' command
+	router.RegisterCmd(&dgc.Command{
+		Name:        "settings",
+		Description: "Displays the current guild settings or changes them",
+		Usage:       "settings [commandChannel <channel mention>]",
+		Example:     "settings commandChannel #my-channel",
+		IgnoreCase:  true,
+		SubCommands: []*dgc.Command{
+			{
+				Name:        "commandChannel",
+				Description: "Toggles the command channel status for the mentioned channel",
+				Usage:       "settings commandChannel <channel mention>",
+				Example:     "settings commandChannel #my-channel",
+				Flags: []string{
+					"guild_admin",
+					"ignore_command_channel",
+				},
+				IgnoreCase:  true,
+				RateLimiter: rateLimiter,
+				Handler:     settingsCommandChannelCommand,
+			},
+		},
+		RateLimiter: rateLimiter,
+		Handler:     settingsCommand,
+	})
+}
+
+// settingsCommand handles the 'settings' command
+func settingsCommand(ctx *dgc.Ctx) {
 	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Settings(ctx.CustomObjects.MustGet("guild").(*guilds.Guild)))
 }
 
-// SettingsCommandChannel handles the settings commandChannel command
-func SettingsCommandChannel(ctx *dgc.Ctx) {
+// settingsCommandChannelCommand handles the 'settings commandChannel' command
+func settingsCommandChannelCommand(ctx *dgc.Ctx) {
 	// Validate the command channel ID
 	channelID := ctx.Arguments.AsSingle().AsChannelMentionID()
 	if channelID == "" {

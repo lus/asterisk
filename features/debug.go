@@ -1,4 +1,4 @@
-package commands
+package features
 
 import (
 	"fmt"
@@ -12,8 +12,25 @@ import (
 	"github.com/containous/yaegi/stdlib"
 )
 
-// Debug handles the debug command
-func Debug(ctx *dgc.Ctx) {
+// initializeDebugFeature initializes the debug feature
+func initializeDebugFeature(router *dgc.Router, rateLimiter dgc.RateLimiter) {
+	// Register the 'debug' command
+	router.RegisterCmd(&dgc.Command{
+		Name:        "debug",
+		Description: "[Bot Admin only] Executes the given code at runtime",
+		Usage:       "debug <codeblock>",
+		Example:     "debug `ctx.Author.ID`\n",
+		Flags: []string{
+			"bot_admin",
+		},
+		IgnoreCase:  true,
+		RateLimiter: rateLimiter,
+		Handler:     debugCommand,
+	})
+}
+
+// debugCommand handles the 'debug' command
+func debugCommand(ctx *dgc.Ctx) {
 	// Validate the arguments
 	codeblock := ctx.Arguments.AsCodeblock()
 	if codeblock == nil {

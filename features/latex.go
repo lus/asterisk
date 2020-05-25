@@ -1,4 +1,4 @@
-package commands
+package features
 
 import (
 	"github.com/Lukaesebrot/asterisk/embeds"
@@ -6,8 +6,22 @@ import (
 	"github.com/Lukaesebrot/dgc"
 )
 
-// Latex handles the latex command
-func Latex(ctx *dgc.Ctx) {
+// initializeLaTeXFeature initializes the LaTeX feature
+func initializeLaTeXFeature(router *dgc.Router, rateLimiter dgc.RateLimiter) {
+	// Register the 'latex' command
+	router.RegisterCmd(&dgc.Command{
+		Name:        "latex",
+		Description: "Renders the given LaTeX expression as an image",
+		Usage:       "latex <codeblock>",
+		Example:     "latex `$ 1+4^6 $`\n",
+		IgnoreCase:  true,
+		RateLimiter: rateLimiter,
+		Handler:     latexCommand,
+	})
+}
+
+// latexCommand handles the 'latex' command
+func latexCommand(ctx *dgc.Ctx) {
 	// Validate the arguments
 	codeblock := ctx.Arguments.AsCodeblock()
 	if codeblock == nil {

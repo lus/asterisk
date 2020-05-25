@@ -1,4 +1,4 @@
-package commands
+package features
 
 import (
 	"github.com/Lukaesebrot/asterisk/embeds"
@@ -7,8 +7,45 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-// Reminder handles the reminder command
-func Reminder(ctx *dgc.Ctx) {
+// initializeReminderFeature initializes the reminder feature
+func initializeReminderFeature(router *dgc.Router, rateLimiter dgc.RateLimiter) {
+	// Register the 'reminder' command
+	router.RegisterCmd(&dgc.Command{
+		Name:        "reminder",
+		Aliases:     []string{"remind", "reminders"},
+		Description: "Lists your current reminders or manages them",
+		Usage:       "reminder [create <duration> <message> | delete <id>]",
+		Example:     "reminder create 2h Hello, world!",
+		IgnoreCase:  true,
+		SubCommands: []*dgc.Command{
+			{
+				Name:        "create",
+				Aliases:     []string{"c"},
+				Description: "Creates a new reminder",
+				Usage:       "reminder create <duration> <message>",
+				Example:     "reminder create 2h Hello, world!",
+				IgnoreCase:  true,
+				RateLimiter: rateLimiter,
+				Handler:     reminderCreateCommand,
+			},
+			{
+				Name:        "delete",
+				Aliases:     []string{"d", "rm"},
+				Description: "Deletes the reminder with the given ID",
+				Usage:       "reminder delete <id>",
+				Example:     "reminder delete 1",
+				IgnoreCase:  true,
+				RateLimiter: rateLimiter,
+				Handler:     reminderDeleteCommand,
+			},
+		},
+		RateLimiter: rateLimiter,
+		Handler:     reminderCommand,
+	})
+}
+
+// reminderCommand handles the 'reminder' command
+func reminderCommand(ctx *dgc.Ctx) {
 	// Retrieve the users reminders
 	userReminders, err := reminders.GetAll(ctx.Event.Author.ID)
 	if err != nil {
@@ -20,8 +57,8 @@ func Reminder(ctx *dgc.Ctx) {
 	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Reminders(userReminders))
 }
 
-// ReminderCreate handles the reminder create command
-func ReminderCreate(ctx *dgc.Ctx) {
+// reminderCreateCommand handles the 'reminder create' command
+func reminderCreateCommand(ctx *dgc.Ctx) {
 	// Validate the argument length
 	if ctx.Arguments.Amount() < 2 {
 		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.InvalidUsage(ctx.Command.Usage))
@@ -51,8 +88,8 @@ func ReminderCreate(ctx *dgc.Ctx) {
 	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Success("Your reminder has been created."))
 }
 
-// ReminderDelete handles the reminder delete command
-func ReminderDelete(ctx *dgc.Ctx) {
+// reminderDeleteCommand handles the 'reminder delete' command
+func reminderDeleteCommand(ctx *dgc.Ctx) {
 	// Parse the arguments into an integer
 	id, err := ctx.Arguments.AsSingle().AsInt64()
 	if err != nil {
