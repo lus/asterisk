@@ -95,6 +95,19 @@ func main() {
 	})
 	log.Println("Successfully scheduled the reminder queue.")
 
+	// Make the specified initial user a bot admin
+	log.Println("Updating the initial user permissions...")
+	user, err := users.RetrieveCached(config.CurrentConfig.InitialAdminID)
+	if err != nil {
+		panic(err)
+	}
+	user.GrantPermission(users.PermissionAdministrator)
+	err = user.Update()
+	if err != nil {
+		panic(err)
+	}
+	log.Println("Successfully updated the initial user permissions.")
+
 	// Wait for the program to exit
 	log.Println("Successfully started this Asterisk instance.")
 	sc := make(chan os.Signal, 1)

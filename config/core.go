@@ -13,6 +13,7 @@ var CurrentConfig *Config = new(Config)
 // Config represents the bot configuration
 type Config struct {
 	BotToken              string `json:"botToken"`
+	InitialAdminID        string `json:"initialAdminID"`
 	FeatureRequestChannel string `json:"featureRequestChannel"`
 	BugReportChannel      string `json:"bugReportChannel"`
 	MongoConnectionString string `json:"mongoConnectionString"`
@@ -28,6 +29,7 @@ func Load() {
 	// Set the current configuration
 	CurrentConfig = &Config{
 		BotToken:              os.Getenv("ASTERISK_BOT_TOKEN"),
+		InitialAdminID:        os.Getenv("ASTERISK_INITIAL_ADMIN_ID"),
 		FeatureRequestChannel: os.Getenv("ASTERISK_FEATURE_REQUEST_CHANNEL"),
 		BugReportChannel:      os.Getenv("ASTERISK_BUG_REPORT_CHANNEL"),
 		MongoConnectionString: os.Getenv("ASTERISK_MONGO_CONNECTION_STRING"),
