@@ -1,6 +1,8 @@
 package features
 
 import (
+	"time"
+
 	"github.com/Lukaesebrot/asterisk/embeds"
 	"github.com/Lukaesebrot/asterisk/reminders"
 	"github.com/Lukaesebrot/dgc"
@@ -69,6 +71,12 @@ func reminderCreateCommand(ctx *dgc.Ctx) {
 	duration, err := ctx.Arguments.Get(0).AsDuration()
 	if err != nil {
 		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.InvalidUsage(ctx.Command.Usage))
+		return
+	}
+
+	// Check if the duration is too long
+	if duration > 504*time.Hour {
+		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Error("You can't create reminders that take longer than 21 days."))
 		return
 	}
 
