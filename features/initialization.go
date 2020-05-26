@@ -59,6 +59,7 @@ func Initialize(session *discordgo.Session) {
 	initializeMathFeature(router, generalRateLimiter)
 	initializeLaTeXFeature(router, generalRateLimiter)
 	initializeHashFeature(router, hashingRateLimiter)
+	initializeGoogleFeature(router, hashingRateLimiter)
 	initializeBugFeature(router, bugReportRateLimiter, session)
 	initializeRequestFeature(router, featureRequestRateLimiter, session)
 	initializeDebugFeature(router, generalRateLimiter)
