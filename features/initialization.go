@@ -63,6 +63,7 @@ func Initialize(session *discordgo.Session) {
 	initializeRequestFeature(router, featureRequestRateLimiter, session)
 	initializeDebugFeature(router, generalRateLimiter)
 	initializeSayFeature(router, generalRateLimiter)
+	initializeStarboardFeature(session)
 
 	// Register all the middlewares
 	router.AddMiddleware("*", middlewares.InjectGuildObject)

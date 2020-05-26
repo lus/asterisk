@@ -22,6 +22,12 @@ func Settings(guild *guilds.Guild) *discordgo.MessageEmbed {
 		}
 	}
 
+	// Define the starboard channel string
+	starboardChannel := "`disabled`"
+	if guild.Settings.StarboardChannel != "" {
+		starboardChannel = fmt.Sprintf("<#%s> (`%s`)", guild.Settings.StarboardChannel, guild.Settings.StarboardChannel)
+	}
+
 	return &discordgo.MessageEmbed{
 		Title:     "Guild Settings",
 		Timestamp: time.Now().Format(time.RFC3339),
@@ -30,6 +36,10 @@ func Settings(guild *guilds.Guild) *discordgo.MessageEmbed {
 			{
 				Name:  "Command channels",
 				Value: commandChannels,
+			},
+			{
+				Name:  "Starboard channel",
+				Value: starboardChannel,
 			},
 		},
 	}

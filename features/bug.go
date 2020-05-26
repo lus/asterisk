@@ -58,7 +58,7 @@ func bugReactionListener(session *discordgo.Session, event *discordgo.MessageRea
 		return
 	}
 
-	// Check of the reaction is the tick reaction
+	// Check if the reaction is the tick reaction
 	if event.Emoji.Name != "✅" {
 		return
 	}
