@@ -22,10 +22,10 @@ func Settings(guild *guilds.Guild) *discordgo.MessageEmbed {
 		}
 	}
 
-	// Define the starboard channel string
-	starboardChannel := "`disabled`"
-	if guild.Settings.StarboardChannel != "" {
-		starboardChannel = fmt.Sprintf("<#%s> (`%s`)", guild.Settings.StarboardChannel, guild.Settings.StarboardChannel)
+	// Define the starboard string
+	starboard := "`disabled`"
+	if guild.Settings.Starboard.Channel != "" {
+		starboard = fmt.Sprintf("Channel: <#%s> (`%s`)\nMinimum stars: `%d`", guild.Settings.Starboard.Channel, guild.Settings.Starboard.Channel, guild.Settings.Starboard.Minimum)
 	}
 
 	return &discordgo.MessageEmbed{
@@ -38,8 +38,8 @@ func Settings(guild *guilds.Guild) *discordgo.MessageEmbed {
 				Value: commandChannels,
 			},
 			{
-				Name:  "Starboard channel",
-				Value: starboardChannel,
+				Name:  "Starboard",
+				Value: starboard,
 			},
 		},
 	}

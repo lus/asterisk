@@ -11,6 +11,12 @@ type Guild struct {
 
 // GuildSettings represents the settings for a bot guild
 type GuildSettings struct {
-	CommandChannels  []string `bson:"commandChannels"`
-	StarboardChannel string   `bson:"starboardChannel"`
+	CommandChannels []string               `bson:"commandChannels"`
+	Starboard       GuildStarboardSettings `bson:"starboard"`
+}
+
+// GuildStarboardSettings represents the starboard settings for a guild
+type GuildStarboardSettings struct {
+	Channel string `bson:"channel"`
+	Minimum int    `bson:"minimum"`
 }

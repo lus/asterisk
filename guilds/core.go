@@ -34,6 +34,9 @@ func Retrieve(guildID string) (*Guild, error) {
 				DiscordID: guildID,
 				Settings: GuildSettings{
 					CommandChannels: []string{},
+					Starboard: GuildStarboardSettings{
+						Minimum: 3,
+					},
 				},
 			}
 			insertResult, err := collection.InsertOne(ctx, guild)

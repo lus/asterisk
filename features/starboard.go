@@ -15,7 +15,7 @@ func initializeStarboardFeature(session *discordgo.Session) {
 // starboardReactionListener has to be registered to enable the starboard feature
 func starboardReactionListener(session *discordgo.Session, event *discordgo.MessageReactionAdd) {
 	// Check if the reaction is a star reaction
-	if event.Emoji.Name != "⭐" && event.Emoji.Name != "🌟" {
+	if event.Emoji.Name != "⭐" {
 		return
 	}
 
@@ -26,7 +26,7 @@ func starboardReactionListener(session *discordgo.Session, event *discordgo.Mess
 	}
 
 	// Retrieve the starboard channel ID
-	starboardChannelID := guild.Settings.StarboardChannel
+	starboardChannelID := guild.Settings.Starboard.Channel
 	if starboardChannelID == "" {
 		return
 	}
@@ -38,11 +38,16 @@ func starboardReactionListener(session *discordgo.Session, event *discordgo.Mess
 	}
 	message.GuildID = event.GuildID
 
+	// Check if the message author is a bot
+	if message.Author.Bot {
+		return
+	}
+
 	// Retrieve the amount of star emojis and check if the message already got posted into the starboard
 	amount := 0
 	alreadyPosted := false
 	for _, reactions := range message.Reactions {
-		if reactions.Emoji.Name != "⭐" && reactions.Emoji.Name != "🌟" {
+		if reactions.Emoji.Name != "⭐" {
 			continue
 		}
 		if reactions.Me {
@@ -51,8 +56,8 @@ func starboardReactionListener(session *discordgo.Session, event *discordgo.Mess
 		amount += reactions.Count
 	}
 
-	// Check if the amount of star emojis is at least 2 and if the message already got posted into the starboard
-	if amount < 2 || alreadyPosted {
+	// Validate the amount of star emojis and check if the message already got posted into the starboard
+	if amount < guild.Settings.Starboard.Minimum || alreadyPosted {
 		return
 	}
 
