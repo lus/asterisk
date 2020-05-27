@@ -62,6 +62,7 @@ func Initialize(session *discordgo.Session) {
 	initializeGoogleFeature(router, hashingRateLimiter)
 	initializeBugFeature(router, bugReportRateLimiter, session)
 	initializeRequestFeature(router, featureRequestRateLimiter, session)
+	initializeCreditsFeature(router, generalRateLimiter)
 	initializeDebugFeature(router)
 	initializeSayFeature(router)
 	initializeStarboardFeature(session)
