@@ -27,10 +27,15 @@ func initializeGoogleFeature(router *dgc.Router, rateLimiter dgc.RateLimiter) {
 func googleCommand(ctx *dgc.Ctx) {
 	// Validate the input
 	if ctx.Arguments.Amount() == 0 {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.InvalidUsage("You need to specify some search parameters."))
+		ctx.RespondEmbed(embeds.InvalidUsage("You need to specify some search parameters."))
+		return
+	}
+
+	// Check the rate limiter
+	if !ctx.Command.NotifyRateLimiter(ctx) {
 		return
 	}
 
 	// Respond with the the lmgtfy URL
-	ctx.Session.ChannelMessageSend(ctx.Event.ChannelID, fmt.Sprintf("https://lmgtfy.com/?q=%s", url.QueryEscape(ctx.Arguments.Raw())))
+	ctx.RespondText(fmt.Sprintf("https://lmgtfy.com/?q=%s", url.QueryEscape(ctx.Arguments.Raw())))
 }

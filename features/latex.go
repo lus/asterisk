@@ -25,15 +25,20 @@ func latexCommand(ctx *dgc.Ctx) {
 	// Validate the arguments
 	codeblock := ctx.Arguments.AsCodeblock()
 	if codeblock == nil {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.InvalidUsage(ctx.Command.Usage))
+		ctx.RespondEmbed(embeds.InvalidUsage(ctx.Command.Usage))
+		return
+	}
+
+	// Check the rate limiter
+	if !ctx.Command.NotifyRateLimiter(ctx) {
 		return
 	}
 
 	// Render the given expression and respond with it
 	url, err := utils.RenderLaTeX(codeblock.Content)
 	if err != nil {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Error(err.Error()))
+		ctx.RespondEmbed(embeds.Error(err.Error()))
 		return
 	}
-	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.LaTeX(url))
+	ctx.RespondEmbed(embeds.LaTeX(url))
 }

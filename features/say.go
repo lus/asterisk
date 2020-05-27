@@ -6,7 +6,7 @@ import (
 )
 
 // initializeSayFeature initializes the say feature
-func initializeSayFeature(router *dgc.Router, rateLimiter dgc.RateLimiter) {
+func initializeSayFeature(router *dgc.Router) {
 	// Register the 'say' command
 	router.RegisterCmd(&dgc.Command{
 		Name:        "say",
@@ -17,7 +17,7 @@ func initializeSayFeature(router *dgc.Router, rateLimiter dgc.RateLimiter) {
 			"bot_admin",
 		},
 		IgnoreCase:  true,
-		RateLimiter: rateLimiter,
+		RateLimiter: nil,
 		Handler:     sayCommand,
 	})
 }
@@ -26,8 +26,8 @@ func initializeSayFeature(router *dgc.Router, rateLimiter dgc.RateLimiter) {
 func sayCommand(ctx *dgc.Ctx) {
 	// Validate the input
 	if ctx.Arguments.Amount() == 0 {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.InvalidUsage("You need to specify a string that I should say."))
+		ctx.RespondEmbed(embeds.InvalidUsage("You need to specify a string that I should say."))
 		return
 	}
-	ctx.Session.ChannelMessageSend(ctx.Event.ChannelID, ctx.Arguments.Raw())
+	ctx.RespondText(ctx.Arguments.Raw())
 }

@@ -81,7 +81,7 @@ func initializeSettingsFeature(router *dgc.Router, rateLimiter dgc.RateLimiter) 
 				},
 				RateLimiter: rateLimiter,
 				Handler: func(ctx *dgc.Ctx) {
-					ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.InvalidUsage(ctx.Command.Usage))
+					ctx.RespondEmbed(embeds.InvalidUsage(ctx.Command.Usage))
 				},
 			},
 		},
@@ -92,7 +92,12 @@ func initializeSettingsFeature(router *dgc.Router, rateLimiter dgc.RateLimiter) 
 
 // settingsCommand handles the 'settings' command
 func settingsCommand(ctx *dgc.Ctx) {
-	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Settings(ctx.CustomObjects.MustGet("guild").(*guilds.Guild)))
+	// Check the rate limiter
+	if !ctx.Command.NotifyRateLimiter(ctx) {
+		return
+	}
+
+	ctx.RespondEmbed(embeds.Settings(ctx.CustomObjects.MustGet("guild").(*guilds.Guild)))
 }
 
 // settingsCommandChannelCommand handles the 'settings commandChannel' command
@@ -106,7 +111,12 @@ func settingsCommandChannelCommand(ctx *dgc.Ctx) {
 	// Validate the channel itself
 	_, err := ctx.Session.Channel(channelID)
 	if err != nil {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Error("The given channel couldn't be found."))
+		ctx.RespondEmbed(embeds.Error("The given channel couldn't be found."))
+		return
+	}
+
+	// Check the rate limiter
+	if !ctx.Command.NotifyRateLimiter(ctx) {
 		return
 	}
 
@@ -131,11 +141,16 @@ func settingsCommandChannelCommand(ctx *dgc.Ctx) {
 	}
 
 	// Respond with a success message
-	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Success("The command channel status for the mentioned channel has been "+utils.PrettifyBool(!contains)+"."))
+	ctx.RespondEmbed(embeds.Success("The command channel status for the mentioned channel has been " + utils.PrettifyBool(!contains) + "."))
 }
 
 // settingsStarboardDisableCommand handles the 'settings starboard disable' command
 func settingsStarboardDisableCommand(ctx *dgc.Ctx) {
+	// Check the rate limiter
+	if !ctx.Command.NotifyRateLimiter(ctx) {
+		return
+	}
+
 	// Retrieve the guild object
 	guild := ctx.CustomObjects.MustGet("guild").(*guilds.Guild)
 
@@ -143,12 +158,12 @@ func settingsStarboardDisableCommand(ctx *dgc.Ctx) {
 	guild.Settings.Starboard.Channel = ""
 	err := guild.Update()
 	if err != nil {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Error(err.Error()))
+		ctx.RespondEmbed(embeds.Error(err.Error()))
 		return
 	}
 
 	// Respond with a success message
-	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Success("The starboard feature got disabled."))
+	ctx.RespondEmbed(embeds.Success("The starboard feature got disabled."))
 }
 
 // settingsStarboardChannelCommand handles the 'settings starboard channel' command
@@ -159,26 +174,31 @@ func settingsStarboardChannelCommand(ctx *dgc.Ctx) {
 		channelID = ctx.Arguments.Raw()
 	}
 
-	// Retrieve the guild object
-	guild := ctx.CustomObjects.MustGet("guild").(*guilds.Guild)
-
 	// Validate the channel itself
 	_, err := ctx.Session.Channel(channelID)
 	if err != nil {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Error(err.Error()))
+		ctx.RespondEmbed(embeds.Error(err.Error()))
 		return
 	}
+
+	// Check the rate limiter
+	if !ctx.Command.NotifyRateLimiter(ctx) {
+		return
+	}
+
+	// Retrieve the guild object
+	guild := ctx.CustomObjects.MustGet("guild").(*guilds.Guild)
 
 	// Set the starboard channel ID
 	guild.Settings.Starboard.Channel = channelID
 	err = guild.Update()
 	if err != nil {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Error(err.Error()))
+		ctx.RespondEmbed(embeds.Error(err.Error()))
 		return
 	}
 
 	// Respond with a success message
-	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Success("The starboard channel has been set to "+channelID+"."))
+	ctx.RespondEmbed(embeds.Success("The starboard channel has been set to " + channelID + "."))
 }
 
 // settingsStarboardMinimumCommand handles the 'settings starboard minimum' command
@@ -187,12 +207,17 @@ func settingsStarboardMinimumCommand(ctx *dgc.Ctx) {
 	minimum, err := ctx.Arguments.AsSingle().AsInt()
 	if err != nil {
 		if err != nil {
-			ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.InvalidUsage("You need to specify a minimum star amount."))
+			ctx.RespondEmbed(embeds.InvalidUsage("You need to specify a minimum star amount."))
 			return
 		}
 	}
 	if minimum <= 0 {
 		minimum = 1
+	}
+
+	// Check the rate limiter
+	if !ctx.Command.NotifyRateLimiter(ctx) {
+		return
 	}
 
 	// Retrieve the guild object
@@ -202,10 +227,10 @@ func settingsStarboardMinimumCommand(ctx *dgc.Ctx) {
 	guild.Settings.Starboard.Minimum = minimum
 	err = guild.Update()
 	if err != nil {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Error(err.Error()))
+		ctx.RespondEmbed(embeds.Error(err.Error()))
 		return
 	}
 
 	// Respond with a success message
-	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Success("The minimum star amount has been set to "+strconv.Itoa(minimum)+"."))
+	ctx.RespondEmbed(embeds.Success("The minimum star amount has been set to " + strconv.Itoa(minimum) + "."))
 }

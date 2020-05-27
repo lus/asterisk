@@ -29,13 +29,13 @@ func initializeHashFeature(router *dgc.Router, rateLimiter dgc.RateLimiter) {
 			},
 		},
 		RateLimiter: rateLimiter,
-		Handler:     hashCommand,
+		Handler:     nil,
 	})
 }
 
 // hashCommand handles the 'hash' command
 func hashCommand(ctx *dgc.Ctx) {
-	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.InvalidUsage(ctx.Command.Usage))
+	ctx.RespondEmbed(embeds.InvalidUsage(ctx.Command.Usage))
 }
 
 // hashMD5Command handles the 'hash md5' command
@@ -43,7 +43,12 @@ func hashMD5Command(ctx *dgc.Ctx) {
 	// Validate the arguments
 	raw := ctx.Arguments.Raw()
 	if raw == "" {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.InvalidUsage("You need to specify a string you want to hash."))
+		ctx.RespondEmbed(embeds.InvalidUsage("You need to specify a string you want to hash."))
+		return
+	}
+
+	// Check the rate limiter
+	if !ctx.Command.NotifyRateLimiter(ctx) {
 		return
 	}
 
@@ -52,5 +57,5 @@ func hashMD5Command(ctx *dgc.Ctx) {
 	hashString := hex.EncodeToString(hashBytes[:])
 
 	// Respond with the hash
-	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Success(hashString))
+	ctx.RespondEmbed(embeds.Success(hashString))
 }

@@ -2,26 +2,36 @@ package middlewares
 
 import (
 	"github.com/Lukaesebrot/asterisk/embeds"
+	"github.com/Lukaesebrot/asterisk/utils"
 	"github.com/Lukaesebrot/dgc"
 	"github.com/bwmarrin/discordgo"
 )
 
 // CheckGuildPermissions checks if the current executor has got the given guild permission(s)
-func CheckGuildPermissions(format string, permissions ...int) func(*dgc.Ctx) bool {
-	return func(ctx *dgc.Ctx) bool {
-		// Check if the executer has the required permissions
-		hasPermissions := true
-		for _, permission := range permissions {
-			hasPermission, _ := hasPermission(ctx.Session, ctx.Event.GuildID, ctx.Event.Author.ID, permission)
-			if !hasPermission {
-				hasPermissions = false
-				break
+func CheckGuildPermissions(flag, format string, permissions ...int) dgc.Middleware {
+	return func(next dgc.ExecutionHandler) dgc.ExecutionHandler {
+		return func(ctx *dgc.Ctx) {
+			// Check if the command has got the specified flag
+			if !utils.StringArrayContains(ctx.Command.Flags, flag) {
+				next(ctx)
+				return
 			}
+
+			// Check if the executer has the required permissions
+			hasPermissions := true
+			for _, permission := range permissions {
+				hasPermission, _ := hasPermission(ctx.Session, ctx.Event.GuildID, ctx.Event.Author.ID, permission)
+				if !hasPermission {
+					hasPermissions = false
+					break
+				}
+			}
+			if !hasPermissions {
+				ctx.RespondEmbed(embeds.InsufficientPermissions("You need to have the guild-related '" + format + "' permission(s)."))
+				return
+			}
+			next(ctx)
 		}
-		if !hasPermissions {
-			ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.InsufficientPermissions("You need to have the guild-related '"+format+"' permission(s)."))
-		}
-		return hasPermissions
 	}
 }
 

@@ -30,22 +30,22 @@ func Initialize(session *discordgo.Session) {
 
 	// Create the general rate limiter
 	generalRateLimiter := dgc.NewRateLimiter(5*time.Second, 1*time.Second, func(ctx *dgc.Ctx) {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Error("Hey! Don't spam!"))
+		ctx.RespondEmbed(embeds.Error("Hey! Don't spam!"))
 	})
 
 	// Create the hashing rate limiter
 	hashingRateLimiter := dgc.NewRateLimiter(1*time.Minute, 5*time.Second, func(ctx *dgc.Ctx) {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Error("You may only create a hash once a minute."))
+		ctx.RespondEmbed(embeds.Error("You may only create a hash once a minute."))
 	})
 
 	// Create the bug report rate limiter
 	bugReportRateLimiter := dgc.NewRateLimiter(10*time.Minute, 10*time.Second, func(ctx *dgc.Ctx) {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Error("Please wait at least 10 minutes between two bug reports."))
+		ctx.RespondEmbed(embeds.Error("Please wait at least 10 minutes between two bug reports."))
 	})
 
 	// Create the feature request rate limiter
 	featureRequestRateLimiter := dgc.NewRateLimiter(10*time.Minute, 10*time.Second, func(ctx *dgc.Ctx) {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Error("Please wait at least 10 minutes between two feature requests."))
+		ctx.RespondEmbed(embeds.Error("Please wait at least 10 minutes between two feature requests."))
 	})
 
 	// Initialize the default help command
@@ -62,15 +62,15 @@ func Initialize(session *discordgo.Session) {
 	initializeGoogleFeature(router, hashingRateLimiter)
 	initializeBugFeature(router, bugReportRateLimiter, session)
 	initializeRequestFeature(router, featureRequestRateLimiter, session)
-	initializeDebugFeature(router, generalRateLimiter)
-	initializeSayFeature(router, generalRateLimiter)
+	initializeDebugFeature(router)
+	initializeSayFeature(router)
 	initializeStarboardFeature(session)
 
 	// Register all the middlewares
-	router.AddMiddleware("*", middlewares.InjectGuildObject)
-	router.AddMiddleware("*", middlewares.CheckCommandChannel)
-	router.AddMiddleware("*", middlewares.InjectUserObject)
-	router.AddMiddleware("bot_admin", middlewares.CheckInternalPermissions("BOT_ADMINISTRATOR", users.PermissionAdministrator))
-	router.AddMiddleware("bot_mod", middlewares.CheckInternalPermissions("BOT_MODERATOR", users.PermissionModerator, users.PermissionAdministrator))
-	router.AddMiddleware("guild_admin", middlewares.CheckGuildPermissions("ADMINISTRATOR", discordgo.PermissionAdministrator))
+	router.RegisterMiddleware(middlewares.CheckGuildPermissions("guild_admin", "ADMINISTRATOR", discordgo.PermissionAdministrator))
+	router.RegisterMiddleware(middlewares.CheckInternalPermissions("bot_mod", "BOT_MODERATOR", users.PermissionModerator, users.PermissionAdministrator))
+	router.RegisterMiddleware(middlewares.CheckInternalPermissions("bot_admin", "BOT_ADMINISTRATOR", users.PermissionAdministrator))
+	router.RegisterMiddleware(middlewares.InjectUserObject)
+	router.RegisterMiddleware(middlewares.CheckCommandChannel)
+	router.RegisterMiddleware(middlewares.InjectGuildObject)
 }

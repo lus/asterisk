@@ -58,61 +58,76 @@ func initializeRandomFeature(router *dgc.Router, rateLimiter dgc.RateLimiter) {
 			},
 		},
 		RateLimiter: rateLimiter,
-		Handler:     randomCommand,
+		Handler:     nil,
 	})
 }
 
 // randomCommand handles the 'random' command
 func randomCommand(ctx *dgc.Ctx) {
-	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.InvalidUsage(ctx.Command.Usage))
+	ctx.RespondEmbed(embeds.InvalidUsage(ctx.Command.Usage))
 }
 
 // randomBoolCommand handles the 'random bool' command
 func randomBoolCommand(ctx *dgc.Ctx) {
+	// Check the rate limiter
+	if !ctx.Command.NotifyRateLimiter(ctx) {
+		return
+	}
+
 	// Seed the random generator
 	rand.Seed(time.Now().UnixNano())
 
 	// Respond with the generated random boolean
-	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Success(strconv.FormatBool(rand.Intn(2) == 0)))
+	ctx.RespondEmbed(embeds.Success(strconv.FormatBool(rand.Intn(2) == 0)))
 }
 
 // randomNumberCommand handles the 'random number' command
 func randomNumberCommand(ctx *dgc.Ctx) {
-	// Seed the random generator
-	rand.Seed(time.Now().UnixNano())
-
 	// Define the random number
 	number := rand.Int()
 	if ctx.Arguments.Amount() > 0 {
 		valid, generated := utils.GenerateFromInterval(ctx.Arguments.Raw())
 		if !valid {
-			ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.InvalidUsage("The interval you specified is invalid."))
+			ctx.RespondEmbed(embeds.InvalidUsage("The interval you specified is invalid."))
 			return
 		}
 		number = generated
 	}
 
+	// Check the rate limiter
+	if !ctx.Command.NotifyRateLimiter(ctx) {
+		return
+	}
+
+	// Seed the random generator
+	rand.Seed(time.Now().UnixNano())
+
 	// Respond with the generated random number
-	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Success(strconv.Itoa(number)))
+	ctx.RespondEmbed(embeds.Success(strconv.Itoa(number)))
 }
 
 // randomStringCommand handles the 'random string' command
 func randomStringCommand(ctx *dgc.Ctx) {
-	// Seed the random generator
-	rand.Seed(time.Now().UnixNano())
-
 	// Validate the argument length
 	if ctx.Arguments.Amount() == 0 {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.InvalidUsage("You need to specify a length."))
+		ctx.RespondEmbed(embeds.InvalidUsage("You need to specify a length."))
 		return
 	}
 
 	// Parse the string length
 	length, err := ctx.Arguments.Get(0).AsInt()
 	if err != nil || length <= 0 || length > 100 {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.InvalidUsage("The length parameter has to be a number > 0 and <= 100."))
+		ctx.RespondEmbed(embeds.InvalidUsage("The length parameter has to be a number > 0 and <= 100."))
 		return
 	}
+
+	// Check the rate limiter
+	if !ctx.Command.NotifyRateLimiter(ctx) {
+		return
+	}
+
+	// Seed the random generator
+	rand.Seed(time.Now().UnixNano())
 
 	// Generate the random string
 	characters := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
@@ -122,23 +137,28 @@ func randomStringCommand(ctx *dgc.Ctx) {
 	}
 
 	// Respond with the generated random string
-	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Success(string(byteArray)))
+	ctx.RespondEmbed(embeds.Success(string(byteArray)))
 }
 
 // randomChoiceCommand handles the 'random choice' command
 func randomChoiceCommand(ctx *dgc.Ctx) {
-	// Seed the random generator
-	rand.Seed(time.Now().UnixNano())
-
 	// Validate the argument length
 	if ctx.Arguments.Amount() < 2 {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.InvalidUsage("You need to specify at least 2 options."))
+		ctx.RespondEmbed(embeds.InvalidUsage("You need to specify at least 2 options."))
 		return
 	}
+
+	// Check the rate limiter
+	if !ctx.Command.NotifyRateLimiter(ctx) {
+		return
+	}
+
+	// Seed the random generator
+	rand.Seed(time.Now().UnixNano())
 
 	// Make a random choice
 	option := ctx.Arguments.Get(rand.Intn(ctx.Arguments.Amount())).Raw()
 
 	// Respond with the random piked choice
-	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Success(option))
+	ctx.RespondEmbed(embeds.Success(option))
 }

@@ -14,7 +14,7 @@ import (
 )
 
 // initializeDebugFeature initializes the debug feature
-func initializeDebugFeature(router *dgc.Router, rateLimiter dgc.RateLimiter) {
+func initializeDebugFeature(router *dgc.Router) {
 	// Register the 'debug' command
 	router.RegisterCmd(&dgc.Command{
 		Name:        "debug",
@@ -25,7 +25,7 @@ func initializeDebugFeature(router *dgc.Router, rateLimiter dgc.RateLimiter) {
 			"bot_admin",
 		},
 		IgnoreCase:  true,
-		RateLimiter: rateLimiter,
+		RateLimiter: nil,
 		Handler:     debugCommand,
 	})
 }
@@ -35,7 +35,7 @@ func debugCommand(ctx *dgc.Ctx) {
 	// Validate the arguments
 	codeblock := ctx.Arguments.AsCodeblock()
 	if codeblock == nil {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.InvalidUsage(ctx.Command.Usage))
+		ctx.RespondEmbed(embeds.InvalidUsage(ctx.Command.Usage))
 		return
 	}
 
@@ -54,15 +54,15 @@ func debugCommand(ctx *dgc.Ctx) {
 	interpreter.Use(custom)
 	_, err := interpreter.Eval("import (\n. \"asterisk\"\n\"fmt\"\n\"time\"\n)")
 	if err != nil {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Error(err.Error()))
+		ctx.RespondEmbed(embeds.Error(err.Error()))
 		return
 	}
 
 	// Evaluate the given string and respond with the result
 	result, err := interpreter.Eval(codeblock.Content)
 	if err != nil {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Error(err.Error()))
+		ctx.RespondEmbed(embeds.Error(err.Error()))
 		return
 	}
-	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Success(fmt.Sprintf("%+v", result)))
+	ctx.RespondEmbed(embeds.Success(fmt.Sprintf("%+v", result)))
 }

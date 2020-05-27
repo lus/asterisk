@@ -7,13 +7,15 @@ import (
 )
 
 // InjectUserObject injects the user object of the message author into the custom context objects
-func InjectUserObject(ctx *dgc.Ctx) bool {
-	// Retrieve the user object
-	user, err := users.RetrieveCached(ctx.Event.Author.ID)
-	if err != nil {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Error(err.Error()))
-		return false
+func InjectUserObject(next dgc.ExecutionHandler) dgc.ExecutionHandler {
+	return func(ctx *dgc.Ctx) {
+		// Retrieve the user object
+		user, err := users.RetrieveCached(ctx.Event.Author.ID)
+		if err != nil {
+			ctx.RespondEmbed(embeds.Error(err.Error()))
+			return
+		}
+		ctx.CustomObjects.Set("user", user)
+		next(ctx)
 	}
-	ctx.CustomObjects.Set("user", user)
-	return true
 }

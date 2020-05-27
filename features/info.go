@@ -21,5 +21,10 @@ func initializeInfoFeature(router *dgc.Router, rateLimiter dgc.RateLimiter) {
 
 // infoCommand handles the 'info' command
 func infoCommand(ctx *dgc.Ctx) {
-	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Info(ctx))
+	// Check the rate limiter
+	if !ctx.Command.NotifyRateLimiter(ctx) {
+		return
+	}
+
+	ctx.RespondEmbed(embeds.Info(ctx))
 }

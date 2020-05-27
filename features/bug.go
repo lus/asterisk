@@ -29,20 +29,25 @@ func initializeBugFeature(router *dgc.Router, rateLimiter dgc.RateLimiter, sessi
 func bugCommand(ctx *dgc.Ctx) {
 	// Validate the input
 	if ctx.Arguments.Amount() == 0 {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.InvalidUsage("You need to specify a description of the bug you want to report."))
+		ctx.RespondEmbed(embeds.InvalidUsage("You need to specify a description of the bug you want to report."))
+		return
+	}
+
+	// Check the rate limiter
+	if !ctx.Command.NotifyRateLimiter(ctx) {
 		return
 	}
 
 	// Send the bug report to the bug report channel and add the delete emote
 	message, err := ctx.Session.ChannelMessageSendEmbed(config.CurrentConfig.BugReportChannel, embeds.BugReport(ctx))
 	if err != nil {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Error("Your bug report couldn't be submitted. Please try again later."))
+		ctx.RespondEmbed(embeds.Error("Your bug report couldn't be submitted. Please try again later."))
 		return
 	}
 	ctx.Session.MessageReactionAdd(config.CurrentConfig.BugReportChannel, message.ID, "✅")
 
 	// Confirm the creation of the feature request
-	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Success("Your bug report got submitted."))
+	ctx.RespondEmbed(embeds.Success("Your bug report got submitted."))
 }
 
 // bugReactionListener has to be registered to enable the tick reaction on bug reports

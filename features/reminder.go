@@ -48,35 +48,45 @@ func initializeReminderFeature(router *dgc.Router, rateLimiter dgc.RateLimiter) 
 
 // reminderCommand handles the 'reminder' command
 func reminderCommand(ctx *dgc.Ctx) {
+	// Check the rate limiter
+	if !ctx.Command.NotifyRateLimiter(ctx) {
+		return
+	}
+
 	// Retrieve the users reminders
 	userReminders, err := reminders.GetAll(ctx.Event.Author.ID)
 	if err != nil {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Error(err.Error()))
+		ctx.RespondEmbed(embeds.Error(err.Error()))
 		return
 	}
 
 	// Respond with the list reminders embed
-	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Reminders(userReminders))
+	ctx.RespondEmbed(embeds.Reminders(userReminders))
 }
 
 // reminderCreateCommand handles the 'reminder create' command
 func reminderCreateCommand(ctx *dgc.Ctx) {
 	// Validate the argument length
 	if ctx.Arguments.Amount() < 2 {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.InvalidUsage(ctx.Command.Usage))
+		ctx.RespondEmbed(embeds.InvalidUsage(ctx.Command.Usage))
 		return
 	}
 
 	// Parse the first argument into a duration
 	duration, err := ctx.Arguments.Get(0).AsDuration()
 	if err != nil {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.InvalidUsage(ctx.Command.Usage))
+		ctx.RespondEmbed(embeds.InvalidUsage(ctx.Command.Usage))
 		return
 	}
 
 	// Check if the duration is too long
 	if duration > 504*time.Hour {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Error("You can't create reminders that take longer than 21 days."))
+		ctx.RespondEmbed(embeds.Error("You can't create reminders that take longer than 21 days."))
+		return
+	}
+
+	// Check the rate limiter
+	if !ctx.Command.NotifyRateLimiter(ctx) {
 		return
 	}
 
@@ -87,13 +97,13 @@ func reminderCreateCommand(ctx *dgc.Ctx) {
 	// Create the reminder and restart the reminder queue
 	_, err = reminders.Create(ctx.Event.Author.ID, ctx.Event.ChannelID, duration, message)
 	if err != nil {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Error(err.Error()))
+		ctx.RespondEmbed(embeds.Error(err.Error()))
 		return
 	}
 	reminders.RestartQueue()
 
 	// Respond with a success embed
-	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Success("Your reminder has been created."))
+	ctx.RespondEmbed(embeds.Success("Your reminder has been created."))
 }
 
 // reminderDeleteCommand handles the 'reminder delete' command
@@ -101,7 +111,7 @@ func reminderDeleteCommand(ctx *dgc.Ctx) {
 	// Parse the arguments into an integer
 	id, err := ctx.Arguments.AsSingle().AsInt64()
 	if err != nil {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.InvalidUsage(ctx.Command.Usage))
+		ctx.RespondEmbed(embeds.InvalidUsage(ctx.Command.Usage))
 		return
 	}
 
@@ -109,21 +119,26 @@ func reminderDeleteCommand(ctx *dgc.Ctx) {
 	reminder, err := reminders.Get(ctx.Event.Author.ID, id-1)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
-			ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Error("There is no reminder with the specified ID."))
+			ctx.RespondEmbed(embeds.Error("There is no reminder with the specified ID."))
 			return
 		}
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Error(err.Error()))
+		ctx.RespondEmbed(embeds.Error(err.Error()))
+		return
+	}
+
+	// Check the rate limiter
+	if !ctx.Command.NotifyRateLimiter(ctx) {
 		return
 	}
 
 	// Delete the reminder and restart the reminder queue
 	err = reminder.Delete()
 	if err != nil {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Error(err.Error()))
+		ctx.RespondEmbed(embeds.Error(err.Error()))
 		return
 	}
 	reminders.RestartQueue()
 
 	// Respond with a success embed
-	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Success("Your reminder has been deleted."))
+	ctx.RespondEmbed(embeds.Success("Your reminder has been deleted."))
 }

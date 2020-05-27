@@ -29,20 +29,25 @@ func initializeRequestFeature(router *dgc.Router, rateLimiter dgc.RateLimiter, s
 func requestCommand(ctx *dgc.Ctx) {
 	// Validate the input
 	if ctx.Arguments.Amount() == 0 {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.InvalidUsage("You need to specify a feature you want to request."))
+		ctx.RespondEmbed(embeds.InvalidUsage("You need to specify a feature you want to request."))
+		return
+	}
+
+	// Check the rate limiter
+	if !ctx.Command.NotifyRateLimiter(ctx) {
 		return
 	}
 
 	// Send the feature request to the feature request channel and add the delete emote
 	message, err := ctx.Session.ChannelMessageSendEmbed(config.CurrentConfig.FeatureRequestChannel, embeds.FeatureRequest(ctx))
 	if err != nil {
-		ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Error("Your feature request couldn't be submitted. Please try again later."))
+		ctx.RespondEmbed(embeds.Error("Your feature request couldn't be submitted. Please try again later."))
 		return
 	}
 	ctx.Session.MessageReactionAdd(config.CurrentConfig.FeatureRequestChannel, message.ID, "✅")
 
 	// Confirm the creation of the feature request
-	ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Success("Your feature request got submitted."))
+	ctx.RespondEmbed(embeds.Success("Your feature request got submitted."))
 }
 
 // requestReactionListener has to be registered to enable the tick reaction on feature requests
