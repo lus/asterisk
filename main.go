@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os"
 	"os/signal"
@@ -62,8 +63,10 @@ func main() {
 	// Schedule the reminder queue
 	log.Println("Scheduling the reminder queue...")
 	go reminders.ScheduleQueue(session, func(reminder *reminders.Reminder) {
-		session.ChannelMessageSend(reminder.ChannelID, "<@"+reminder.UserID+">")
-		session.ChannelMessageSendEmbed(reminder.ChannelID, embeds.Reminder(reminder))
+		session.ChannelMessageSendComplex(reminder.ChannelID, &discordgo.MessageSend{
+			Content: fmt.Sprintf("<@%s>", reminder.UserID),
+			Embed:   embeds.Reminder(reminder),
+		})
 	})
 	log.Println("Successfully scheduled the reminder queue.")
 
