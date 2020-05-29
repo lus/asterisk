@@ -22,7 +22,7 @@ func initializeInfoFeature(router *dgc.Router, rateLimiter dgc.RateLimiter) {
 // infoCommand handles the 'info' command
 func infoCommand(ctx *dgc.Ctx) {
 	// Check the rate limiter
-	if !ctx.Command.NotifyRateLimiter(ctx) {
+	if ctx.Command != nil && !ctx.Command.NotifyRateLimiter(ctx) {
 		return
 	}
 
