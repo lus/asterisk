@@ -49,7 +49,7 @@ func initializeHashFeature(router *dgc.Router, rateLimiter dgc.RateLimiter) {
 			},
 		},
 		RateLimiter: rateLimiter,
-		Handler:     nil,
+		Handler:     hashCommand,
 	})
 }
 
