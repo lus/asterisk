@@ -34,11 +34,14 @@ func mathCommand(ctx *dgc.Ctx) {
 		return
 	}
 
+	// Respond with a loading embed
+	msg, _ := ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Loading())
+
 	// Evaluate the expression and respond with the result
 	result, err := utils.EvaluateMathematicalExpression(codeblock.Content)
 	if err != nil {
 		ctx.RespondEmbed(embeds.Error(err.Error()))
 		return
 	}
-	ctx.RespondEmbed(embeds.Success(result))
+	ctx.Session.ChannelMessageEditEmbed(ctx.Event.ChannelID, msg.ID, embeds.Success(result))
 }

@@ -34,11 +34,14 @@ func latexCommand(ctx *dgc.Ctx) {
 		return
 	}
 
+	// Respond with a loading embed
+	msg, _ := ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Loading())
+
 	// Render the given expression and respond with it
 	url, err := utils.RenderLaTeX(codeblock.Content)
 	if err != nil {
 		ctx.RespondEmbed(embeds.Error(err.Error()))
 		return
 	}
-	ctx.RespondEmbed(embeds.LaTeX(url))
+	ctx.Session.ChannelMessageEditEmbed(ctx.Event.ChannelID, msg.ID, embeds.LaTeX(url))
 }
