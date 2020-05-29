@@ -21,6 +21,7 @@ func initializeSettingsFeature(router *dgc.Router, rateLimiter dgc.RateLimiter) 
 		SubCommands: []*dgc.Command{
 			{
 				Name:        "commandChannel",
+				Aliases:     []string{"cc"},
 				Description: "Toggles the command channel status for the mentioned channel",
 				Usage:       "settings commandChannel <channel mention or ID>",
 				Example:     "settings commandChannel #my-channel",
@@ -34,6 +35,7 @@ func initializeSettingsFeature(router *dgc.Router, rateLimiter dgc.RateLimiter) 
 			},
 			{
 				Name:        "starboard",
+				Aliases:     []string{"sb"},
 				Description: "Sets the starboard channel, the minimum star amount or disables the feature",
 				Usage:       "settings starboard <disable | channel <channel mention or ID> | minimum <number>>",
 				Example:     "settings starboard channel #my-channel",
@@ -56,6 +58,7 @@ func initializeSettingsFeature(router *dgc.Router, rateLimiter dgc.RateLimiter) 
 					},
 					{
 						Name:        "channel",
+						Aliases:     []string{"c"},
 						Description: "Sets the starboard channel",
 						Usage:       "settings starboard channel <channel mention or ID>",
 						Example:     "settings starboard channel #my-channel",
@@ -68,6 +71,7 @@ func initializeSettingsFeature(router *dgc.Router, rateLimiter dgc.RateLimiter) 
 					},
 					{
 						Name:        "minimum",
+						Aliases:     []string{"min"},
 						Description: "Sets the minimum star amount",
 						Usage:       "settings starboard minimum <number>",
 						Example:     "settings starboard minimum 5",

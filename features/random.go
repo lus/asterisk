@@ -22,6 +22,7 @@ func initializeRandomFeature(router *dgc.Router, rateLimiter dgc.RateLimiter) {
 		SubCommands: []*dgc.Command{
 			{
 				Name:        "bool",
+				Aliases:     []string{"b"},
 				Description: "Generates a random boolean",
 				Usage:       "random bool",
 				Example:     "random bool",
@@ -31,6 +32,7 @@ func initializeRandomFeature(router *dgc.Router, rateLimiter dgc.RateLimiter) {
 			},
 			{
 				Name:        "number",
+				Aliases:     []string{"n"},
 				Description: "Generates a random number respecting the given interval",
 				Usage:       "random number <interval>",
 				Example:     "random number [0,5]",
@@ -40,6 +42,7 @@ func initializeRandomFeature(router *dgc.Router, rateLimiter dgc.RateLimiter) {
 			},
 			{
 				Name:        "string",
+				Aliases:     []string{"s"},
 				Description: "Generates a random string with the given length",
 				Usage:       "random string <length>",
 				Example:     "random string 32",
@@ -49,6 +52,7 @@ func initializeRandomFeature(router *dgc.Router, rateLimiter dgc.RateLimiter) {
 			},
 			{
 				Name:        "choice",
+				Aliases:     []string{"c"},
 				Description: "Generates a random choice",
 				Usage:       "random choice <options...>",
 				Example:     "random choice \"Coice one\" \"Choice two\"",
