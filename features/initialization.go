@@ -64,14 +64,16 @@ func Initialize(session *discordgo.Session) {
 	initializeBugFeature(router, bugReportRateLimiter, session)
 	initializeRequestFeature(router, featureRequestRateLimiter, session)
 	initializeCreditsFeature(router, generalRateLimiter)
+	initializeBlacklistFeature(router)
 	initializeDebugFeature(router)
 	initializeSayFeature(router)
 	initializeStarboardFeature(session)
 
 	// Register all the middlewares
 	router.RegisterMiddleware(middlewares.CheckGuildPermissions("guild_admin", "ADMINISTRATOR", discordgo.PermissionAdministrator))
-	router.RegisterMiddleware(middlewares.CheckInternalPermissions("bot_mod", "BOT_MODERATOR", users.PermissionModerator, users.PermissionAdministrator))
-	router.RegisterMiddleware(middlewares.CheckInternalPermissions("bot_admin", "BOT_ADMINISTRATOR", users.PermissionAdministrator))
+	router.RegisterMiddleware(middlewares.CheckInternalFlags("bot_mod", "BOT_MODERATOR", users.PermissionModerator, users.PermissionAdministrator))
+	router.RegisterMiddleware(middlewares.CheckInternalFlags("bot_admin", "BOT_ADMINISTRATOR", users.PermissionAdministrator))
+	router.RegisterMiddleware(middlewares.CheckBlacklist())
 	router.RegisterMiddleware(middlewares.InjectUserObject)
 	router.RegisterMiddleware(middlewares.CheckCommandChannel)
 	router.RegisterMiddleware(middlewares.InjectGuildObject)
