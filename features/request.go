@@ -39,12 +39,12 @@ func requestCommand(ctx *dgc.Ctx) {
 	}
 
 	// Send the feature request to the feature request channel and add the delete emote
-	message, err := ctx.Session.ChannelMessageSendEmbed(config.CurrentConfig.FeatureRequestChannel, embeds.FeatureRequest(ctx))
+	message, err := ctx.Session.ChannelMessageSendEmbed(config.CurrentConfig.Channels.FeatureRequests, embeds.FeatureRequest(ctx))
 	if err != nil {
 		ctx.RespondEmbed(embeds.Error("Your feature request couldn't be submitted. Please try again later."))
 		return
 	}
-	ctx.Session.MessageReactionAdd(config.CurrentConfig.FeatureRequestChannel, message.ID, "✅")
+	ctx.Session.MessageReactionAdd(config.CurrentConfig.Channels.FeatureRequests, message.ID, "✅")
 
 	// Confirm the creation of the feature request
 	ctx.RespondEmbed(embeds.Success("Your feature request got submitted."))
@@ -53,7 +53,7 @@ func requestCommand(ctx *dgc.Ctx) {
 // requestReactionListener has to be registered to enable the tick reaction on feature requests
 func requestReactionListener(session *discordgo.Session, event *discordgo.MessageReactionAdd) {
 	// Check if the channel is the feature request channel
-	if event.ChannelID != config.CurrentConfig.FeatureRequestChannel {
+	if event.ChannelID != config.CurrentConfig.Channels.FeatureRequests {
 		return
 	}
 

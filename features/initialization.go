@@ -67,6 +67,7 @@ func Initialize(session *discordgo.Session) {
 	initializeBlacklistFeature(router)
 	initializeDebugFeature(router)
 	initializeSayFeature(router)
+	initializeRedeployFeature(router)
 	initializeStarboardFeature(session)
 
 	// Register all the middlewares

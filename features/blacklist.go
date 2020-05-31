@@ -17,6 +17,9 @@ func initializeBlacklistFeature(router *dgc.Router) {
 		Description: "[Bot Moderator only] Toggles the blacklist status of the given user",
 		Usage:       "blacklist <user mention or ID>",
 		Example:     "blacklist @Erik",
+		Flags: []string{
+			"bot_mod",
+		},
 		IgnoreCase:  true,
 		RateLimiter: nil,
 		Handler:     blacklistCommand,

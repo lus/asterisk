@@ -39,12 +39,12 @@ func bugCommand(ctx *dgc.Ctx) {
 	}
 
 	// Send the bug report to the bug report channel and add the delete emote
-	message, err := ctx.Session.ChannelMessageSendEmbed(config.CurrentConfig.BugReportChannel, embeds.BugReport(ctx))
+	message, err := ctx.Session.ChannelMessageSendEmbed(config.CurrentConfig.Channels.BugReports, embeds.BugReport(ctx))
 	if err != nil {
 		ctx.RespondEmbed(embeds.Error("Your bug report couldn't be submitted. Please try again later."))
 		return
 	}
-	ctx.Session.MessageReactionAdd(config.CurrentConfig.BugReportChannel, message.ID, "✅")
+	ctx.Session.MessageReactionAdd(config.CurrentConfig.Channels.BugReports, message.ID, "✅")
 
 	// Confirm the creation of the feature request
 	ctx.RespondEmbed(embeds.Success("Your bug report got submitted."))
@@ -53,7 +53,7 @@ func bugCommand(ctx *dgc.Ctx) {
 // bugReactionListener has to be registered to enable the tick reaction on bug reports
 func bugReactionListener(session *discordgo.Session, event *discordgo.MessageReactionAdd) {
 	// Check if the channel is the bug report channel
-	if event.ChannelID != config.CurrentConfig.BugReportChannel {
+	if event.ChannelID != config.CurrentConfig.Channels.BugReports {
 		return
 	}
 
