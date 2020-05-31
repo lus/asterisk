@@ -2,9 +2,9 @@ package users
 
 // These constants define the bitflags a user may have
 const (
-	Flagdministrator = 0x01
-	FlagModerator    = 0x02
-	FlagBlacklisted  = 0x04
+	FlagAdministrator = 0x01
+	FlagModerator     = 0x02
+	FlagBlacklisted   = 0x04
 )
 
 // HasFlag checks whether or not the current user has at least one of the given flags

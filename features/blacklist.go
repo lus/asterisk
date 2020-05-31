@@ -51,7 +51,7 @@ func blacklistCommand(ctx *dgc.Ctx) {
 	// Update the user object
 	err = user.Update()
 	if err != nil {
-		ctx.RespondEmbed(embeds.Error(ctx.Error()))
+		ctx.RespondEmbed(embeds.Error(err.Error()))
 		return
 	}
 	ctx.RespondEmbed(embeds.Success(fmt.Sprintf("The blacklist status of the given user has been %s.", utils.PrettifyBool(user.HasFlag(users.FlagBlacklisted)))))

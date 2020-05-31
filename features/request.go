@@ -59,7 +59,7 @@ func requestReactionListener(session *discordgo.Session, event *discordgo.Messag
 
 	// Check if the user is a bot admin
 	user, err := users.RetrieveCached(event.UserID)
-	if err != nil || !user.HasPermission(users.PermissionAdministrator) {
+	if err != nil || !user.HasFlag(users.FlagAdministrator) {
 		return
 	}
 
