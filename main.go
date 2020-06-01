@@ -76,7 +76,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	user.GrantPermission(users.PermissionAdministrator)
+	user.AssignFlag(users.FlagAdministrator)
 	err = user.Update()
 	if err != nil {
 		panic(err)
