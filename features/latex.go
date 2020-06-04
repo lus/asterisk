@@ -40,7 +40,7 @@ func latexCommand(ctx *dgc.Ctx) {
 	// Render the given expression and respond with it
 	url, err := utils.RenderLaTeX(codeblock.Content)
 	if err != nil {
-		ctx.RespondEmbed(embeds.Error(err.Error()))
+		ctx.Session.ChannelMessageEditEmbed(ctx.Event.ChannelID, msg.ID, embeds.Error(err.Error()))
 		return
 	}
 	ctx.Session.ChannelMessageEditEmbed(ctx.Event.ChannelID, msg.ID, embeds.LaTeX(url))

@@ -40,7 +40,7 @@ func mathCommand(ctx *dgc.Ctx) {
 	// Evaluate the expression and respond with the result
 	result, err := utils.EvaluateMathematicalExpression(codeblock.Content)
 	if err != nil {
-		ctx.RespondEmbed(embeds.Error(err.Error()))
+		ctx.Session.ChannelMessageEditEmbed(ctx.Event.ChannelID, msg.ID, embeds.Error(err.Error()))
 		return
 	}
 	ctx.Session.ChannelMessageEditEmbed(ctx.Event.ChannelID, msg.ID, embeds.Success(result))
