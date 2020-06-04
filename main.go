@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/Lukaesebrot/asterisk/features"
+	"github.com/Lukaesebrot/asterisk/utils"
 
 	"github.com/Lukaesebrot/asterisk/embeds"
 	"github.com/Lukaesebrot/asterisk/reminders"
@@ -45,7 +46,7 @@ func main() {
 		panic(err)
 	}
 	session.AddHandler(func(session *discordgo.Session, event *discordgo.Ready) {
-		session.UpdateListeningStatus("$help")
+		go utils.AnimatePresence(session)
 	})
 	err = session.Open()
 	if err != nil {
