@@ -2,7 +2,7 @@ package features
 
 import (
 	"github.com/Lukaesebrot/asterisk/embeds"
-	"github.com/Lukaesebrot/asterisk/utils"
+	"github.com/Lukaesebrot/asterisk/services/rtex"
 	"github.com/Lukaesebrot/dgc"
 )
 
@@ -38,7 +38,7 @@ func latexCommand(ctx *dgc.Ctx) {
 	msg, _ := ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Loading())
 
 	// Render the given expression and respond with it
-	url, err := utils.RenderLaTeX(codeblock.Content)
+	url, err := rtex.Render(codeblock.Content)
 	if err != nil {
 		ctx.Session.ChannelMessageEditEmbed(ctx.Event.ChannelID, msg.ID, embeds.Error(err.Error()))
 		return
