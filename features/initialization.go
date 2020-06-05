@@ -55,6 +55,7 @@ func Initialize(session *discordgo.Session) {
 	initializeSettingsFeature(router, generalRateLimiter)
 	initializeInfoFeature(router, generalRateLimiter)
 	initializeReminderFeature(router, generalRateLimiter)
+	initializeToDoFeature(router, generalRateLimiter)
 	initializeRandomFeature(router, generalRateLimiter)
 	initializeMathFeature(router, generalRateLimiter)
 	initializeLaTeXFeature(router, generalRateLimiter)
