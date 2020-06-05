@@ -20,5 +20,5 @@ var (
 	LaTeXTemplate = "\\documentclass[varwidth,border=2pt]{standalone} \\usepackage[utf8]{inputenc} \\usepackage{amsmath} \\usepackage{xcolor} \\definecolor{bgcolor}{HTML}{2F3136} \\begin{document} \\pagecolor{bgcolor} \\color{white} #CONTENT# \\end{document}"
 
 	// IntervalRegexString defines the RegEx an interval has to match
-	IntervalRegexString = "(\\[|\\()(\\d+),\\s*(\\d+)(\\]|\\))"
+	IntervalRegexString = "(\\[|\\()(-?\\d+),\\s*(-?\\d+)(\\]|\\))"
 )
