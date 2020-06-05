@@ -42,7 +42,11 @@ func blacklistCommand(ctx *dgc.Ctx) {
 	}
 
 	// Retrieve the internal user object
-	user := ctx.CustomObjects.MustGet("user").(*users.User)
+	user, err := users.RetrieveCached(userID)
+	if err != nil {
+		ctx.RespondEmbed(embeds.Error(err.Error()))
+		return
+	}
 
 	// Toggle the blacklist status of the given user
 	if user.HasFlag(users.FlagBlacklisted) {
