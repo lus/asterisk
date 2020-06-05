@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/Lukaesebrot/asterisk/users"
+	"github.com/Lukaesebrot/asterisk/nodes/users"
 	"github.com/bwmarrin/discordgo"
 )
 

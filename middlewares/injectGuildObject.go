@@ -2,7 +2,7 @@ package middlewares
 
 import (
 	"github.com/Lukaesebrot/asterisk/embeds"
-	"github.com/Lukaesebrot/asterisk/guilds"
+	"github.com/Lukaesebrot/asterisk/nodes/guilds"
 	"github.com/Lukaesebrot/dgc"
 )
 

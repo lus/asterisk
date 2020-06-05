@@ -1,7 +1,7 @@
 package middlewares
 
 import (
-	"github.com/Lukaesebrot/asterisk/users"
+	"github.com/Lukaesebrot/asterisk/nodes/users"
 	"github.com/Lukaesebrot/dgc"
 )
 

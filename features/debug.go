@@ -6,8 +6,8 @@ import (
 
 	"github.com/Lukaesebrot/asterisk/config"
 	"github.com/Lukaesebrot/asterisk/embeds"
-	"github.com/Lukaesebrot/asterisk/guilds"
-	"github.com/Lukaesebrot/asterisk/users"
+	"github.com/Lukaesebrot/asterisk/nodes/guilds"
+	"github.com/Lukaesebrot/asterisk/nodes/users"
 	"github.com/Lukaesebrot/dgc"
 	"github.com/containous/yaegi/interp"
 	"github.com/containous/yaegi/stdlib"

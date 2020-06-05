@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/Lukaesebrot/asterisk/embeds"
-	"github.com/Lukaesebrot/asterisk/reminders"
+	"github.com/Lukaesebrot/asterisk/nodes/reminders"
 	"github.com/Lukaesebrot/dgc"
 	"go.mongodb.org/mongo-driver/mongo"
 )

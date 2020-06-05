@@ -13,8 +13,8 @@ import (
 	"github.com/Lukaesebrot/asterisk/presence"
 
 	"github.com/Lukaesebrot/asterisk/embeds"
-	"github.com/Lukaesebrot/asterisk/reminders"
-	"github.com/Lukaesebrot/asterisk/users"
+	"github.com/Lukaesebrot/asterisk/nodes/reminders"
+	"github.com/Lukaesebrot/asterisk/nodes/users"
 
 	"github.com/Lukaesebrot/asterisk/static"
 
