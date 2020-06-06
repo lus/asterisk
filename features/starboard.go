@@ -36,6 +36,11 @@ func starboardReactionAddListener(session *discordgo.Session, event *discordgo.M
 	}
 	message.GuildID = event.GuildID
 
+	// Check if the message author is a bot
+	if message.Author.Bot {
+		return
+	}
+
 	// Get the amount of stars
 	amount := 0
 	for _, reaction := range message.Reactions {
