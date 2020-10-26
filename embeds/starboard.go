@@ -9,10 +9,12 @@ import (
 
 // Starboard generates a starboard embed
 func Starboard(message *discordgo.Message) *discordgo.MessageEmbed {
-	return &discordgo.MessageEmbed{
-		URL:         fmt.Sprintf("https://discordapp.com/channels/%s/%s/%s/", message.GuildID, message.ChannelID, message.ID),
-		Title:       "Jump To Message",
-		Description: message.Content,
+	desc := fmt.Sprintf(
+		"%s\n\n[*jump to message*](https://discord.com/channels/%s/%s/%s)",
+		message.Content, message.GuildID, message.ChannelID, message.ID)
+
+	emb := &discordgo.MessageEmbed{
+		Description: desc,
 		Timestamp:   time.Now().Format(time.RFC3339),
 		Color:       0xffff00,
 		Author: &discordgo.MessageEmbedAuthor{
@@ -20,4 +22,12 @@ func Starboard(message *discordgo.Message) *discordgo.MessageEmbed {
 			IconURL: message.Author.AvatarURL("512"),
 		},
 	}
+
+	if len(message.Attachments) > 0 {
+		emb.Image = &discordgo.MessageEmbedImage{
+			URL: message.Attachments[0].URL,
+		}
+	}
+
+	return emb
 }

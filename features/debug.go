@@ -9,8 +9,8 @@ import (
 	"github.com/Lukaesebrot/asterisk/nodes/guilds"
 	"github.com/Lukaesebrot/asterisk/nodes/users"
 	"github.com/Lukaesebrot/dgc"
-	"github.com/containous/yaegi/interp"
-	"github.com/containous/yaegi/stdlib"
+	"github.com/traefik/yaegi/interp"
+	"github.com/traefik/yaegi/stdlib"
 )
 
 // initializeDebugFeature initializes the debug feature
