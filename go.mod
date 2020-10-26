@@ -11,6 +11,7 @@ require (
 	github.com/joho/godotenv v1.3.0
 	github.com/klauspost/compress v1.10.6 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
+	github.com/traefik/yaegi v0.9.4
 	github.com/valyala/fasthttp v1.13.1
 	github.com/zekroTJA/timedmap v1.1.2 // indirect
 	go.mongodb.org/mongo-driver v1.3.3
