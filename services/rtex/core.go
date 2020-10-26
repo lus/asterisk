@@ -1,4 +1,4 @@
-package utils
+package rtex
 
 import (
 	"encoding/json"
@@ -24,8 +24,8 @@ type rtexResponse struct {
 	Description string `json:"description,omitempty"`
 }
 
-// RenderLaTeX renders a LaTeX expression and returns the image URL
-func RenderLaTeX(expression string) (string, error) {
+// Render renders a LaTeX expression and returns the image URL
+func Render(expression string) (string, error) {
 	// Format the expression
 	expression = strings.Replace(static.LaTeXTemplate, "#CONTENT#", expression, 1)
 

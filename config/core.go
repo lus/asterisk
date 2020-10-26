@@ -12,11 +12,23 @@ var CurrentConfig *Config = new(Config)
 
 // Config represents the bot configuration
 type Config struct {
-	BotToken              string `json:"botToken"`
-	InitialAdminID        string `json:"initialAdminID"`
-	FeatureRequestChannel string `json:"featureRequestChannel"`
-	BugReportChannel      string `json:"bugReportChannel"`
-	MongoConnectionString string `json:"mongoConnectionString"`
+	BotToken              string
+	InitialAdminID        string
+	MongoConnectionString string
+	Channels              *SectionChannels
+	Redeployment          *SectionRedeployment
+}
+
+// SectionChannels represents the 'channels' configuration section
+type SectionChannels struct {
+	FeatureRequests string
+	BugReports      string
+}
+
+// SectionRedeployment represents the 'redeployment' configuration section
+type SectionRedeployment struct {
+	WebhookURL string
+	Token      string
 }
 
 // Load loads the bot configuration
@@ -30,8 +42,14 @@ func Load() {
 	CurrentConfig = &Config{
 		BotToken:              os.Getenv("ASTERISK_BOT_TOKEN"),
 		InitialAdminID:        os.Getenv("ASTERISK_INITIAL_ADMIN_ID"),
-		FeatureRequestChannel: os.Getenv("ASTERISK_FEATURE_REQUEST_CHANNEL"),
-		BugReportChannel:      os.Getenv("ASTERISK_BUG_REPORT_CHANNEL"),
 		MongoConnectionString: os.Getenv("ASTERISK_MONGO_CONNECTION_STRING"),
+		Channels: &SectionChannels{
+			FeatureRequests: os.Getenv("ASTERISK_FEATURE_REQUEST_CHANNEL"),
+			BugReports:      os.Getenv("ASTERISK_BUG_REPORT_CHANNEL"),
+		},
+		Redeployment: &SectionRedeployment{
+			WebhookURL: os.Getenv("ASTERISK_REDEPLOYMENT_WEBHOOK_URL"),
+			Token:      os.Getenv("ASTERISK_REDEPLOYMENT_TOKEN"),
+		},
 	}
 }

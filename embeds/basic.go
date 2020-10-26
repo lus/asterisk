@@ -55,7 +55,7 @@ func InvalidUsage(usage string) *discordgo.MessageEmbed {
 // InsufficientPermissions generates an insufficient permissions embed
 func InsufficientPermissions(message string) *discordgo.MessageEmbed {
 	return &discordgo.MessageEmbed{
-		Title:     "Insuficcient Permissions",
+		Title:     "Insufficient Permissions",
 		Timestamp: time.Now().Format(time.RFC3339),
 		Color:     0xff0000,
 		Fields: []*discordgo.MessageEmbedField{

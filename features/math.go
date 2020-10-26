@@ -2,7 +2,7 @@ package features
 
 import (
 	"github.com/Lukaesebrot/asterisk/embeds"
-	"github.com/Lukaesebrot/asterisk/utils"
+	"github.com/Lukaesebrot/asterisk/services/mathjs"
 	"github.com/Lukaesebrot/dgc"
 )
 
@@ -38,9 +38,9 @@ func mathCommand(ctx *dgc.Ctx) {
 	msg, _ := ctx.Session.ChannelMessageSendEmbed(ctx.Event.ChannelID, embeds.Loading())
 
 	// Evaluate the expression and respond with the result
-	result, err := utils.EvaluateMathematicalExpression(codeblock.Content)
+	result, err := mathjs.Evaluate(codeblock.Content)
 	if err != nil {
-		ctx.RespondEmbed(embeds.Error(err.Error()))
+		ctx.Session.ChannelMessageEditEmbed(ctx.Event.ChannelID, msg.ID, embeds.Error(err.Error()))
 		return
 	}
 	ctx.Session.ChannelMessageEditEmbed(ctx.Event.ChannelID, msg.ID, embeds.Success(result))

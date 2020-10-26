@@ -10,9 +10,6 @@ var (
 	// MongoDatabase defines the MongoDB database name
 	MongoDatabase = "asterisk"
 
-	// HastebinURL defines the URL of the hastebin instance to use
-	HastebinURL = "https://hasteb.in/"
-
 	// RTeXURL defines the URL of the rTeX API to use
 	RTeXURL = "https://rtex.probablyaweb.site/api/v2"
 
@@ -23,5 +20,5 @@ var (
 	LaTeXTemplate = "\\documentclass[varwidth,border=2pt]{standalone} \\usepackage[utf8]{inputenc} \\usepackage{amsmath} \\usepackage{xcolor} \\definecolor{bgcolor}{HTML}{2F3136} \\begin{document} \\pagecolor{bgcolor} \\color{white} #CONTENT# \\end{document}"
 
 	// IntervalRegexString defines the RegEx an interval has to match
-	IntervalRegexString = "(\\[|\\()(\\d+),\\s*(\\d+)(\\]|\\))"
+	IntervalRegexString = "(\\[|\\()(-?\\d+),\\s*(-?\\d+)(\\]|\\))"
 )

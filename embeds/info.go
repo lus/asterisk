@@ -47,7 +47,7 @@ func Info(ctx *dgc.Ctx) *discordgo.MessageEmbed {
 				Name: "General",
 				Value: "Developer(s): `Lukaesebrot#8001`" +
 					"\nGitHub repository: [here](http://github.com/Lukaesebrot/asterisk)" +
-					"\nInvite me: [here](https://discord.com/api/oauth2/authorize?client_id=" + static.Self.ID + "&permissions=0&scope=bot)" +
+					"\nInvite me: [here](https://discord.com/api/oauth2/authorize?client_id=" + static.Self.ID + "&permissions=76864&scope=bot)" +
 					"\nSupport guild: [here](https://discord.gg/ddz9b86)",
 			},
 		},

@@ -3,7 +3,7 @@ package features
 import (
 	"github.com/Lukaesebrot/asterisk/config"
 	"github.com/Lukaesebrot/asterisk/embeds"
-	"github.com/Lukaesebrot/asterisk/users"
+	"github.com/Lukaesebrot/asterisk/nodes/users"
 	"github.com/Lukaesebrot/dgc"
 	"github.com/bwmarrin/discordgo"
 )
@@ -39,12 +39,12 @@ func bugCommand(ctx *dgc.Ctx) {
 	}
 
 	// Send the bug report to the bug report channel and add the delete emote
-	message, err := ctx.Session.ChannelMessageSendEmbed(config.CurrentConfig.BugReportChannel, embeds.BugReport(ctx))
+	message, err := ctx.Session.ChannelMessageSendEmbed(config.CurrentConfig.Channels.BugReports, embeds.BugReport(ctx))
 	if err != nil {
 		ctx.RespondEmbed(embeds.Error("Your bug report couldn't be submitted. Please try again later."))
 		return
 	}
-	ctx.Session.MessageReactionAdd(config.CurrentConfig.BugReportChannel, message.ID, "✅")
+	ctx.Session.MessageReactionAdd(config.CurrentConfig.Channels.BugReports, message.ID, "✅")
 
 	// Confirm the creation of the feature request
 	ctx.RespondEmbed(embeds.Success("Your bug report got submitted."))
@@ -53,13 +53,13 @@ func bugCommand(ctx *dgc.Ctx) {
 // bugReactionListener has to be registered to enable the tick reaction on bug reports
 func bugReactionListener(session *discordgo.Session, event *discordgo.MessageReactionAdd) {
 	// Check if the channel is the bug report channel
-	if event.ChannelID != config.CurrentConfig.BugReportChannel {
+	if event.ChannelID != config.CurrentConfig.Channels.BugReports {
 		return
 	}
 
 	// Check if the user is a bot admin
 	user, err := users.RetrieveCached(event.UserID)
-	if err != nil || !user.HasPermission(users.PermissionAdministrator) {
+	if err != nil || !user.HasFlag(users.FlagAdministrator) {
 		return
 	}
 

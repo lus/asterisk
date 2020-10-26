@@ -32,7 +32,7 @@ func GenerateFromInterval(raw string) (bool, int) {
 	}
 
 	// Validate the given numbers
-	if leftNumber < 0 || rightNumber < 0 || rightNumber < leftNumber {
+	if rightNumber < leftNumber {
 		return false, 0
 	}
 	if leftNumber == rightNumber {

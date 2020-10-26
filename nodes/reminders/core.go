@@ -108,7 +108,7 @@ func GetAll(userID string) ([]Reminder, error) {
 		return nil, err
 	}
 
-	// Parse the document into a reminder object and return it
+	// Parse the documenst into reminder objects and return them
 	var reminders []Reminder
 	err = result.All(ctx, &reminders)
 	return reminders, err

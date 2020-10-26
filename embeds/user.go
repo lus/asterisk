@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/Lukaesebrot/asterisk/users"
+	"github.com/Lukaesebrot/asterisk/nodes/users"
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -32,8 +32,8 @@ func User(dcUser *discordgo.User, intUser *users.User) *discordgo.MessageEmbed {
 				Value: fmt.Sprintf("%s", dcUser.AvatarURL("512")),
 			},
 			{
-				Name:  "Internal permission integer",
-				Value: fmt.Sprintf("`%d`", intUser.Permissions),
+				Name:  "Internal flag integer",
+				Value: fmt.Sprintf("`%d`", intUser.Flags),
 			},
 		},
 	}

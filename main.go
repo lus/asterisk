@@ -10,10 +10,11 @@ import (
 	"time"
 
 	"github.com/Lukaesebrot/asterisk/features"
+	"github.com/Lukaesebrot/asterisk/presence"
 
 	"github.com/Lukaesebrot/asterisk/embeds"
-	"github.com/Lukaesebrot/asterisk/reminders"
-	"github.com/Lukaesebrot/asterisk/users"
+	"github.com/Lukaesebrot/asterisk/nodes/reminders"
+	"github.com/Lukaesebrot/asterisk/nodes/users"
 
 	"github.com/Lukaesebrot/asterisk/static"
 
@@ -45,7 +46,7 @@ func main() {
 		panic(err)
 	}
 	session.AddHandler(func(session *discordgo.Session, event *discordgo.Ready) {
-		session.UpdateListeningStatus("$help")
+		go presence.Animate(session)
 	})
 	err = session.Open()
 	if err != nil {
@@ -76,7 +77,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	user.GrantPermission(users.PermissionAdministrator)
+	user.AssignFlag(users.FlagAdministrator)
 	err = user.Update()
 	if err != nil {
 		panic(err)

@@ -1,4 +1,4 @@
-package utils
+package mathjs
 
 import (
 	"encoding/json"
@@ -9,17 +9,17 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
-type mathjsRequest struct {
+type mjsRequest struct {
 	Expression string `json:"expr"`
 }
 
-type mathjsResponse struct {
+type mjsResponse struct {
 	Result string `json:"result,omitempty"`
 	Error  string `json:"error,omitempty"`
 }
 
-// EvaluateMathematicalExpression evaluates the given expression and returns the result
-func EvaluateMathematicalExpression(expression string) (string, error) {
+// Evaluate evaluates the given expression and returns the result
+func Evaluate(expression string) (string, error) {
 	// Acquire a request object
 	request := fasthttp.AcquireRequest()
 	defer fasthttp.ReleaseRequest(request)
@@ -32,7 +32,7 @@ func EvaluateMathematicalExpression(expression string) (string, error) {
 	request.SetRequestURI(fmt.Sprintf("%s", static.MathJSURL))
 	request.Header.SetMethod("POST")
 	request.Header.SetContentType("application/json")
-	body, _ := json.Marshal(&mathjsRequest{
+	body, _ := json.Marshal(&mjsRequest{
 		Expression: expression,
 	})
 	request.SetBody(body)
@@ -44,7 +44,7 @@ func EvaluateMathematicalExpression(expression string) (string, error) {
 	}
 
 	// Unmarshal the response body and return the result
-	jsonResponse := new(mathjsResponse)
+	jsonResponse := new(mjsResponse)
 	err = json.Unmarshal(response.Body(), jsonResponse)
 	if err != nil {
 		return "", err

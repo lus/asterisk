@@ -5,8 +5,8 @@ import (
 
 	"github.com/Lukaesebrot/asterisk/embeds"
 	"github.com/Lukaesebrot/asterisk/middlewares"
+	"github.com/Lukaesebrot/asterisk/nodes/users"
 	"github.com/Lukaesebrot/asterisk/static"
-	"github.com/Lukaesebrot/asterisk/users"
 	"github.com/Lukaesebrot/dgc"
 	"github.com/bwmarrin/discordgo"
 )
@@ -55,6 +55,7 @@ func Initialize(session *discordgo.Session) {
 	initializeSettingsFeature(router, generalRateLimiter)
 	initializeInfoFeature(router, generalRateLimiter)
 	initializeReminderFeature(router, generalRateLimiter)
+	initializeToDoFeature(router, generalRateLimiter)
 	initializeRandomFeature(router, generalRateLimiter)
 	initializeMathFeature(router, generalRateLimiter)
 	initializeLaTeXFeature(router, generalRateLimiter)
@@ -64,14 +65,17 @@ func Initialize(session *discordgo.Session) {
 	initializeBugFeature(router, bugReportRateLimiter, session)
 	initializeRequestFeature(router, featureRequestRateLimiter, session)
 	initializeCreditsFeature(router, generalRateLimiter)
+	initializeBlacklistFeature(router)
 	initializeDebugFeature(router)
 	initializeSayFeature(router)
+	initializeRedeployFeature(router)
 	initializeStarboardFeature(session)
 
 	// Register all the middlewares
 	router.RegisterMiddleware(middlewares.CheckGuildPermissions("guild_admin", "ADMINISTRATOR", discordgo.PermissionAdministrator))
-	router.RegisterMiddleware(middlewares.CheckInternalPermissions("bot_mod", "BOT_MODERATOR", users.PermissionModerator, users.PermissionAdministrator))
-	router.RegisterMiddleware(middlewares.CheckInternalPermissions("bot_admin", "BOT_ADMINISTRATOR", users.PermissionAdministrator))
+	router.RegisterMiddleware(middlewares.CheckInternalFlags("bot_mod", "BOT_MODERATOR", users.FlagModerator, users.FlagAdministrator))
+	router.RegisterMiddleware(middlewares.CheckInternalFlags("bot_admin", "BOT_ADMINISTRATOR", users.FlagAdministrator))
+	router.RegisterMiddleware(middlewares.CheckBlacklist)
 	router.RegisterMiddleware(middlewares.InjectUserObject)
 	router.RegisterMiddleware(middlewares.CheckCommandChannel)
 	router.RegisterMiddleware(middlewares.InjectGuildObject)

@@ -23,8 +23,9 @@ func Credits() *discordgo.MessageEmbed {
 					"\n[github.com/mongodb/mongo-go-driver](https://github.com/mongodb/mongo-go-driver)",
 			},
 			{
-				Name:  "Cool people",
-				Value: "das_#9677 `testing`",
+				Name: "Cool people",
+				Value: "`das_#9677` for `testing`" +
+					"\n`Cerus#5149` for `testing`",
 			},
 		},
 	}
